@@ -1,16 +1,16 @@
 module Data.String where
 
-foreign import lengthS
-  "function lengthS(s) {\
-  \  return s.length;\
-  \}" :: String -> Number
-
 foreign import charAt
   "function charAt(i) {\
   \  return function(s) {\
   \    return s.charAt(i); \
   \  };\
   \}" :: Number -> String -> String
+
+foreign import fromCharCode
+  "function fromCharCode(n) {\
+  \  return String.fromCharCode(n);\
+  \}" :: Number -> String
 
 foreign import indexOfS
   "function indexOfS(s1) {\
@@ -25,6 +25,11 @@ foreign import lastIndexOfS
   \    return s1.lastIndexOf(s2);\
   \  };\
   \}" :: String -> String -> Number
+
+foreign import lengthS
+  "function lengthS(s) {\
+  \  return s.length;\
+  \}" :: String -> Number
 
 foreign import localeCompare
   "function localeCompare(s1) {\

@@ -12,22 +12,22 @@ foreign import fromCharCode
   \  return String.fromCharCode(n);\
   \}" :: Number -> String
 
-foreign import indexOfS
-  "function indexOfS(s1) {\
+foreign import indexOf
+  "function indexOf(s1) {\
   \  return function(s2) {\
   \    return s1.indexOf(s2);\
   \  }; \
   \}" :: String -> String -> Number
 
-foreign import lastIndexOfS
-  "function lastIndexOfS(s1) {\
+foreign import lastIndexOf
+  "function lastIndexOf(s1) {\
   \  return function(s2) {\
   \    return s1.lastIndexOf(s2);\
   \  };\
   \}" :: String -> String -> Number
 
-foreign import lengthS
-  "function lengthS(s) {\
+foreign import length
+  "function length(s) {\
   \  return s.length;\
   \}" :: String -> Number
 
@@ -47,8 +47,8 @@ foreign import replace
   \  };\
   \}" :: String -> String -> String -> String
 
-foreign import sliceS
-  "function sliceS(st) {\
+foreign import slice
+  "function slice(st) {\
   \  return function(e) {\
   \    return function(s) {\
   \      return s.slice(st, e);\

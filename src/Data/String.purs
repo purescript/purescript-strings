@@ -95,3 +95,10 @@ foreign import trim
   "function trim(s) {\
   \  return s.trim();\
   \}" :: String -> String
+
+foreign import joinWith
+  "function joinWith (l) {\
+  \  return function (s) {\
+  \    return l.join(s);\
+  \  };\
+  \}" :: [String] -> String -> String

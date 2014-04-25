@@ -1,6 +1,5 @@
 {
   "name": "purescript-strings",
-  "version": "0.0.0",
   "homepage": "https://github.com/purescript/purescript-strings",
   "description": "String utility functions and regular expressions",
   "keywords": [
@@ -9,10 +8,13 @@
   "license": "MIT",
   "ignore": [
     "**/.*",
-    "node_modules",
     "bower_components",
-    "examples",
-    "externs",
-    "js"
+    "node_modules",
+    "output",
+    "tests",
+    "tmp",
+    "bower.json",
+    "Gruntfile.js",
+    "package.json"
   ]
 }

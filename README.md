@@ -35,7 +35,6 @@
     trim :: Prim.String -> Prim.String
 
 
-
 ## Module Data.String.Regex
 
 ### Types
@@ -54,6 +53,3 @@
     search :: Regex -> Prim.String -> Prim.Number
 
     test :: Regex -> Prim.String -> Prim.Boolean
-
-
-

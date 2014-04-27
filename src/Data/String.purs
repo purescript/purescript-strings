@@ -91,8 +91,8 @@ foreign import trim
   \}" :: String -> String
 
 foreign import joinWith
-  "function joinWith (l) {\
-  \  return function (s) {\
-  \    return l.join(s);\
+  "function joinWith (s) {\
+  \  return function (xs) {\
+  \    return xs.join(s);\
   \  };\
-  \}" :: [String] -> String -> String
+  \}" :: String -> [String] -> String

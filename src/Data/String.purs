@@ -7,6 +7,13 @@ foreign import charAt
   \  };\
   \}" :: Number -> String -> String
 
+foreign import charCodeAt
+  "function charCodeAt(i) {\
+  \  return function(s) {\
+  \    return s.charCodeAt(i); \
+  \  };\
+  \}" :: Number -> String -> Number
+
 foreign import fromCharCode
   "function fromCharCode(n) {\
   \  return String.fromCharCode(n);\

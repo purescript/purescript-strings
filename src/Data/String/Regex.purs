@@ -5,7 +5,7 @@ foreign import data Regex :: *
 foreign import regex
   "function regex(s1) {\
   \  return function(s2) {\
-  \    return new Regex(s1, s2);\
+  \    return new RegExp(s1, s2);\
   \  };\
   \}" :: String -> String -> Regex
 

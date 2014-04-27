@@ -20,16 +20,16 @@ foreign import fromCharCode
   \}" :: Number -> String
 
 foreign import indexOf
-  "function indexOf(s1) {\
-  \  return function(s2) {\
-  \    return s1.indexOf(s2);\
+  "function indexOf(x) {\
+  \  return function(s) {\
+  \    return s.indexOf(x);\
   \  }; \
   \}" :: String -> String -> Number
 
 foreign import lastIndexOf
-  "function lastIndexOf(s1) {\
-  \  return function(s2) {\
-  \    return s1.lastIndexOf(s2);\
+  "function lastIndexOf(x) {\
+  \  return function(s) {\
+  \    return s.lastIndexOf(x);\
   \  };\
   \}" :: String -> String -> Number
 

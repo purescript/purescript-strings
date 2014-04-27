@@ -54,14 +54,19 @@ foreign import replace
   \  };\
   \}" :: String -> String -> String -> String
 
-foreign import slice
-  "function slice(st) {\
-  \  return function(e) {\
-  \    return function(s) {\
-  \      return s.slice(st, e);\
-  \    };\
+foreign import take
+  "function take(n) {\
+  \  return function(s) {\
+  \    return s.substr(0, n);\
   \  };\
-  \}" :: Number -> Number -> String -> String
+  \}" :: Number -> String -> String
+
+foreign import drop
+  "function drop(n) {\
+  \  return function(s) {\
+  \    return s.substr(n);\
+  \  };\
+  \}" :: Number -> String -> String
 
 foreign import split
   "function split(sep) {\
@@ -69,24 +74,6 @@ foreign import split
   \    return s.split(sep);\
   \  };\
   \}" :: String -> String -> [String]
-
-foreign import substr
-  "function substr(n1) {\
-  \  return function(n2) {\
-  \    return function(s) {\
-  \      return s.substr(n1, n2);\
-  \    };\
-  \  };\
-  \}" :: Number -> Number -> String -> String
-
-foreign import substring
-  "function substring(n1) {\
-  \  return function(n2) {\
-  \    return function(s) {\
-  \      return s.substring(n1, n2);\
-  \    };\
-  \  };\
-  \}" :: Number -> Number -> String -> String
 
 foreign import toLower
   "function toLower(s) {\

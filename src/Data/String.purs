@@ -26,12 +26,30 @@ foreign import indexOf
   \  }; \
   \}" :: String -> String -> Number
 
+foreign import indexOf'
+  "function indexOf$prime(x) {\
+  \  return function(startAt) {\
+  \    return function(s) {\
+  \      return s.indexOf(x, startAt);\
+  \    }; \
+  \  }; \
+  \}" :: String -> Number -> String -> Number
+
 foreign import lastIndexOf
   "function lastIndexOf(x) {\
   \  return function(s) {\
   \    return s.lastIndexOf(x);\
   \  };\
   \}" :: String -> String -> Number
+
+foreign import lastIndexOf'
+  "function lastIndexOf$prime(x) {\
+  \  return function(startAt) {\
+  \    return function(s) {\
+  \      return s.lastIndexOf(x, startAt);\
+  \    }; \
+  \  }; \
+  \}" :: String -> Number -> String -> Number
 
 foreign import length
   "function length(s) {\

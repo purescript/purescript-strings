@@ -6,13 +6,21 @@
 
     charAt :: Prim.Number -> Prim.String -> Prim.String
 
+    charCodeAt :: Prim.Number -> Prim.String -> Prim.Number
+
+    drop :: Prim.Number -> Prim.String -> Prim.String
+
     fromCharCode :: Prim.Number -> Prim.String
 
     indexOf :: Prim.String -> Prim.String -> Prim.Number
 
-    joinWith :: [Prim.String] -> Prim.String -> Prim.String
+    indexOf' :: Prim.String -> Prim.Number -> Prim.String -> Prim.Number
+
+    joinWith :: Prim.String -> [Prim.String] -> Prim.String
 
     lastIndexOf :: Prim.String -> Prim.String -> Prim.Number
+
+    lastIndexOf' :: Prim.String -> Prim.Number -> Prim.String -> Prim.Number
 
     length :: Prim.String -> Prim.Number
 
@@ -20,13 +28,9 @@
 
     replace :: Prim.String -> Prim.String -> Prim.String -> Prim.String
 
-    slice :: Prim.Number -> Prim.Number -> Prim.String -> Prim.String
-
     split :: Prim.String -> Prim.String -> [Prim.String]
 
-    substr :: Prim.Number -> Prim.Number -> Prim.String -> Prim.String
-
-    substring :: Prim.Number -> Prim.Number -> Prim.String -> Prim.String
+    take :: Prim.Number -> Prim.String -> Prim.String
 
     toLower :: Prim.String -> Prim.String
 

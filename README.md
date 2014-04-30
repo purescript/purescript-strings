@@ -20,6 +20,8 @@
 
     lastIndexOf :: Prim.String -> Prim.String -> Prim.Number
 
+    lastIndexOf' :: Prim.String -> Prim.Number -> Prim.String -> Prim.Number
+
     length :: Prim.String -> Prim.Number
 
     localeCompare :: Prim.String -> Prim.String -> Prim.Number

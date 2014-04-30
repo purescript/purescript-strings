@@ -26,6 +26,15 @@ foreign import indexOf
   \  }; \
   \}" :: String -> String -> Number
 
+foreign import indexOf'
+  "function indexOf$prime(x) {\
+  \  return function(startAt) {\
+  \    return function(s) {\
+  \      return s.indexOf(x, startAt);\
+  \    }; \
+  \  }; \
+  \}" :: String -> Number -> String -> Number
+
 foreign import lastIndexOf
   "function lastIndexOf(x) {\
   \  return function(s) {\

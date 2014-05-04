@@ -23,14 +23,25 @@ foreign import match
   \  };\
   \}" :: Regex -> String -> [String]
 
-foreign import replaceR
-  "function replaceR(r) {\
+foreign import replace
+  "function replace(r) {\
   \  return function(s1) {\
   \    return function(s2) {\
   \      return s2.replace(r, s1);\
   \    };\
   \  };\
   \}" :: Regex -> String -> String -> String
+
+foreign import replace'
+  "function replace$prime(r) {\
+  \  return function(f) {\
+  \    return function(s2) {\
+  \      return s2.replace(r, function (match) {\
+  \        return f(match)(Array.prototype.splice.call(arguments, 1, arguments.length - 3));\
+  \      });\
+  \    };\
+  \  };\
+  \}" :: Regex -> (String -> [String] -> String) -> String -> String
 
 foreign import search
   "function search(r) {\

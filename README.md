@@ -4,39 +4,39 @@
 
 ### Values
 
-    charAt :: Prim.Number -> Prim.String -> Prim.String
+    charAt :: Number -> String -> String
 
-    charCodeAt :: Prim.Number -> Prim.String -> Prim.Number
+    charCodeAt :: Number -> String -> Number
 
-    drop :: Prim.Number -> Prim.String -> Prim.String
+    drop :: Number -> String -> String
 
-    fromCharCode :: Prim.Number -> Prim.String
+    fromCharCode :: Number -> String
 
-    indexOf :: Prim.String -> Prim.String -> Prim.Number
+    indexOf :: String -> String -> Number
 
-    indexOf' :: Prim.String -> Prim.Number -> Prim.String -> Prim.Number
+    indexOf' :: String -> Number -> String -> Number
 
-    joinWith :: Prim.String -> [Prim.String] -> Prim.String
+    joinWith :: String -> [String] -> String
 
-    lastIndexOf :: Prim.String -> Prim.String -> Prim.Number
+    lastIndexOf :: String -> String -> Number
 
-    lastIndexOf' :: Prim.String -> Prim.Number -> Prim.String -> Prim.Number
+    lastIndexOf' :: String -> Number -> String -> Number
 
-    length :: Prim.String -> Prim.Number
+    length :: String -> Number
 
-    localeCompare :: Prim.String -> Prim.String -> Prim.Number
+    localeCompare :: String -> String -> Number
 
-    replace :: Prim.String -> Prim.String -> Prim.String -> Prim.String
+    replace :: String -> String -> String -> String
 
-    split :: Prim.String -> Prim.String -> [Prim.String]
+    split :: String -> String -> [String]
 
-    take :: Prim.Number -> Prim.String -> Prim.String
+    take :: Number -> String -> String
 
-    toLower :: Prim.String -> Prim.String
+    toLower :: String -> String
 
-    toUpper :: Prim.String -> Prim.String
+    toUpper :: String -> String
 
-    trim :: Prim.String -> Prim.String
+    trim :: String -> String
 
 
 ## Module Data.String.Regex
@@ -48,12 +48,14 @@
 
 ### Values
 
-    match :: Regex -> Prim.String -> [Prim.String]
+    match :: Regex -> String -> [String]
 
-    regex :: Prim.String -> Prim.String -> Regex
+    regex :: String -> String -> Regex
 
-    replaceR :: Regex -> Prim.String -> Prim.String -> Prim.String
+    replace :: Regex -> String -> String -> String
 
-    search :: Regex -> Prim.String -> Prim.Number
+    replace' :: Regex -> (String -> [String] -> String) -> String -> String
 
-    test :: Regex -> Prim.String -> Prim.Boolean
+    search :: Regex -> String -> Number
+
+    test :: Regex -> String -> Boolean

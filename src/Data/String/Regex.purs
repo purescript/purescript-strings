@@ -1,12 +1,19 @@
 module Data.String.Regex (
   Regex(..),
+  RegexFlags(..),
   regex,
+  source,
+  flags,
+  renderFlags,
+  parseFlags,
   test,
   match,
   replace,
   replace',
   search
   ) where
+
+import Data.String (indexOf)
 
 foreign import data Regex :: *
 
@@ -18,12 +25,56 @@ foreign import showRegex'
 instance showRegex :: Show Regex where
   show = showRegex'
 
-foreign import regex
-  "function regex(s1) {\
+type RegexFlags =
+  { global :: Boolean
+  , ignoreCase :: Boolean
+  , multiline :: Boolean
+  , sticky :: Boolean
+  , unicode :: Boolean
+  }
+
+foreign import regex'
+  "function regex$prime(s1) {\
   \  return function(s2) {\
   \    return new RegExp(s1, s2);\
   \  };\
   \}" :: String -> String -> Regex
+
+regex :: String -> RegexFlags -> Regex
+regex source flags = regex' source $ renderFlags flags
+
+foreign import source
+  "function source(r) {\
+  \  return r.source;\
+  \}" :: Regex -> String
+
+foreign import flags
+  "function source(r) {\
+  \  return {\
+  \    multiline: r.multiline,\
+  \    ignoreCase: r.ignoreCase,\
+  \    global: r.global,\
+  \    sticky: !!r.sticky,\
+  \    unicode: !!r.unicode\
+  \  };\
+  \}" :: Regex -> RegexFlags
+
+renderFlags :: RegexFlags -> String
+renderFlags flags =
+  (if flags.global then "g" else "") ++
+  (if flags.ignoreCase then "i" else "") ++
+  (if flags.multiline then "m" else "") ++
+  (if flags.sticky then "y" else "") ++
+  (if flags.unicode then "u" else "")
+
+parseFlags :: String -> RegexFlags
+parseFlags s =
+  { global: indexOf "g" s >= 0
+  , ignoreCase: indexOf "i" s >= 0
+  , multiline: indexOf "m" s >= 0
+  , sticky: indexOf "y" s >= 0
+  , unicode: indexOf "u" s >= 0
+  }
 
 foreign import test
   "function test(r) {\

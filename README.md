@@ -46,6 +46,11 @@
     data Regex :: *
 
 
+### Type Class Instances
+
+    instance showRegex :: Show Regex
+
+
 ### Values
 
     match :: Regex -> String -> [String]

@@ -1,6 +1,22 @@
-module Data.String.Regex where
+module Data.String.Regex (
+  Regex(..),
+  regex,
+  test,
+  match,
+  replace,
+  replace',
+  search
+  ) where
 
 foreign import data Regex :: *
+
+foreign import showRegex'
+  "function showRegex$prime(r){\
+  \  return '' + r;\
+  \}" :: Regex -> String
+
+instance showRegex :: Show Regex where
+  show = showRegex'
 
 foreign import regex
   "function regex(s1) {\

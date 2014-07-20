@@ -45,6 +45,8 @@
 
     data Regex :: *
 
+    type RegexFlags  = { unicode :: Boolean, sticky :: Boolean, multiline :: Boolean, ignoreCase :: Boolean, global :: Boolean }
+
 
 ### Type Class Instances
 
@@ -53,14 +55,22 @@
 
 ### Values
 
+    flags :: Regex -> RegexFlags
+
     match :: Regex -> String -> [String]
 
-    regex :: String -> String -> Regex
+    parseFlags :: String -> RegexFlags
+
+    regex :: String -> RegexFlags -> Regex
+
+    renderFlags :: RegexFlags -> String
 
     replace :: Regex -> String -> String -> String
 
     replace' :: Regex -> (String -> [String] -> String) -> String -> String
 
     search :: Regex -> String -> Number
+
+    source :: Regex -> String
 
     test :: Regex -> String -> Boolean

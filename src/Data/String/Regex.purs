@@ -49,7 +49,7 @@ foreign import source
   \}" :: Regex -> String
 
 foreign import flags
-  "function source(r) {\
+  "function flags(r) {\
   \  return {\
   \    multiline: r.multiline,\
   \    ignoreCase: r.ignoreCase,\

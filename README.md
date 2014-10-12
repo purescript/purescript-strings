@@ -2,15 +2,28 @@
 
 ## Module Data.String
 
+### Types
+
+    newtype Char
+
+
 ### Values
 
     charAt :: Number -> String -> String
 
+    charAt' :: Number -> String -> Maybe Char
+
     charCodeAt :: Number -> String -> Number
+
+    charCodeOf :: Char -> Number
 
     drop :: Number -> String -> String
 
+    fromArray :: [Char] -> String
+
     fromCharCode :: Number -> String
+
+    fromCharCode' :: Number -> Char
 
     indexOf :: String -> String -> Number
 
@@ -31,6 +44,8 @@
     split :: String -> String -> [String]
 
     take :: Number -> String -> String
+
+    toArray :: String -> [Char]
 
     toLower :: String -> String
 

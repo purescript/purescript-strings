@@ -1,11 +1,18 @@
 # Module Documentation
 
-## Module Data.String
+## Module Data.Char
 
 ### Types
 
     newtype Char
 
+
+### Values
+
+    charString :: Char -> String
+
+
+## Module Data.String
 
 ### Values
 
@@ -20,6 +27,8 @@
     drop :: Number -> String -> String
 
     fromArray :: [Char] -> String
+
+    fromChar :: Char -> String
 
     fromCharCode :: Number -> String
 

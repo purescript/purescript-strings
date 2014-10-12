@@ -1,11 +1,11 @@
 module Data.String
   (
-    Char(),
     charAt,
     charAt',
     charCodeAt,
     charCodeOf,
-    fromArray,
+    fromCharArray,
+    fromChar,
     fromCharCode,
     fromCharCode',
     indexOf,
@@ -18,7 +18,7 @@ module Data.String
     take,
     drop,
     split,
-    toArray,
+    toCharArray,
     toLower,
     toUpper,
     trim,
@@ -26,8 +26,9 @@ module Data.String
   ) where
 
   import Data.Maybe
+  import Data.Char
 
-  newtype Char = Char String 
+  foreign import _unsafeMkChar "function _unsafeMkChar(s){return s;}" :: String -> Char
 
   -- | Deprecated
   foreign import charAt
@@ -41,10 +42,13 @@ module Data.String
   charAt' n s = 
     case charAt n s of 
       "" -> Nothing
-      c  -> Just $ Char c
+      c  -> Just $ _unsafeMkChar c
+
+  fromChar :: Char -> String
+  fromChar = charString
 
   charCodeOf :: Char -> Number
-  charCodeOf (Char s) = charCodeAt 0 s
+  charCodeOf c = charCodeAt 0 (charString c)
 
   foreign import charCodeAt
     "function charCodeAt(i) {\
@@ -53,8 +57,8 @@ module Data.String
     \  };\
     \}" :: Number -> String -> Number
 
-  foreign import fromArray
-    "function fromArray(a) {\
+  foreign import fromCharArray
+    "function fromCharArray(a) {\
     \   return a.join('');  \
     \" :: [Char] -> String
 
@@ -65,7 +69,7 @@ module Data.String
     \}" :: Number -> String
 
   fromCharCode' :: Number -> Char
-  fromCharCode' c = Char $ fromCharCode c
+  fromCharCode' c = _unsafeMkChar $ fromCharCode c
 
   foreign import indexOf
     "function indexOf(x) {\
@@ -141,8 +145,8 @@ module Data.String
     \  };\
     \}" :: String -> String -> [String]
 
-  foreign import toArray 
-    "function toArray(s) {\
+  foreign import toCharArray 
+    "function toCharArray(s) {\
     \   return s.split('');\
     \}" :: String -> [Char]
 

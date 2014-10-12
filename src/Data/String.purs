@@ -1,13 +1,9 @@
 module Data.String
   (
     charAt,
-    charAt',
     charCodeAt,
-    charCodeOf,
     fromCharArray,
     fromChar,
-    fromCharCode,
-    fromCharCode',
     indexOf,
     indexOf',
     lastIndexOf,
@@ -27,28 +23,19 @@ module Data.String
 
   import Data.Maybe
   import Data.Char
+  import Data.Function
 
-  foreign import _unsafeMkChar "function _unsafeMkChar(s){return s;}" :: String -> Char
+  foreign import _charAt
+    "function _charAt(i, s, Just, Nothing) {\
+    \  if (i < 0 || i >= s.length) return Nothing;\
+    \  else return Just(s.charAt(i));\
+    \}" :: forall a. Fn4 Number String (a -> Maybe a) (Maybe a) (Maybe Char)
 
-  -- | Deprecated
-  foreign import charAt
-    "function charAt(i) {\
-    \  return function(s) {\
-    \    return s.charAt(i); \
-    \  };\
-    \}" :: Number -> String -> String
-
-  charAt' :: Number -> String -> Maybe Char
-  charAt' n s = 
-    case charAt n s of 
-      "" -> Nothing
-      c  -> Just $ _unsafeMkChar c
+  charAt :: Number -> String -> Maybe Char
+  charAt n s = runFn4 _charAt n s Just Nothing
 
   fromChar :: Char -> String
   fromChar = charString
-
-  charCodeOf :: Char -> Number
-  charCodeOf c = charCodeAt 0 (charString c)
 
   foreign import charCodeAt
     "function charCodeAt(i) {\
@@ -61,15 +48,6 @@ module Data.String
     "function fromCharArray(a) {\
     \   return a.join('');  \
     \" :: [Char] -> String
-
-  -- | Deprecated
-  foreign import fromCharCode
-    "function fromCharCode(n) {\
-    \  return String.fromCharCode(n);\
-    \}" :: Number -> String
-
-  fromCharCode' :: Number -> Char
-  fromCharCode' c = _unsafeMkChar $ fromCharCode c
 
   foreign import indexOf
     "function indexOf(x) {\

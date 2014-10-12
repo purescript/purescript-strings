@@ -11,28 +11,24 @@
 
     charString :: Char -> String
 
+    fromCharCode :: Number -> Char
+
+    toCharCode :: Char -> Number
+
 
 ## Module Data.String
 
 ### Values
 
-    charAt :: Number -> String -> String
-
-    charAt' :: Number -> String -> Maybe Char
+    charAt :: Number -> String -> Maybe Char
 
     charCodeAt :: Number -> String -> Number
 
-    charCodeOf :: Char -> Number
-
     drop :: Number -> String -> String
-
-    fromArray :: [Char] -> String
 
     fromChar :: Char -> String
 
-    fromCharCode :: Number -> String
-
-    fromCharCode' :: Number -> Char
+    fromCharArray :: [Char] -> String
 
     indexOf :: String -> String -> Number
 
@@ -54,7 +50,7 @@
 
     take :: Number -> String -> String
 
-    toArray :: String -> [Char]
+    toCharArray :: String -> [Char]
 
     toLower :: String -> String
 

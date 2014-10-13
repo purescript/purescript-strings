@@ -1,16 +1,34 @@
 # Module Documentation
 
+## Module Data.Char
+
+### Types
+
+    newtype Char
+
+
+### Values
+
+    charString :: Char -> String
+
+    fromCharCode :: Number -> Char
+
+    toCharCode :: Char -> Number
+
+
 ## Module Data.String
 
 ### Values
 
-    charAt :: Number -> String -> String
+    charAt :: Number -> String -> Maybe Char
 
     charCodeAt :: Number -> String -> Number
 
     drop :: Number -> String -> String
 
-    fromCharCode :: Number -> String
+    fromChar :: Char -> String
+
+    fromCharArray :: [Char] -> String
 
     indexOf :: String -> String -> Number
 
@@ -31,6 +49,8 @@
     split :: String -> String -> [String]
 
     take :: Number -> String -> String
+
+    toCharArray :: String -> [Char]
 
     toLower :: String -> String
 

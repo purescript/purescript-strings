@@ -18,13 +18,25 @@ module.exports = function(grunt) {
             src: "src/**/*.purs",
             dest: "README.md"
         }
+    },
+    jsvalidate: {
+      options:{
+        globals: {},
+        esprimaOptions: {},
+        verbose: false
+      },
+      targetName:{
+        files:{
+          src: ['output/Data.String/*.js']
+        }
+      }
     }
-
   });
 
+  grunt.loadNpmTasks('grunt-jsvalidate');
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-purescript");
   
-  grunt.registerTask("make", ["pscMake", "dotPsci", "docgen"]);
+  grunt.registerTask("make", ["pscMake", "dotPsci", "docgen", "jsvalidate"]);
   grunt.registerTask("default", ["make"]);
 };

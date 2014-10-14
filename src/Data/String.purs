@@ -47,7 +47,7 @@ module Data.String
   foreign import fromCharArray
     "function fromCharArray(a) {\
     \   return a.join('');  \
-    \" :: [Char] -> String
+    \}" :: [Char] -> String
 
   foreign import indexOf
     "function indexOf(x) {\

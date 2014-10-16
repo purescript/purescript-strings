@@ -20,3 +20,13 @@ module Data.Char
     \   return String.fromCharCode(c);\
     \}" :: Number -> Char
 
+  instance eqChar :: Eq Char where
+    (==) (Char a) (Char b) = a == b
+
+    (/=) a b = not (a == b)
+
+  instance ordChar :: Ord Char where
+    compare (Char a) (Char b) = a `compare` b
+
+  instance showChar :: Show Char where
+    show (Char s) = "Char " ++ show s

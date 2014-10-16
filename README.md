@@ -7,6 +7,15 @@
     newtype Char
 
 
+### Type Class Instances
+
+    instance eqChar :: Eq Char
+
+    instance ordChar :: Ord Char
+
+    instance showChar :: Show Char
+
+
 ### Values
 
     charString :: Char -> String

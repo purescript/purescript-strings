@@ -10,7 +10,8 @@ module Data.String.Regex (
   match,
   replace,
   replace',
-  search
+  search,
+  split
   ) where
 
 import Data.String (indexOf)
@@ -116,3 +117,10 @@ foreign import search
   \    return s.search(r);\
   \  };\
   \}" :: Regex -> String -> Number
+
+foreign import split
+  "function split(r) {\
+  \  return function(s) {\
+  \    return s.split(r);\
+  \  };\
+  \}" :: Regex -> String -> [String]

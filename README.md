@@ -102,4 +102,6 @@
 
     source :: Regex -> String
 
+    split :: Regex -> String -> [String]
+
     test :: Regex -> String -> Boolean

@@ -31,7 +31,7 @@
 
     charAt :: Number -> String -> Maybe Char
 
-    charCodeAt :: Number -> String -> Number
+    charCodeAt :: Number -> String -> Maybe Number
 
     drop :: Number -> String -> String
 
@@ -105,3 +105,12 @@
     split :: Regex -> String -> [String]
 
     test :: Regex -> String -> Boolean
+
+
+## Module Data.String.Unsafe
+
+### Values
+
+    charAt :: Number -> String -> Char
+
+    charCodeAt :: Number -> String -> Number

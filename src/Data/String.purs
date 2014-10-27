@@ -37,12 +37,14 @@ module Data.String
   fromChar :: Char -> String
   fromChar = charString
 
-  foreign import charCodeAt
-    "function charCodeAt(i) {\
-    \  return function(s) {\
-    \    return s.charCodeAt(i); \
-    \  };\
-    \}" :: Number -> String -> Number
+  foreign import _charCodeAt
+    "function _charCodeAt(i, s, Just, Nothing) {\
+    \  if (i < 0 || i >= s.length) return Nothing;\
+    \  else return Just(s.charCodeAt(i));\
+    \}" :: forall a. Fn4 Number String (a -> Maybe a) (Maybe a) (Maybe Number)
+
+  charCodeAt :: Number -> String -> Maybe Number
+  charCodeAt n s = runFn4 _charCodeAt n s Just Nothing
 
   foreign import fromCharArray
     "function fromCharArray(a) {\
@@ -123,7 +125,7 @@ module Data.String
     \  };\
     \}" :: String -> String -> [String]
 
-  foreign import toCharArray 
+  foreign import toCharArray
     "function toCharArray(s) {\
     \   return s.split('');\
     \}" :: String -> [Char]

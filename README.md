@@ -105,3 +105,12 @@
     split :: Regex -> String -> [String]
 
     test :: Regex -> String -> Boolean
+
+
+## Module Data.String.Unsafe
+
+### Values
+
+    charAt :: Number -> String -> Char
+
+    charCodeAt :: Number -> String -> Number

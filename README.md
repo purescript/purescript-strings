@@ -31,7 +31,7 @@
 
     charAt :: Number -> String -> Maybe Char
 
-    charCodeAt :: Number -> String -> Number
+    charCodeAt :: Number -> String -> Maybe Number
 
     drop :: Number -> String -> String
 

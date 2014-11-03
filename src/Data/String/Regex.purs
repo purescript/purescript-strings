@@ -14,6 +14,8 @@ module Data.String.Regex (
   split
   ) where
 
+import Data.Function
+import Data.Maybe
 import Data.String (indexOf)
 
 foreign import data Regex :: *
@@ -84,12 +86,14 @@ foreign import test
   \  };\
   \}" :: Regex -> String -> Boolean
 
-foreign import match
-  "function match(r) {\
-  \  return function (s) {\
-  \    return s.match(r); \
-  \  };\
-  \}" :: Regex -> String -> [String]
+foreign import _match
+  "function _match(r, s, Just, Nothing) {\
+  \  var m = s.match(r);\
+  \  return m == null ? Nothing : Just(m);\
+  \}" :: forall r. Fn4 Regex String ([String] -> r) r r
+
+match :: Regex -> String -> Maybe [String]
+match r s = runFn4 _match r s Just Nothing
 
 foreign import replace
   "function replace(r) {\

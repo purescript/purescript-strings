@@ -86,7 +86,7 @@
 
     flags :: Regex -> RegexFlags
 
-    match :: Regex -> String -> [String]
+    match :: Regex -> String -> Maybe [String]
 
     parseFlags :: String -> RegexFlags
 

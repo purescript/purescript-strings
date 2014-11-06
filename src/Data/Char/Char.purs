@@ -11,14 +11,18 @@ module Data.Char
   charString (Char s) = s
 
   foreign import toCharCode
-    "function toCharCode(c){\
-    \  return c.charCodeAt(0);\
-    \}" :: Char -> Number
+    """
+    function toCharCode(c) {
+      return c.charCodeAt(0);
+    }
+    """ :: Char -> Number
 
-  foreign import fromCharCode 
-    "function fromCharCode(c){\
-    \   return String.fromCharCode(c);\
-    \}" :: Number -> Char
+  foreign import fromCharCode
+    """
+    function fromCharCode(c) {
+      return String.fromCharCode(c);
+    }
+    """ :: Number -> Char
 
   instance eqChar :: Eq Char where
     (==) (Char a) (Char b) = a == b

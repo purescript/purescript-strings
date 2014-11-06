@@ -28,8 +28,7 @@ module Data.String
   foreign import _charAt
     """
     function _charAt(i, s, Just, Nothing) {
-      if (i < 0 || i >= s.length) return Nothing;
-      else return Just(s.charAt(i));
+      return i >= 0 && i < s.length ? Just(s.charAt(i)) : Nothing;
     }
     """ :: forall a. Fn4 Number String (a -> Maybe a) (Maybe a) (Maybe Char)
 
@@ -42,8 +41,7 @@ module Data.String
   foreign import _charCodeAt
     """
     function _charCodeAt(i, s, Just, Nothing) {
-      if (i < 0 || i >= s.length) return Nothing;
-      else return Just(s.charCodeAt(i));
+      return i >= 0 && i < s.length ? Just(s.charCodeAt(i)) : Nothing;
     }
     """ :: forall a. Fn4 Number String (a -> Maybe a) (Maybe a) (Maybe Number)
 

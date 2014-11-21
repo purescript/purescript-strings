@@ -154,7 +154,7 @@ module Data.String
         var i;
         for(i = 0; i < s.length && p(s.charAt(i)); i++){};
         return take(i)(s);
-      }
+      };
     }
     """ :: (Char -> Boolean) -> String -> String
 
@@ -174,7 +174,7 @@ module Data.String
         var i;
         for(i = 0; i < s.length && p(s.charAt(i)); i++){};
         return drop(i)(s);
-      }
+      };
     }
     """ :: (Char -> Boolean) -> String -> String
 

@@ -59,6 +59,8 @@
 
     replace :: String -> String -> String -> String
 
+    singleton :: Char -> String
+
     split :: String -> String -> [String]
 
     take :: Number -> String -> String

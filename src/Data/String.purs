@@ -11,6 +11,7 @@ module Data.String
     null,
     uncons,
     length,
+    singleton,
     localeCompare,
     replace,
     take,

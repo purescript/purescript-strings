@@ -8,11 +8,15 @@ module Data.String
     indexOf',
     lastIndexOf,
     lastIndexOf',
+    null,
+    uncons,
     length,
     localeCompare,
     replace,
     take,
+    takeWhile,
     drop,
+    dropWhile,
     split,
     toCharArray,
     toLower,
@@ -24,6 +28,7 @@ module Data.String
   import Data.Maybe
   import Data.Char
   import Data.Function
+  import qualified Data.String.Unsafe as U
 
   foreign import _charAt
     """
@@ -38,6 +43,9 @@ module Data.String
   fromChar :: Char -> String
   fromChar = charString
 
+  singleton :: Char -> String
+  singleton = fromChar
+
   foreign import _charCodeAt
     """
     function _charCodeAt(i, s, Just, Nothing) {
@@ -47,6 +55,13 @@ module Data.String
 
   charCodeAt :: Number -> String -> Maybe Number
   charCodeAt n s = runFn4 _charCodeAt n s Just Nothing
+
+  null :: String -> Boolean
+  null s = length s == 0
+
+  uncons :: String -> Maybe {head :: Char, tail :: String}
+  uncons s | null s = Nothing
+  uncons s = Just {head : U.charAt 0 s, tail : drop 1 s}
 
   foreign import fromCharArray
     """
@@ -131,6 +146,17 @@ module Data.String
     }
     """ :: Number -> String -> String
 
+  foreign import takeWhile
+    """
+    function takeWhile(p){
+      return function(s){
+        var i;
+        for(i = 0; i < s.length && p(s.charAt(i)); i++){};
+        return take(i)(s);
+      }
+    }
+    """ :: (Char -> Boolean) -> String -> String
+
   foreign import drop
     """
     function drop(n) {
@@ -139,6 +165,17 @@ module Data.String
       };
     }
     """ :: Number -> String -> String
+
+  foreign import dropWhile
+    """
+    function dropWhile(p){
+      return function(s){
+        var i;
+        for(i = 0; i < s.length && p(s.charAt(i)); i++){};
+        return drop(i)(s);
+      }
+    }
+    """ :: (Char -> Boolean) -> String -> String
 
   foreign import split
     """

@@ -35,6 +35,8 @@
 
     drop :: Number -> String -> String
 
+    dropWhile :: (Char -> Boolean) -> String -> String
+
     fromChar :: Char -> String
 
     fromCharArray :: [Char] -> String
@@ -53,11 +55,15 @@
 
     localeCompare :: String -> String -> Number
 
+    null :: String -> Boolean
+
     replace :: String -> String -> String -> String
 
     split :: String -> String -> [String]
 
     take :: Number -> String -> String
+
+    takeWhile :: (Char -> Boolean) -> String -> String
 
     toCharArray :: String -> [Char]
 
@@ -67,6 +73,8 @@
 
     trim :: String -> String
 
+    uncons :: String -> Maybe { tail :: String, head :: Char }
+
 
 ## Module Data.String.Regex
 
@@ -74,7 +82,7 @@
 
     data Regex :: *
 
-    type RegexFlags  = { unicode :: Boolean, sticky :: Boolean, multiline :: Boolean, ignoreCase :: Boolean, global :: Boolean }
+    type RegexFlags = { unicode :: Boolean, sticky :: Boolean, multiline :: Boolean, ignoreCase :: Boolean, global :: Boolean }
 
 
 ### Type Class Instances

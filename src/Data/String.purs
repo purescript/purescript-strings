@@ -64,6 +64,12 @@ module Data.String
   uncons s | null s = Nothing
   uncons s = Just {head : U.charAt 0 s, tail : drop 1 s}
 
+  takeWhile :: (Char -> Boolean) -> String -> String
+  takeWhile = doAfter take
+
+  dropWhile :: (Char -> Boolean) -> String -> String
+  dropWhile = doAfter drop
+
   foreign import fromCharArray
     """
     function fromCharArray(a) {
@@ -147,17 +153,6 @@ module Data.String
     }
     """ :: Number -> String -> String
 
-  foreign import takeWhile
-    """
-    function takeWhile(p){
-      return function(s){
-        var i;
-        for(i = 0; i < s.length && p(s.charAt(i)); i++){};
-        return take(i)(s);
-      };
-    }
-    """ :: (Char -> Boolean) -> String -> String
-
   foreign import drop
     """
     function drop(n) {
@@ -167,16 +162,18 @@ module Data.String
     }
     """ :: Number -> String -> String
 
-  foreign import dropWhile
+  foreign import doAfter
     """
-    function dropWhile(p){
-      return function(s){
-        var i;
-        for(i = 0; i < s.length && p(s.charAt(i)); i++){};
-        return drop(i)(s);
+    function doAfter(f){
+      return function(p){
+        return function(s){
+          var i;
+          for(i = 0; i < s.length && p(s.charAt(i)); i++){};
+          return f(i)(s);
+        };
       };
     }
-    """ :: (Char -> Boolean) -> String -> String
+    """ :: (Number -> String -> String) -> (Char -> Boolean) -> String -> String
 
   foreign import split
     """

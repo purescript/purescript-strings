@@ -33,6 +33,8 @@
 
     charCodeAt :: Number -> String -> Maybe Number
 
+    count :: (Char -> Boolean) -> String -> Number
+
     drop :: Number -> String -> String
 
     dropWhile :: (Char -> Boolean) -> String -> String

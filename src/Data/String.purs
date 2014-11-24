@@ -14,6 +14,7 @@ module Data.String
     singleton,
     localeCompare,
     replace,
+    count,
     take,
     takeWhile,
     drop,
@@ -65,10 +66,10 @@ module Data.String
   uncons s = Just {head : U.charAt 0 s, tail : drop 1 s}
 
   takeWhile :: (Char -> Boolean) -> String -> String
-  takeWhile = doAfter take
+  takeWhile p s = take (count p s) s
 
   dropWhile :: (Char -> Boolean) -> String -> String
-  dropWhile = doAfter drop
+  dropWhile p s = drop (count p s) s
 
   foreign import fromCharArray
     """
@@ -162,18 +163,16 @@ module Data.String
     }
     """ :: Number -> String -> String
 
-  foreign import doAfter
+  foreign import count
     """
-    function doAfter(f){
-      return function(p){
-        return function(s){
-          var i;
-          for(i = 0; i < s.length && p(s.charAt(i)); i++){};
-          return f(i)(s);
-        };
-      };
+    function count(p){      
+      return function(s){
+        var i;
+        for(i = 0; i < s.length && p(s.charAt(i)); i++){};
+        return i;
+      };      
     }
-    """ :: (Number -> String -> String) -> (Char -> Boolean) -> String -> String
+    """ :: (Char -> Boolean) -> String -> Number
 
   foreign import split
     """

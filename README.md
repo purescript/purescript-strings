@@ -75,6 +75,8 @@
 
     split :: String -> String -> [String]
 
+    startsWith :: String -> String -> Boolean
+
     take :: Number -> String -> String
 
     takeWhile :: (Char -> Boolean) -> String -> String
@@ -86,6 +88,10 @@
     toUpper :: String -> String
 
     trim :: String -> String
+
+    trimLeft :: String -> String
+
+    trimRight :: String -> String
 
     uncons :: String -> Maybe { tail :: String, head :: Char }
 

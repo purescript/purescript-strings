@@ -18,9 +18,19 @@
 
 ### Values
 
+    charInRange :: Char -> Char -> Char -> Boolean
+
     charString :: Char -> String
 
     fromCharCode :: Number -> Char
+
+    isDigit :: Char -> Boolean
+
+    isHexDigit :: Char -> Boolean
+
+    isOctDigit :: Char -> Boolean
+
+    isSpace :: Char -> Boolean
 
     toCharCode :: Char -> Number
 

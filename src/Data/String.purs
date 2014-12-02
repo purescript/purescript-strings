@@ -27,7 +27,8 @@ module Data.String
     trimLeft,
     trimRight,
     joinWith,
-    startsWith
+    startsWith,
+    reverse
   ) where
 
   import Data.Maybe
@@ -214,19 +215,18 @@ module Data.String
     }
     """ :: String -> String
 
-  foreign import trimLeft
+  foreign import reverse
     """
-    function trimLeft(s) {
-      return s.trimLeft();
+    function reverse(s) {
+      return s.split('').reverse().join('');
     }
     """ :: String -> String
 
-  foreign import trimRight
-    """
-    function trimRight(s) {
-      return s.trimRight();
-    }
-    """ :: String -> String
+  trimLeft :: String -> String
+  trimLeft = dropWhile isSpace
+
+  trimRight :: String -> String
+  trimRight = reverse >>> trimLeft >>> reverse
 
   foreign import joinWith
     """

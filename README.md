@@ -71,6 +71,8 @@
 
     replace :: String -> String -> String -> String
 
+    reverse :: String -> String
+
     singleton :: Char -> String
 
     split :: String -> String -> [String]

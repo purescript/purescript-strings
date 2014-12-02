@@ -24,7 +24,11 @@ module Data.String
     toLower,
     toUpper,
     trim,
-    joinWith
+    trimLeft,
+    trimRight,
+    joinWith,
+    startsWith,
+    reverse
   ) where
 
   import Data.Maybe
@@ -211,6 +215,19 @@ module Data.String
     }
     """ :: String -> String
 
+  foreign import reverse
+    """
+    function reverse(s) {
+      return s.split('').reverse().join('');
+    }
+    """ :: String -> String
+
+  trimLeft :: String -> String
+  trimLeft = dropWhile isSpace
+
+  trimRight :: String -> String
+  trimRight = reverse >>> trimLeft >>> reverse
+
   foreign import joinWith
     """
     function joinWith(s) {
@@ -219,3 +236,6 @@ module Data.String
       };
     }
     """ :: String -> [String] -> String
+
+  startsWith :: String -> String -> Boolean
+  startsWith sub s = take (length sub) s == sub

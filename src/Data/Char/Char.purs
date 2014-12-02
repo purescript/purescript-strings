@@ -2,7 +2,12 @@ module Data.Char
   ( Char(),
     charString,
     fromCharCode,
-    toCharCode
+    toCharCode,
+    isSpace,
+    isDigit,
+    isOctDigit,
+    isHexDigit,
+    charInRange
   ) where
 
   newtype Char = Char String
@@ -34,3 +39,31 @@ module Data.Char
 
   instance showChar :: Show Char where
     show (Char s) = "Char " ++ show s
+  
+  
+  isSpace :: Char -> Boolean
+  isSpace (Char c) =
+       c == " "
+    || c == "\t"
+    || c == "\n"
+    || c == "\r"
+    || c == "\f"
+    || c == "\v"
+    || c == "\xa0"
+  
+  charInRange :: Char -> Char -> Char -> Boolean
+  charInRange st en c =
+       toCharCode c >= toCharCode st
+    && toCharCode c <= toCharCode en
+  
+  isDigit :: Char -> Boolean
+  isDigit = charInRange (Char "0") (Char "9")
+
+  isOctDigit :: Char -> Boolean
+  isOctDigit = charInRange (Char "0") (Char "9")
+  
+  isHexDigit :: Char -> Boolean
+  isHexDigit c =
+       isDigit c
+    || charInRange (Char "a") (Char "f") c
+    || charInRange (Char "A") (Char "F") c

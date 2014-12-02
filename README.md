@@ -18,9 +18,19 @@
 
 ### Values
 
+    charInRange :: Char -> Char -> Char -> Boolean
+
     charString :: Char -> String
 
     fromCharCode :: Number -> Char
+
+    isDigit :: Char -> Boolean
+
+    isHexDigit :: Char -> Boolean
+
+    isOctDigit :: Char -> Boolean
+
+    isSpace :: Char -> Boolean
 
     toCharCode :: Char -> Number
 
@@ -61,9 +71,13 @@
 
     replace :: String -> String -> String -> String
 
+    reverse :: String -> String
+
     singleton :: Char -> String
 
     split :: String -> String -> [String]
+
+    startsWith :: String -> String -> Boolean
 
     take :: Number -> String -> String
 
@@ -76,6 +90,10 @@
     toUpper :: String -> String
 
     trim :: String -> String
+
+    trimLeft :: String -> String
+
+    trimRight :: String -> String
 
     uncons :: String -> Maybe { tail :: String, head :: Char }
 

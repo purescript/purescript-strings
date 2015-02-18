@@ -174,6 +174,10 @@
 
     match :: Regex -> String -> Maybe [String]
 
+#### `noFlags`
+
+    noFlags :: RegexFlags
+
 #### `parseFlags`
 
     parseFlags :: String -> RegexFlags

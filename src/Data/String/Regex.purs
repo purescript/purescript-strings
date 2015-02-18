@@ -1,17 +1,18 @@
-module Data.String.Regex (
-  Regex(..),
-  RegexFlags(..),
-  regex,
-  source,
-  flags,
-  renderFlags,
-  parseFlags,
-  test,
-  match,
-  replace,
-  replace',
-  search,
-  split
+module Data.String.Regex
+  ( Regex(..)
+  , RegexFlags(..)
+  , regex
+  , source
+  , flags
+  , renderFlags
+  , parseFlags
+  , test
+  , match
+  , replace
+  , replace'
+  , search
+  , split
+  , noFlags
   ) where
 
 import Data.Function

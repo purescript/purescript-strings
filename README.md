@@ -160,21 +160,29 @@
 
 ### Type Class Instances
 
+#### `boolLikeRegexFlags`
+
+    instance boolLikeRegexFlags :: BoolLike RegexFlags
+
+#### `eqRegexFlags`
+
+    instance eqRegexFlags :: Eq RegexFlags
+
 #### `monoidRegexFlags`
 
     instance monoidRegexFlags :: Monoid RegexFlags
 
-#### `regexFlagsBoolLike`
+#### `semiGroupRegexFlags`
 
-    instance regexFlagsBoolLike :: BoolLike RegexFlags
-
-#### `regexFlagsSemiGroup`
-
-    instance regexFlagsSemiGroup :: Semigroup RegexFlags
+    instance semiGroupRegexFlags :: Semigroup RegexFlags
 
 #### `showRegex`
 
     instance showRegex :: Show Regex
+
+#### `showRegexFlags`
+
+    instance showRegexFlags :: Show RegexFlags
 
 
 ### Values

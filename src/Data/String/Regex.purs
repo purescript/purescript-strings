@@ -77,12 +77,25 @@ onRegexFlags f x' y' = RegexFlags
   x = runRegexFlags x'
   y = runRegexFlags y'
 
-instance regexFlagsBoolLike :: BoolLike RegexFlags where
+instance showRegexFlags :: Show RegexFlags where
+  show (RegexFlags rf) = "RegexFlags "    ++
+  "{ global     : " ++ show rf.global     ++ "\n" ++
+  ", ignoreCase : " ++ show rf.ignoreCase ++ "\n" ++
+  ", multiline  : " ++ show rf.multiline  ++ "\n" ++
+  ", sticky     : " ++ show rf.sticky     ++ "\n" ++
+  ", unicode    : " ++ show rf.unicode    ++ "\n" ++ " }"
+
+instance eqRegexFlags :: Eq RegexFlags where
+  (==) x y = case onRegexFlags (==) x y of 
+    RegexFlags rf -> rf.global && rf.ignoreCase && rf.multiline && rf.sticky && rf.unicode
+  (/=) x y = not (x == y)
+
+instance boolLikeRegexFlags :: BoolLike RegexFlags where
   (&&) = onRegexFlags (&&)
   (||) = onRegexFlags (||)
   not  = onRegexFlags (const not) noFlags
 
-instance regexFlagsSemiGroup :: Semigroup RegexFlags where
+instance semiGroupRegexFlags :: Semigroup RegexFlags where
   (<>) = (||)
 
 instance monoidRegexFlags :: Monoid RegexFlags where

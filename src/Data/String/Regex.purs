@@ -38,17 +38,23 @@ newtype RegexFlags = RegexFlags
   , ignoreCase :: Boolean
   , multiline :: Boolean
   , sticky :: Boolean
-  , unicode :: Boolean
-  }
+  , unicode :: Boolean }
 
 runRegexFlags :: RegexFlags -> 
   { global :: Boolean
   , ignoreCase :: Boolean
   , multiline :: Boolean
   , sticky :: Boolean
-  , unicode :: Boolean
-  }
+  , unicode :: Boolean }
 runRegexFlags (RegexFlags x) = x
+
+newRegexFlags :: 
+  { global :: Boolean
+  , ignoreCase :: Boolean
+  , multiline :: Boolean
+  , sticky :: Boolean
+  , unicode :: Boolean } -> RegexFlags
+newRegexFlags f = RegexFlags f 
 
 noFlags :: RegexFlags
 noFlags = RegexFlags 
@@ -79,15 +85,6 @@ instance regexFlagsSemiGroup :: Semigroup RegexFlags where
 
 instance monoidRegexFlags :: Monoid RegexFlags where
   mempty = noFlags
-
--- instance semiRingRegexFlags :: Semiring RegexFlags where
---   (*) = (&&)
---   zero = not mempty
---   (+) = (<>)
---   one = mempty
-
--- instance ringRegexFlags :: Ring RegexFlags where
---   (-) = onRegexFlags (/=)
 
 foreign import regex'
   """

@@ -34,6 +34,7 @@ type RegexFlags =
   , unicode :: Boolean
   }
   
+noFlags :: RegexFlags
 noFlags  = { global     : false
            , ignoreCase : false
            , multiline  : false

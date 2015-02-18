@@ -187,9 +187,17 @@
 
     match :: Regex -> String -> Maybe [String]
 
+#### `newRegexFlags`
+
+    newRegexFlags :: { unicode :: Boolean, sticky :: Boolean, multiline :: Boolean, ignoreCase :: Boolean, global :: Boolean } -> RegexFlags
+
 #### `noFlags`
 
     noFlags :: RegexFlags
+
+#### `onRegexFlags`
+
+    onRegexFlags :: (Boolean -> Boolean -> Boolean) -> RegexFlags -> RegexFlags -> RegexFlags
 
 #### `parseFlags`
 

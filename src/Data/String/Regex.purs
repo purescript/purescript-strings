@@ -14,6 +14,8 @@ module Data.String.Regex
   , split
   , noFlags
   , runRegexFlags
+  , onRegexFlags
+  , newRegexFlags
   ) where
 
 import Data.Function

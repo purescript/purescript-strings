@@ -38,6 +38,13 @@ type RegexFlags =
   , unicode :: Boolean
   }
 
+noFlags :: RegexFlags
+noFlags = { global     : false
+          , ignoreCase : false
+          , multiline  : false
+          , sticky     : false
+          , unicode    : false }
+
 foreign import regex'
   """
   function regex$prime(s1) {

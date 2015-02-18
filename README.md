@@ -168,11 +168,12 @@
 
     instance eqRegexFlags :: Eq RegexFlags
 
-#### `monoidRegexFlags`
-
-    instance monoidRegexFlags :: Monoid RegexFlags
-
 #### `semiGroupRegexFlags`
+
+Example usage:
+`regex "Foo" $ global <> ignoreCase`
+is equivalent to
+`/Foo/ig`
 
     instance semiGroupRegexFlags :: Semigroup RegexFlags
 
@@ -191,19 +192,43 @@
 
     flags :: Regex -> RegexFlags
 
+#### `global`
+
+Flags where `global : true` and all others are false
+
+    global :: RegexFlags
+
+#### `ignoreCase`
+
+Flags where `ignoreCase : true` and all others are false
+
+    ignoreCase :: RegexFlags
+
 #### `match`
 
     match :: Regex -> String -> Maybe [String]
 
+#### `multiline`
+
+Flags where `multiline : true` and all others are false
+
+    multiline :: RegexFlags
+
 #### `newRegexFlags`
 
-    newRegexFlags :: { unicode :: Boolean, sticky :: Boolean, multiline :: Boolean, ignoreCase :: Boolean, global :: Boolean } -> RegexFlags
+Produce a new `RegexFlags` from `Booleans`
+
+    newRegexFlags :: Boolean -> Boolean -> Boolean -> Boolean -> Boolean -> RegexFlags
 
 #### `noFlags`
+
+All flags are set to false. Useful as a base for building flags or a default.
 
     noFlags :: RegexFlags
 
 #### `onRegexFlags`
+
+Perform a `Boolean` comparison across `RegexFlags`
 
     onRegexFlags :: (Boolean -> Boolean -> Boolean) -> RegexFlags -> RegexFlags -> RegexFlags
 
@@ -229,6 +254,8 @@
 
 #### `runRegexFlags`
 
+Unwrap `RegexFlags` type to the underlying record
+
     runRegexFlags :: RegexFlags -> { unicode :: Boolean, sticky :: Boolean, multiline :: Boolean, ignoreCase :: Boolean, global :: Boolean }
 
 #### `search`
@@ -243,9 +270,21 @@
 
     split :: Regex -> String -> [String]
 
+#### `sticky`
+
+Flags where `sticky : true` and all others are false
+
+    sticky :: RegexFlags
+
 #### `test`
 
     test :: Regex -> String -> Boolean
+
+#### `unicode`
+
+Flags where `unicode : true` and all others are false
+
+    unicode :: RegexFlags
 
 
 ## Module Data.String.Unsafe

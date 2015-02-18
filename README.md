@@ -154,10 +154,23 @@
 
 #### `RegexFlags`
 
-    type RegexFlags = { unicode :: Boolean, sticky :: Boolean, multiline :: Boolean, ignoreCase :: Boolean, global :: Boolean }
+    newtype RegexFlags
+      = RegexFlags { unicode :: Boolean, sticky :: Boolean, multiline :: Boolean, ignoreCase :: Boolean, global :: Boolean }
 
 
 ### Type Class Instances
+
+#### `monoidRegexFlags`
+
+    instance monoidRegexFlags :: Monoid RegexFlags
+
+#### `regexFlagsBoolLike`
+
+    instance regexFlagsBoolLike :: BoolLike RegexFlags
+
+#### `regexFlagsSemiGroup`
+
+    instance regexFlagsSemiGroup :: Semigroup RegexFlags
 
 #### `showRegex`
 
@@ -197,6 +210,10 @@
 #### `replace'`
 
     replace' :: Regex -> (String -> [String] -> String) -> String -> String
+
+#### `runRegexFlags`
+
+    runRegexFlags :: RegexFlags -> { unicode :: Boolean, sticky :: Boolean, multiline :: Boolean, ignoreCase :: Boolean, global :: Boolean }
 
 #### `search`
 

@@ -13,9 +13,11 @@ module Data.String.Regex
   , search
   , split
   , noFlags
+  , runRegexFlags
   ) where
 
 import Data.Function
+import Data.Monoid
 import Data.Maybe
 import Data.String (indexOf)
 
@@ -31,7 +33,7 @@ foreign import showRegex'
 instance showRegex :: Show Regex where
   show = showRegex'
 
-type RegexFlags =
+newtype RegexFlags = RegexFlags
   { global :: Boolean
   , ignoreCase :: Boolean
   , multiline :: Boolean
@@ -39,12 +41,53 @@ type RegexFlags =
   , unicode :: Boolean
   }
 
+runRegexFlags :: RegexFlags -> 
+  { global :: Boolean
+  , ignoreCase :: Boolean
+  , multiline :: Boolean
+  , sticky :: Boolean
+  , unicode :: Boolean
+  }
+runRegexFlags (RegexFlags x) = x
+
 noFlags :: RegexFlags
-noFlags = { global     : false
-          , ignoreCase : false
-          , multiline  : false
-          , sticky     : false
-          , unicode    : false }
+noFlags = RegexFlags 
+  { global     : false
+  , ignoreCase : false
+  , multiline  : false
+  , sticky     : false
+  , unicode    : false }
+
+onRegexFlags :: (Boolean -> Boolean -> Boolean) -> RegexFlags -> RegexFlags -> RegexFlags
+onRegexFlags f x' y' = RegexFlags
+  { global     : x.global     `f` y.global
+  , ignoreCase : x.ignoreCase `f` y.ignoreCase
+  , multiline  : x.multiline  `f` y.multiline
+  , sticky     : x.sticky     `f` y.sticky
+  , unicode    : x.unicode    `f` y.unicode }
+  where 
+  x = runRegexFlags x'
+  y = runRegexFlags y'
+
+instance regexFlagsBoolLike :: BoolLike RegexFlags where
+  (&&) = onRegexFlags (&&)
+  (||) = onRegexFlags (||)
+  not  = onRegexFlags (const not) noFlags
+
+instance regexFlagsSemiGroup :: Semigroup RegexFlags where
+  (<>) = (||)
+
+instance monoidRegexFlags :: Monoid RegexFlags where
+  mempty = noFlags
+
+-- instance semiRingRegexFlags :: Semiring RegexFlags where
+--   (*) = (&&)
+--   zero = not mempty
+--   (+) = (<>)
+--   one = mempty
+
+-- instance ringRegexFlags :: Ring RegexFlags where
+--   (-) = onRegexFlags (/=)
 
 foreign import regex'
   """
@@ -57,6 +100,7 @@ foreign import regex'
 
 regex :: String -> RegexFlags -> Regex
 regex source flags = regex' source $ renderFlags flags
+
 
 foreign import source
   """
@@ -79,7 +123,7 @@ foreign import flags
   """ :: Regex -> RegexFlags
 
 renderFlags :: RegexFlags -> String
-renderFlags flags =
+renderFlags = runRegexFlags >>> \flags ->
   (if flags.global then "g" else "") ++
   (if flags.ignoreCase then "i" else "") ++
   (if flags.multiline then "m" else "") ++
@@ -87,7 +131,7 @@ renderFlags flags =
   (if flags.unicode then "u" else "")
 
 parseFlags :: String -> RegexFlags
-parseFlags s =
+parseFlags s = RegexFlags
   { global: indexOf "g" s >= 0
   , ignoreCase: indexOf "i" s >= 0
   , multiline: indexOf "m" s >= 0

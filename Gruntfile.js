@@ -2,18 +2,18 @@ module.exports = function(grunt) {
 
   "use strict";
 
-  grunt.initConfig({ 
-  
+  grunt.initConfig({
+
     libFiles: [
       "src/**/*.purs",
       "bower_components/purescript-*/src/**/*.purs",
     ],
-    
+
     clean: ["output"],
-  
+
     pscMake: ["<%=libFiles%>"],
     dotPsci: ["<%=libFiles%>"],
-    docgen: {
+    pscDocs: {
         readme: {
             src: "src/**/*.purs",
             dest: "README.md"
@@ -36,7 +36,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-jsvalidate');
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-purescript");
-  
-  grunt.registerTask("make", ["pscMake", "dotPsci", "docgen", "jsvalidate"]);
+
+  grunt.registerTask("make", ["pscMake", "dotPsci", "pscDocs", "jsvalidate"]);
   grunt.registerTask("default", ["make"]);
 };

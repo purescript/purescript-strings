@@ -13,13 +13,17 @@ module Data.String.Regex
   , search
   , split
   , noFlags
+  , global
+  , ignoreCase
+  , multiline
+  , sticky
+  , unicode
   , runRegexFlags
   , onRegexFlags
   , newRegexFlags
   ) where
 
 import Data.Function
-import Data.Monoid
 import Data.Maybe
 import Data.String (indexOf)
 
@@ -35,37 +39,56 @@ foreign import showRegex'
 instance showRegex :: Show Regex where
   show = showRegex'
 
-newtype RegexFlags = RegexFlags
-  { global :: Boolean
+newtype RegexFlags = RegexFlags 
+  { global     :: Boolean
   , ignoreCase :: Boolean
-  , multiline :: Boolean
-  , sticky :: Boolean
-  , unicode :: Boolean }
+  , multiline  :: Boolean
+  , sticky     :: Boolean
+  , unicode    :: Boolean }
 
+-- | Unwrap `RegexFlags` type to the underlying record
 runRegexFlags :: RegexFlags -> 
-  { global :: Boolean
+  { global     :: Boolean
   , ignoreCase :: Boolean
-  , multiline :: Boolean
-  , sticky :: Boolean
-  , unicode :: Boolean }
+  , multiline  :: Boolean
+  , sticky     :: Boolean
+  , unicode    :: Boolean }
 runRegexFlags (RegexFlags x) = x
 
-newRegexFlags :: 
-  { global :: Boolean
-  , ignoreCase :: Boolean
-  , multiline :: Boolean
-  , sticky :: Boolean
-  , unicode :: Boolean } -> RegexFlags
-newRegexFlags f = RegexFlags f 
+-- | Produce a new `RegexFlags` from `Booleans`
+newRegexFlags :: Boolean -> Boolean -> Boolean -> Boolean -> Boolean -> RegexFlags
+newRegexFlags g i m s u = RegexFlags 
+  { global     : g
+  , ignoreCase : i
+  , multiline  : m
+  , sticky     : s
+  , unicode    : u }
 
-noFlags :: RegexFlags
-noFlags = RegexFlags 
-  { global     : false
-  , ignoreCase : false
-  , multiline  : false
-  , sticky     : false
-  , unicode    : false }
+-- | All flags are set to false. Useful as a base for building flags or a default.
+noFlags    :: RegexFlags
+noFlags    = newRegexFlags false false false false false
 
+-- | Flags where `global : true` and all others are false
+global     :: RegexFlags
+global     = newRegexFlags true  false false false false
+
+-- | Flags where `ignoreCase : true` and all others are false
+ignoreCase :: RegexFlags
+ignoreCase = newRegexFlags false true  false false false
+
+-- | Flags where `multiline : true` and all others are false
+multiline  :: RegexFlags
+multiline  = newRegexFlags false false true  false false
+
+-- | Flags where `sticky : true` and all others are false
+sticky     :: RegexFlags
+sticky     = newRegexFlags false false false true  false 
+
+-- | Flags where `unicode : true` and all others are false
+unicode    :: RegexFlags
+unicode    = newRegexFlags false false false false true 
+
+-- | Perform a `Boolean` comparison across `RegexFlags`
 onRegexFlags :: (Boolean -> Boolean -> Boolean) -> RegexFlags -> RegexFlags -> RegexFlags
 onRegexFlags f x' y' = RegexFlags
   { global     : x.global     `f` y.global
@@ -82,11 +105,12 @@ instance regexFlagsBoolLike :: BoolLike RegexFlags where
   (||) = onRegexFlags (||)
   not  = onRegexFlags (const not) noFlags
 
+-- | Example usage:
+-- | `regex "Foo" $ global <> ignoreCase`
+-- | is equivalent to
+-- | `/Foo/ig`
 instance regexFlagsSemiGroup :: Semigroup RegexFlags where
   (<>) = (||)
-
-instance monoidRegexFlags :: Monoid RegexFlags where
-  mempty = noFlags
 
 foreign import regex'
   """

@@ -13,6 +13,14 @@ module Data.String.Regex
   , search
   , split
   , noFlags
+  , global
+  , ignoreCase
+  , multiline
+  , sticky
+  , unicode
+  , runRegexFlags
+  , onRegexFlags
+  , newRegexFlags
   ) where
 
 import Data.Function
@@ -31,20 +39,91 @@ foreign import showRegex'
 instance showRegex :: Show Regex where
   show = showRegex'
 
-type RegexFlags =
-  { global :: Boolean
+newtype RegexFlags = RegexFlags 
+  { global     :: Boolean
   , ignoreCase :: Boolean
-  , multiline :: Boolean
-  , sticky :: Boolean
-  , unicode :: Boolean
-  }
+  , multiline  :: Boolean
+  , sticky     :: Boolean
+  , unicode    :: Boolean }
 
-noFlags :: RegexFlags
-noFlags = { global     : false
-          , ignoreCase : false
-          , multiline  : false
-          , sticky     : false
-          , unicode    : false }
+-- | Unwrap `RegexFlags` type to the underlying record
+runRegexFlags :: RegexFlags -> 
+  { global     :: Boolean
+  , ignoreCase :: Boolean
+  , multiline  :: Boolean
+  , sticky     :: Boolean
+  , unicode    :: Boolean }
+runRegexFlags (RegexFlags x) = x
+
+-- | Produce a new `RegexFlags` from `Booleans`
+newRegexFlags :: Boolean -> Boolean -> Boolean -> Boolean -> Boolean -> RegexFlags
+newRegexFlags g i m s u = RegexFlags 
+  { global     : g
+  , ignoreCase : i
+  , multiline  : m
+  , sticky     : s
+  , unicode    : u }
+
+-- | All flags are set to false. Useful as a base for building flags or a default.
+noFlags    :: RegexFlags
+noFlags    = newRegexFlags false false false false false
+
+-- | Flags where `global : true` and all others are false
+global     :: RegexFlags
+global     = newRegexFlags true  false false false false
+
+-- | Flags where `ignoreCase : true` and all others are false
+ignoreCase :: RegexFlags
+ignoreCase = newRegexFlags false true  false false false
+
+-- | Flags where `multiline : true` and all others are false
+multiline  :: RegexFlags
+multiline  = newRegexFlags false false true  false false
+
+-- | Flags where `sticky : true` and all others are false
+sticky     :: RegexFlags
+sticky     = newRegexFlags false false false true  false 
+
+-- | Flags where `unicode : true` and all others are false
+unicode    :: RegexFlags
+unicode    = newRegexFlags false false false false true 
+
+-- | Perform a `Boolean` comparison across `RegexFlags`
+onRegexFlags :: (Boolean -> Boolean -> Boolean) -> RegexFlags -> RegexFlags -> RegexFlags
+onRegexFlags f x' y' = RegexFlags
+  { global     : x.global     `f` y.global
+  , ignoreCase : x.ignoreCase `f` y.ignoreCase
+  , multiline  : x.multiline  `f` y.multiline
+  , sticky     : x.sticky     `f` y.sticky
+  , unicode    : x.unicode    `f` y.unicode }
+  where 
+  x = runRegexFlags x'
+  y = runRegexFlags y'
+
+instance showRegexFlags :: Show RegexFlags where
+  show (RegexFlags rf) = "RegexFlags "    ++
+  "{ global     : " ++ show rf.global     ++ "\n" ++
+  ", ignoreCase : " ++ show rf.ignoreCase ++ "\n" ++
+  ", multiline  : " ++ show rf.multiline  ++ "\n" ++
+  ", sticky     : " ++ show rf.sticky     ++ "\n" ++
+  ", unicode    : " ++ show rf.unicode    ++ "\n" ++ " }"
+
+instance eqRegexFlags :: Eq RegexFlags where
+  (==) x y = case onRegexFlags (==) x y of 
+    RegexFlags rf -> rf.global && rf.ignoreCase && rf.multiline && rf.sticky && rf.unicode
+  (/=) x y = not (x == y)
+
+instance boolLikeRegexFlags :: BoolLike RegexFlags where
+  (&&) = onRegexFlags (&&)
+  (||) = onRegexFlags (||)
+  not  = onRegexFlags (const not) noFlags
+
+-- | Example usage:
+-- | `regex "Foo" $ global <> ignoreCase`
+-- | is equivalent to
+-- | `/Foo/ig`
+instance semiGroupRegexFlags :: Semigroup RegexFlags where
+  (<>) = (||)
 
 foreign import regex'
   """
@@ -57,6 +136,7 @@ foreign import regex'
 
 regex :: String -> RegexFlags -> Regex
 regex source flags = regex' source $ renderFlags flags
+
 
 foreign import source
   """
@@ -79,7 +159,7 @@ foreign import flags
   """ :: Regex -> RegexFlags
 
 renderFlags :: RegexFlags -> String
-renderFlags flags =
+renderFlags = runRegexFlags >>> \flags ->
   (if flags.global then "g" else "") ++
   (if flags.ignoreCase then "i" else "") ++
   (if flags.multiline then "m" else "") ++
@@ -87,7 +167,7 @@ renderFlags flags =
   (if flags.unicode then "u" else "")
 
 parseFlags :: String -> RegexFlags
-parseFlags s =
+parseFlags s = RegexFlags
   { global: indexOf "g" s >= 0
   , ignoreCase: indexOf "i" s >= 0
   , multiline: indexOf "m" s >= 0

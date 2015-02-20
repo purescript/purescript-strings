@@ -154,14 +154,36 @@
 
 #### `RegexFlags`
 
-    type RegexFlags = { unicode :: Boolean, sticky :: Boolean, multiline :: Boolean, ignoreCase :: Boolean, global :: Boolean }
+    newtype RegexFlags
+      = RegexFlags { unicode :: Boolean, sticky :: Boolean, multiline :: Boolean, ignoreCase :: Boolean, global :: Boolean }
 
 
 ### Type Class Instances
 
+#### `boolLikeRegexFlags`
+
+    instance boolLikeRegexFlags :: BoolLike RegexFlags
+
+#### `eqRegexFlags`
+
+    instance eqRegexFlags :: Eq RegexFlags
+
+#### `semiGroupRegexFlags`
+
+Example usage:
+`regex "Foo" $ global <> ignoreCase`
+is equivalent to
+`/Foo/ig`
+
+    instance semiGroupRegexFlags :: Semigroup RegexFlags
+
 #### `showRegex`
 
     instance showRegex :: Show Regex
+
+#### `showRegexFlags`
+
+    instance showRegexFlags :: Show RegexFlags
 
 
 ### Values
@@ -170,13 +192,45 @@
 
     flags :: Regex -> RegexFlags
 
+#### `global`
+
+Flags where `global : true` and all others are false
+
+    global :: RegexFlags
+
+#### `ignoreCase`
+
+Flags where `ignoreCase : true` and all others are false
+
+    ignoreCase :: RegexFlags
+
 #### `match`
 
     match :: Regex -> String -> Maybe [String]
 
+#### `multiline`
+
+Flags where `multiline : true` and all others are false
+
+    multiline :: RegexFlags
+
+#### `newRegexFlags`
+
+Produce a new `RegexFlags` from `Booleans`
+
+    newRegexFlags :: Boolean -> Boolean -> Boolean -> Boolean -> Boolean -> RegexFlags
+
 #### `noFlags`
 
+All flags are set to false. Useful as a base for building flags or a default.
+
     noFlags :: RegexFlags
+
+#### `onRegexFlags`
+
+Perform a `Boolean` comparison across `RegexFlags`
+
+    onRegexFlags :: (Boolean -> Boolean -> Boolean) -> RegexFlags -> RegexFlags -> RegexFlags
 
 #### `parseFlags`
 
@@ -198,6 +252,12 @@
 
     replace' :: Regex -> (String -> [String] -> String) -> String -> String
 
+#### `runRegexFlags`
+
+Unwrap `RegexFlags` type to the underlying record
+
+    runRegexFlags :: RegexFlags -> { unicode :: Boolean, sticky :: Boolean, multiline :: Boolean, ignoreCase :: Boolean, global :: Boolean }
+
 #### `search`
 
     search :: Regex -> String -> Number
@@ -210,9 +270,21 @@
 
     split :: Regex -> String -> [String]
 
+#### `sticky`
+
+Flags where `sticky : true` and all others are false
+
+    sticky :: RegexFlags
+
 #### `test`
 
     test :: Regex -> String -> Boolean
+
+#### `unicode`
+
+Flags where `unicode : true` and all others are false
+
+    unicode :: RegexFlags
 
 
 ## Module Data.String.Unsafe

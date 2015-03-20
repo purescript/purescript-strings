@@ -1,3 +1,6 @@
+-- | Wraps Javascript's `RegExp` object that enables matching strings with
+-- | patternes defined by regular expressions.
+-- | For examples and details of the underlying implementation, see [RegExp Reference at MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
 module Data.String.Regex
   ( Regex(..)
   , RegexFlags(..)
@@ -19,6 +22,7 @@ import Data.Function
 import Data.Maybe
 import Data.String (indexOf)
 
+-- | Wraps Javascript `RegExp` objects.
 foreign import data Regex :: *
 
 foreign import showRegex'
@@ -31,6 +35,7 @@ foreign import showRegex'
 instance showRegex :: Show Regex where
   show = showRegex'
 
+-- | Flags that control matching.
 type RegexFlags =
   { global :: Boolean
   , ignoreCase :: Boolean
@@ -39,6 +44,7 @@ type RegexFlags =
   , unicode :: Boolean
   }
 
+-- | All flags set to false.
 noFlags :: RegexFlags
 noFlags = { global     : false
           , ignoreCase : false
@@ -55,9 +61,11 @@ foreign import regex'
   }
   """ :: String -> String -> Regex
 
+-- | Constructs a `Regex` from a pattern string and flags.
 regex :: String -> RegexFlags -> Regex
 regex source flags = regex' source $ renderFlags flags
 
+-- | Returns the pattern string used to construct the given `Regex`.
 foreign import source
   """
   function source(r) {
@@ -65,6 +73,7 @@ foreign import source
   }
   """ :: Regex -> String
 
+-- | Returns the `RegexFlags` used to construct the given `Regex`.
 foreign import flags
   """
   function flags(r) {
@@ -78,6 +87,7 @@ foreign import flags
   }
   """ :: Regex -> RegexFlags
 
+-- | Returns the string representation of the given `RegexFlags`.
 renderFlags :: RegexFlags -> String
 renderFlags flags =
   (if flags.global then "g" else "") ++
@@ -86,6 +96,7 @@ renderFlags flags =
   (if flags.sticky then "y" else "") ++
   (if flags.unicode then "u" else "")
 
+-- | Parses the string representation of `RegexFlags`.
 parseFlags :: String -> RegexFlags
 parseFlags s =
   { global: indexOf "g" s >= 0
@@ -95,6 +106,7 @@ parseFlags s =
   , unicode: indexOf "u" s >= 0
   }
 
+-- | Returns `true` if the `Regex` matches the string.
 foreign import test
   """
   function test(r) {
@@ -112,9 +124,15 @@ foreign import _match
   }
   """ :: forall r. Fn4 Regex String ([String] -> r) r r
 
+-- | Matches the string against the `Regex` and returns an array of matches
+-- | if there were any.
+-- | See [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match).
 match :: Regex -> String -> Maybe [String]
 match r s = runFn4 _match r s Just Nothing
 
+-- | Replaces occurences of the `Regex` with the first string. The replacement
+-- | string can include special replacement patterns escaped with `"$"`.
+-- | See [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace).
 foreign import replace
   """
   function replace(r) {
@@ -126,6 +144,9 @@ foreign import replace
   }
   """ :: Regex -> String -> String -> String
 
+-- | Transforms occurences of the `Regex` using a function of the matched
+-- | substring and a list of submatch strings.
+-- | See the [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_function_as_a_parameter).
 foreign import replace'
   """
   function replace$prime(r) {
@@ -139,6 +160,8 @@ foreign import replace'
   }
   """ :: Regex -> (String -> [String] -> String) -> String -> String
 
+-- | Returns the index of the first match of the `Regex` in the string, or
+-- | `-1` if there is no match.
 foreign import search
   """
   function search(r) {
@@ -148,6 +171,7 @@ foreign import search
   }
   """ :: Regex -> String -> Number
 
+-- | Split the string into an array of substrings along occurences of the `Regex`.
 foreign import split
   """
   function split(r) {

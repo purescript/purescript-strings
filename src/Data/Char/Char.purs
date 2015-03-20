@@ -1,3 +1,4 @@
+-- | A type and functions for single characters.
 module Data.Char
   ( Char(),
     charString,
@@ -5,11 +6,14 @@ module Data.Char
     toCharCode
   ) where
 
+  --| A unicode character.
   newtype Char = Char String
 
+  -- | Returns the string of length `1` containing only the given character.
   charString :: Char -> String
   charString (Char s) = s
 
+  -- | Returns the numeric Unicode value of the character.
   foreign import toCharCode
     """
     function toCharCode(c) {
@@ -17,6 +21,7 @@ module Data.Char
     }
     """ :: Char -> Number
 
+  -- | Constructs a character from the given Unicode numeric value.
   foreign import fromCharCode
     """
     function fromCharCode(c) {

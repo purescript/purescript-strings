@@ -1,6 +1,6 @@
 -- | Wraps Javascript's `RegExp` object that enables matching strings with
 -- | patternes defined by regular expressions.
--- | For examples and details of the underlying implementation, see [RegExp Reference at MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
+-- | For details of the underlying implementation, see [RegExp Reference at MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
 module Data.String.Regex
   ( Regex(..)
   , RegexFlags(..)

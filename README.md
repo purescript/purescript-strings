@@ -43,6 +43,7 @@ Constructs a character from the given Unicode numeric value.
 instance eqChar :: Eq Char
 ```
 
+Characters can be compared for equality with `==` and `/=`.
 
 #### `ordChar`
 
@@ -50,6 +51,7 @@ instance eqChar :: Eq Char
 instance ordChar :: Ord Char
 ```
 
+Characters can be compared with `compare`, `>`, `>=`, `<` and `<=`.
 
 #### `showChar`
 
@@ -57,6 +59,7 @@ instance ordChar :: Ord Char
 instance showChar :: Show Char
 ```
 
+Characters can be rendered as a string with `show`.
 
 
 ## Module Data.String
@@ -64,7 +67,7 @@ instance showChar :: Show Char
 
 Wraps the functions of Javascript's `String` object.
 A String represents a sequence of characters.
-For examples and details of the underlying implementation, see [String Reference at MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String).
+For details of the underlying implementation, see [String Reference at MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String).
 
 #### `charAt`
 
@@ -123,8 +126,8 @@ if the string is not empty.
 takeWhile :: (Char -> Boolean) -> String -> String
 ```
 
-Returns the longest prefix (possibly empty) of characters that satisfy the
-predicate:
+Returns the longest prefix (possibly empty) of characters that satisfy
+the predicate:
 
 #### `dropWhile`
 
@@ -196,7 +199,8 @@ localeCompare :: String -> String -> Number
 
 Locale-aware sort order comparison. Returns a negative number if the
 first string occurs before the second in a sort, a positive number
-if the first string occurs after the second, and 0 if they occur at the same level.
+if the first string occurs after the second, and `0` if their sort order
+is equal.
 
 #### `replace`
 
@@ -269,9 +273,9 @@ Returns the argument converted to uppercase.
 trim :: String -> String
 ```
 
-Removes whitespace from the beginning and end of a string, where
-whitespace means all the whitespace characters (space, tab, no-break
-space, etc.) and all the line terminator characters (LF, CR, etc.).
+Removes whitespace from the beginning and end of a string, including
+[whitespace characters](http://www.ecma-international.org/ecma-262/5.1/#sec-7.2)
+and [line terminators](http://www.ecma-international.org/ecma-262/5.1/#sec-7.3).
 
 #### `joinWith`
 
@@ -288,7 +292,7 @@ as separator between them.
 
 Wraps Javascript's `RegExp` object that enables matching strings with
 patternes defined by regular expressions.
-For examples and details of the underlying implementation, see [RegExp Reference at MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
+For details of the underlying implementation, see [RegExp Reference at MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
 
 #### `Regex`
 

@@ -2,227 +2,449 @@
 
 ## Module Data.Char
 
-### Types
+
+A type and functions for single characters.
 
 #### `Char`
 
-    newtype Char
+``` purescript
+newtype Char
+```
 
-
-### Type Class Instances
-
-#### `eqChar`
-
-    instance eqChar :: Eq Char
-
-#### `ordChar`
-
-    instance ordChar :: Ord Char
-
-#### `showChar`
-
-    instance showChar :: Show Char
-
-
-### Values
+A unicode character.
 
 #### `charString`
 
-    charString :: Char -> String
+``` purescript
+charString :: Char -> String
+```
 
-#### `fromCharCode`
-
-    fromCharCode :: Number -> Char
+Returns the string of length `1` containing only the given character.
 
 #### `toCharCode`
 
-    toCharCode :: Char -> Number
+``` purescript
+toCharCode :: Char -> Number
+```
+
+Returns the numeric Unicode value of the character.
+
+#### `fromCharCode`
+
+``` purescript
+fromCharCode :: Number -> Char
+```
+
+Constructs a character from the given Unicode numeric value.
+
+#### `eqChar`
+
+``` purescript
+instance eqChar :: Eq Char
+```
+
+Characters can be compared for equality with `==` and `/=`.
+
+#### `ordChar`
+
+``` purescript
+instance ordChar :: Ord Char
+```
+
+Characters can be compared with `compare`, `>`, `>=`, `<` and `<=`.
+
+#### `showChar`
+
+``` purescript
+instance showChar :: Show Char
+```
+
+Characters can be rendered as a string with `show`.
 
 
 ## Module Data.String
 
-### Values
+
+Wraps the functions of Javascript's `String` object.
+A String represents a sequence of characters.
+For details of the underlying implementation, see [String Reference at MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String).
 
 #### `charAt`
 
-    charAt :: Number -> String -> Maybe Char
+``` purescript
+charAt :: Number -> String -> Maybe Char
+```
 
-#### `charCodeAt`
-
-    charCodeAt :: Number -> String -> Maybe Number
-
-#### `count`
-
-    count :: (Char -> Boolean) -> String -> Number
-
-#### `drop`
-
-    drop :: Number -> String -> String
-
-#### `dropWhile`
-
-    dropWhile :: (Char -> Boolean) -> String -> String
+Returns the character at the given index, if the index is within bounds.
 
 #### `fromChar`
 
-    fromChar :: Char -> String
+``` purescript
+fromChar :: Char -> String
+```
 
-#### `fromCharArray`
-
-    fromCharArray :: [Char] -> String
-
-#### `indexOf`
-
-    indexOf :: String -> String -> Number
-
-#### `indexOf'`
-
-    indexOf' :: String -> Number -> String -> Number
-
-#### `joinWith`
-
-    joinWith :: String -> [String] -> String
-
-#### `lastIndexOf`
-
-    lastIndexOf :: String -> String -> Number
-
-#### `lastIndexOf'`
-
-    lastIndexOf' :: String -> Number -> String -> Number
-
-#### `length`
-
-    length :: String -> Number
-
-#### `localeCompare`
-
-    localeCompare :: String -> String -> Number
-
-#### `null`
-
-    null :: String -> Boolean
-
-#### `replace`
-
-    replace :: String -> String -> String -> String
+Returns a string of length `1` containing the given character.
 
 #### `singleton`
 
-    singleton :: Char -> String
+``` purescript
+singleton :: Char -> String
+```
 
-#### `split`
+Returns a string of length `1` containing the given character.
+Same as `fromChar`.
 
-    split :: String -> String -> [String]
+#### `charCodeAt`
 
-#### `take`
+``` purescript
+charCodeAt :: Number -> String -> Maybe Number
+```
 
-    take :: Number -> String -> String
+Returns the numeric Unicode value of the character at the given index,
+if the index is within bounds.
 
-#### `takeWhile`
+#### `null`
 
-    takeWhile :: (Char -> Boolean) -> String -> String
+``` purescript
+null :: String -> Boolean
+```
 
-#### `toCharArray`
-
-    toCharArray :: String -> [Char]
-
-#### `toLower`
-
-    toLower :: String -> String
-
-#### `toUpper`
-
-    toUpper :: String -> String
-
-#### `trim`
-
-    trim :: String -> String
+Returns `true` if the given string is empty.
 
 #### `uncons`
 
-    uncons :: String -> Maybe { tail :: String, head :: Char }
+``` purescript
+uncons :: String -> Maybe { tail :: String, head :: Char }
+```
+
+Returns the first character and the rest of the string,
+if the string is not empty.
+
+#### `takeWhile`
+
+``` purescript
+takeWhile :: (Char -> Boolean) -> String -> String
+```
+
+Returns the longest prefix (possibly empty) of characters that satisfy
+the predicate:
+
+#### `dropWhile`
+
+``` purescript
+dropWhile :: (Char -> Boolean) -> String -> String
+```
+
+Returns the suffix remaining after `takeWhile`.
+
+#### `fromCharArray`
+
+``` purescript
+fromCharArray :: [Char] -> String
+```
+
+Converts an array of characters into a string.
+
+#### `indexOf`
+
+``` purescript
+indexOf :: String -> String -> Number
+```
+
+Returns the index of the first occurrence of the first string in the
+second string. Returns `-1` if there is no match.
+
+#### `indexOf'`
+
+``` purescript
+indexOf' :: String -> Number -> String -> Number
+```
+
+Returns the index of the first occurrence of the first string in the
+second string, starting at the given index. Returns `-1` if there is
+no match.
+
+#### `lastIndexOf`
+
+``` purescript
+lastIndexOf :: String -> String -> Number
+```
+
+Returns the index of the last occurrence of the first string in the
+second string. Returns `-1` if there is no match.
+
+#### `lastIndexOf'`
+
+``` purescript
+lastIndexOf' :: String -> Number -> String -> Number
+```
+
+Returns the index of the first occurrence of the last string in the
+second string, starting at the given index. Returns `-1` if there is
+no match.
+
+#### `length`
+
+``` purescript
+length :: String -> Number
+```
+
+Returns the number of characters the string is composed of.
+
+#### `localeCompare`
+
+``` purescript
+localeCompare :: String -> String -> Number
+```
+
+Locale-aware sort order comparison. Returns a negative number if the
+first string occurs before the second in a sort, a positive number
+if the first string occurs after the second, and `0` if their sort order
+is equal.
+
+#### `replace`
+
+``` purescript
+replace :: String -> String -> String -> String
+```
+
+Replaces the first occurence of the first argument with the second argument.
+
+#### `take`
+
+``` purescript
+take :: Number -> String -> String
+```
+
+Returns the first `n` characters of the string.
+
+#### `drop`
+
+``` purescript
+drop :: Number -> String -> String
+```
+
+Returns the string without the first `n` characters.
+
+#### `count`
+
+``` purescript
+count :: (Char -> Boolean) -> String -> Number
+```
+
+Returns the number of characters in the string for which the predicate holds.
+
+#### `split`
+
+``` purescript
+split :: String -> String -> [String]
+```
+
+Returns the substrings of the first string separated along occurences
+of the second string.
+
+#### `toCharArray`
+
+``` purescript
+toCharArray :: String -> [Char]
+```
+
+Converts the string into an array of characters.
+
+#### `toLower`
+
+``` purescript
+toLower :: String -> String
+```
+
+Returns the argument converted to lowercase.
+
+#### `toUpper`
+
+``` purescript
+toUpper :: String -> String
+```
+
+Returns the argument converted to uppercase.
+
+#### `trim`
+
+``` purescript
+trim :: String -> String
+```
+
+Removes whitespace from the beginning and end of a string, including
+[whitespace characters](http://www.ecma-international.org/ecma-262/5.1/#sec-7.2)
+and [line terminators](http://www.ecma-international.org/ecma-262/5.1/#sec-7.3).
+
+#### `joinWith`
+
+``` purescript
+joinWith :: String -> [String] -> String
+```
+
+Joins the strings in the array together, inserting the first argument
+as separator between them.
 
 
 ## Module Data.String.Regex
 
-### Types
+
+Wraps Javascript's `RegExp` object that enables matching strings with
+patternes defined by regular expressions.
+For details of the underlying implementation, see [RegExp Reference at MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
 
 #### `Regex`
 
-    data Regex :: *
+``` purescript
+data Regex :: *
+```
 
-#### `RegexFlags`
-
-    type RegexFlags = { unicode :: Boolean, sticky :: Boolean, multiline :: Boolean, ignoreCase :: Boolean, global :: Boolean }
-
-
-### Type Class Instances
+Wraps Javascript `RegExp` objects.
 
 #### `showRegex`
 
-    instance showRegex :: Show Regex
+``` purescript
+instance showRegex :: Show Regex
+```
 
 
-### Values
+#### `RegexFlags`
 
-#### `flags`
+``` purescript
+type RegexFlags = { unicode :: Boolean, sticky :: Boolean, multiline :: Boolean, ignoreCase :: Boolean, global :: Boolean }
+```
 
-    flags :: Regex -> RegexFlags
-
-#### `match`
-
-    match :: Regex -> String -> Maybe [String]
+Flags that control matching.
 
 #### `noFlags`
 
-    noFlags :: RegexFlags
+``` purescript
+noFlags :: RegexFlags
+```
 
-#### `parseFlags`
-
-    parseFlags :: String -> RegexFlags
+All flags set to false.
 
 #### `regex`
 
-    regex :: String -> RegexFlags -> Regex
+``` purescript
+regex :: String -> RegexFlags -> Regex
+```
 
-#### `renderFlags`
-
-    renderFlags :: RegexFlags -> String
-
-#### `replace`
-
-    replace :: Regex -> String -> String -> String
-
-#### `replace'`
-
-    replace' :: Regex -> (String -> [String] -> String) -> String -> String
-
-#### `search`
-
-    search :: Regex -> String -> Number
+Constructs a `Regex` from a pattern string and flags.
 
 #### `source`
 
-    source :: Regex -> String
+``` purescript
+source :: Regex -> String
+```
 
-#### `split`
+Returns the pattern string used to construct the given `Regex`.
 
-    split :: Regex -> String -> [String]
+#### `flags`
+
+``` purescript
+flags :: Regex -> RegexFlags
+```
+
+Returns the `RegexFlags` used to construct the given `Regex`.
+
+#### `renderFlags`
+
+``` purescript
+renderFlags :: RegexFlags -> String
+```
+
+Returns the string representation of the given `RegexFlags`.
+
+#### `parseFlags`
+
+``` purescript
+parseFlags :: String -> RegexFlags
+```
+
+Parses the string representation of `RegexFlags`.
 
 #### `test`
 
-    test :: Regex -> String -> Boolean
+``` purescript
+test :: Regex -> String -> Boolean
+```
+
+Returns `true` if the `Regex` matches the string.
+
+#### `match`
+
+``` purescript
+match :: Regex -> String -> Maybe [String]
+```
+
+Matches the string against the `Regex` and returns an array of matches
+if there were any.
+See [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match).
+
+#### `replace`
+
+``` purescript
+replace :: Regex -> String -> String -> String
+```
+
+Replaces occurences of the `Regex` with the first string. The replacement
+string can include special replacement patterns escaped with `"$"`.
+See [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace).
+
+#### `replace'`
+
+``` purescript
+replace' :: Regex -> (String -> [String] -> String) -> String -> String
+```
+
+Transforms occurences of the `Regex` using a function of the matched
+substring and a list of submatch strings.
+See the [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_function_as_a_parameter).
+
+#### `search`
+
+``` purescript
+search :: Regex -> String -> Number
+```
+
+Returns the index of the first match of the `Regex` in the string, or
+`-1` if there is no match.
+
+#### `split`
+
+``` purescript
+split :: Regex -> String -> [String]
+```
+
+Split the string into an array of substrings along occurences of the `Regex`.
 
 
 ## Module Data.String.Unsafe
 
-### Values
 
-#### `charAt`
-
-    charAt :: Number -> String -> Char
+Unsafe string and character functions.
 
 #### `charCodeAt`
 
-    charCodeAt :: Number -> String -> Number
+``` purescript
+charCodeAt :: Number -> String -> Number
+```
+
+Returns the numeric Unicode value of the character at the given index.
+
+**Unsafe:** returns `NaN` if the index is out of bounds.
+
+#### `charAt`
+
+``` purescript
+charAt :: Number -> String -> Char
+```
+
+Returns the character at the given index.
+
+**Unsafe:** returns an illegal value if the index is out of bounds.
+
+
+

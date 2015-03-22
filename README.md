@@ -452,7 +452,7 @@ Returns the character at the given index.
 char :: String -> Char
 ```
 
-Converts a string of length `1` to a character..
+Converts a string of length `1` to a character.
 
 **Unsafe:** throws runtime exception if length is not `1`.
 

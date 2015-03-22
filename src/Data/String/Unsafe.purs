@@ -37,7 +37,7 @@ module Data.String.Unsafe
     }
     """ :: Number -> String -> Char
 
-  -- | Converts a string of length `1` to a character..
+  -- | Converts a string of length `1` to a character.
   -- |
   -- | **Unsafe:** throws runtime exception if length is not `1`.
   foreign import char

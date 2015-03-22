@@ -434,7 +434,7 @@ charCodeAt :: Number -> String -> Number
 
 Returns the numeric Unicode value of the character at the given index.
 
-**Unsafe:** returns `NaN` if the index is out of bounds.
+**Unsafe:** throws runtime exception if the index is out of bounds.
 
 #### `charAt`
 
@@ -444,7 +444,17 @@ charAt :: Number -> String -> Char
 
 Returns the character at the given index.
 
-**Unsafe:** returns an illegal value if the index is out of bounds.
+**Unsafe:** throws runtime exception if the index is out of bounds.
+
+#### `char`
+
+``` purescript
+char :: String -> Char
+```
+
+Converts a string of length `1` to a character..
+
+**Unsafe:** throws runtime exception if length is not `1`.
 
 
 

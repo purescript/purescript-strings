@@ -6,6 +6,8 @@ module Data.Char
   , toCharCode
   ) where
 
+import Data.Int (Int(), fromNumber)
+
 --| A unicode character.
 newtype Char = Char String
 
@@ -19,7 +21,7 @@ foreign import toCharCode
   function toCharCode(c) {
     return c.charCodeAt(0);
   }
-  """ :: Char -> Number
+  """ :: Char -> Int
 
 -- | Constructs a character from the given Unicode numeric value.
 foreign import fromCharCode
@@ -27,12 +29,11 @@ foreign import fromCharCode
   function fromCharCode(c) {
     return String.fromCharCode(c);
   }
-  """ :: Number -> Char
+  """ :: Int -> Char
 
 -- | Characters can be compared for equality with `==` and `/=`.
 instance eqChar :: Eq Char where
   (==) (Char a) (Char b) = a == b
-
   (/=) a b = not (a == b)
 
 -- | Characters can be compared with `compare`, `>`, `>=`, `<` and `<=`.
@@ -40,8 +41,8 @@ instance ordChar :: Ord Char where
   compare (Char a) (Char b) = a `compare` b
 
 instance boundedChar :: Bounded Char where
-  top = fromCharCode 0
-  bottom = fromCharCode 65535
+  top = fromCharCode zero
+  bottom = fromCharCode (fromNumber 65535)
 
 -- | Characters can be rendered as a string with `show`.
 instance showChar :: Show Char where

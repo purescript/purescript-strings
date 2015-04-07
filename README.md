@@ -24,7 +24,7 @@ Returns the string of length `1` containing only the given character.
 #### `toCharCode`
 
 ``` purescript
-toCharCode :: Char -> Number
+toCharCode :: Char -> Int
 ```
 
 Returns the numeric Unicode value of the character.
@@ -32,7 +32,7 @@ Returns the numeric Unicode value of the character.
 #### `fromCharCode`
 
 ``` purescript
-fromCharCode :: Number -> Char
+fromCharCode :: Int -> Char
 ```
 
 Constructs a character from the given Unicode numeric value.

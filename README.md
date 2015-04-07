@@ -53,6 +53,13 @@ instance ordChar :: Ord Char
 
 Characters can be compared with `compare`, `>`, `>=`, `<` and `<=`.
 
+#### `boundedChar`
+
+``` purescript
+instance boundedChar :: Bounded Char
+```
+
+
 #### `showChar`
 
 ``` purescript
@@ -455,6 +462,3 @@ char :: String -> Char
 Converts a string of length `1` to a character.
 
 **Unsafe:** throws runtime exception if length is not `1`.
-
-
-

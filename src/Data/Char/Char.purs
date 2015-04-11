@@ -1,7 +1,7 @@
 -- | A type and functions for single characters.
 module Data.Char
   ( Char()
-  , charString
+  , toString
   , fromCharCode
   , toCharCode
   ) where

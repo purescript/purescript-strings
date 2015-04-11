@@ -13,10 +13,10 @@ newtype Char
 
 A unicode character.
 
-#### `charString`
+#### `toString`
 
 ``` purescript
-charString :: Char -> String
+toString :: Char -> String
 ```
 
 Returns the string of length `1` containing only the given character.
@@ -59,6 +59,7 @@ Characters can be compared with `compare`, `>`, `>=`, `<` and `<=`.
 instance boundedChar :: Bounded Char
 ```
 
+Characters fall within the Unicode range.
 
 #### `showChar`
 

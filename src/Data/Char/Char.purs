@@ -12,8 +12,8 @@ import Data.Int (Int(), fromNumber)
 newtype Char = Char String
 
 -- | Returns the string of length `1` containing only the given character.
-charString :: Char -> String
-charString (Char s) = s
+toString :: Char -> String
+toString (Char s) = s
 
 -- | Returns the numeric Unicode value of the character.
 foreign import toCharCode
@@ -40,6 +40,7 @@ instance eqChar :: Eq Char where
 instance ordChar :: Ord Char where
   compare (Char a) (Char b) = a `compare` b
 
+-- | Characters fall within the Unicode range.
 instance boundedChar :: Bounded Char where
   top = fromCharCode zero
   bottom = fromCharCode (fromNumber 65535)

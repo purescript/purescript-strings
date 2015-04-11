@@ -79,7 +79,7 @@ For details of the underlying implementation, see [String Reference at MDN](http
 #### `charAt`
 
 ``` purescript
-charAt :: Number -> String -> Maybe Char
+charAt :: Int -> String -> Maybe Char
 ```
 
 Returns the character at the given index, if the index is within bounds.
@@ -104,7 +104,7 @@ Same as `fromChar`.
 #### `charCodeAt`
 
 ``` purescript
-charCodeAt :: Number -> String -> Maybe Number
+charCodeAt :: Int -> String -> Maybe Int
 ```
 
 Returns the numeric Unicode value of the character at the given index,
@@ -152,29 +152,37 @@ fromCharArray :: [Char] -> String
 
 Converts an array of characters into a string.
 
+#### `contains`
+
+``` purescript
+contains :: String -> String -> Boolean
+```
+
+Checks whether the first string exists in the second string.
+
 #### `indexOf`
 
 ``` purescript
-indexOf :: String -> String -> Number
+indexOf :: String -> String -> Maybe Int
 ```
 
 Returns the index of the first occurrence of the first string in the
-second string. Returns `-1` if there is no match.
+second string. Returns `Nothing` if there is no match.
 
 #### `indexOf'`
 
 ``` purescript
-indexOf' :: String -> Number -> String -> Number
+indexOf' :: String -> Int -> String -> Maybe Int
 ```
 
 Returns the index of the first occurrence of the first string in the
-second string, starting at the given index. Returns `-1` if there is
+second string, starting at the given index. Returns `Nothing` if there is
 no match.
 
 #### `lastIndexOf`
 
 ``` purescript
-lastIndexOf :: String -> String -> Number
+lastIndexOf :: String -> String -> Maybe Int
 ```
 
 Returns the index of the last occurrence of the first string in the
@@ -183,17 +191,17 @@ second string. Returns `-1` if there is no match.
 #### `lastIndexOf'`
 
 ``` purescript
-lastIndexOf' :: String -> Number -> String -> Number
+lastIndexOf' :: String -> Int -> String -> Maybe Int
 ```
 
-Returns the index of the first occurrence of the last string in the
-second string, starting at the given index. Returns `-1` if there is
+Returns the index of the last occurrence of the first string in the
+second string, starting at the given index. Returns `Nothing` if there is
 no match.
 
 #### `length`
 
 ``` purescript
-length :: String -> Number
+length :: String -> Int
 ```
 
 Returns the number of characters the string is composed of.
@@ -201,13 +209,10 @@ Returns the number of characters the string is composed of.
 #### `localeCompare`
 
 ``` purescript
-localeCompare :: String -> String -> Number
+localeCompare :: String -> String -> Ordering
 ```
 
-Locale-aware sort order comparison. Returns a negative number if the
-first string occurs before the second in a sort, a positive number
-if the first string occurs after the second, and `0` if their sort order
-is equal.
+Locale-aware sort order comparison.
 
 #### `replace`
 
@@ -220,7 +225,7 @@ Replaces the first occurence of the first argument with the second argument.
 #### `take`
 
 ``` purescript
-take :: Number -> String -> String
+take :: Int -> String -> String
 ```
 
 Returns the first `n` characters of the string.
@@ -228,7 +233,7 @@ Returns the first `n` characters of the string.
 #### `drop`
 
 ``` purescript
-drop :: Number -> String -> String
+drop :: Int -> String -> String
 ```
 
 Returns the string without the first `n` characters.
@@ -236,7 +241,7 @@ Returns the string without the first `n` characters.
 #### `count`
 
 ``` purescript
-count :: (Char -> Boolean) -> String -> Number
+count :: (Char -> Boolean) -> String -> Int
 ```
 
 Returns the number of characters in the string for which the predicate holds.
@@ -413,7 +418,7 @@ See the [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 #### `search`
 
 ``` purescript
-search :: Regex -> String -> Number
+search :: Regex -> String -> Int
 ```
 
 Returns the index of the first match of the `Regex` in the string, or
@@ -436,7 +441,7 @@ Unsafe string and character functions.
 #### `charCodeAt`
 
 ``` purescript
-charCodeAt :: Number -> String -> Number
+charCodeAt :: Int -> String -> Int
 ```
 
 Returns the numeric Unicode value of the character at the given index.
@@ -446,7 +451,7 @@ Returns the numeric Unicode value of the character at the given index.
 #### `charAt`
 
 ``` purescript
-charAt :: Number -> String -> Char
+charAt :: Int -> String -> Char
 ```
 
 Returns the character at the given index.

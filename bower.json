@@ -1,7 +1,7 @@
 {
   "name": "purescript-strings",
   "homepage": "https://github.com/purescript/purescript-strings",
-  "description": "String utility functions and regular expressions",
+  "description": "String utility functions, Char type, regular expressions.",
   "keywords": [
     "purescript"
   ],
@@ -11,13 +11,12 @@
     "bower_components",
     "node_modules",
     "output",
-    "tests",
-    "tmp",
     "bower.json",
-    "Gruntfile.js",
+    "gulpfile.js",
     "package.json"
   ],
   "dependencies": {
-    "purescript-maybe": "~0.2.1"
+    "purescript-functions": "~0.1.0",
+    "purescript-maybe": "~0.3.0"
   }
 }

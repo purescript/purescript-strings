@@ -18,9 +18,10 @@ module Data.String.Regex
   , noFlags
   ) where
 
-import Data.Function
-import Data.Maybe
-import Data.String (indexOf)
+import Data.Function (Fn4(), runFn4)
+import Data.Maybe (Maybe(..))
+import Data.Int (Int())
+import Data.String (contains)
 
 -- | Wraps Javascript `RegExp` objects.
 foreign import data Regex :: *
@@ -99,11 +100,11 @@ renderFlags flags =
 -- | Parses the string representation of `RegexFlags`.
 parseFlags :: String -> RegexFlags
 parseFlags s =
-  { global: indexOf "g" s >= 0
-  , ignoreCase: indexOf "i" s >= 0
-  , multiline: indexOf "m" s >= 0
-  , sticky: indexOf "y" s >= 0
-  , unicode: indexOf "u" s >= 0
+  { global: contains "g" s
+  , ignoreCase: contains "i" s
+  , multiline: contains "m" s
+  , sticky: contains "y" s
+  , unicode: contains "u" s
   }
 
 -- | Returns `true` if the `Regex` matches the string.
@@ -169,7 +170,7 @@ foreign import search
       return s.search(r);
     };
   }
-  """ :: Regex -> String -> Number
+  """ :: Regex -> String -> Int
 
 -- | Split the string into an array of substrings along occurences of the `Regex`.
 foreign import split

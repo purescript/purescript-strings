@@ -30,10 +30,11 @@ module Data.String
   , joinWith
   ) where
 
-import Data.Int (Int())
-import Data.Maybe (Maybe(..), isJust)
 import Data.Char
 import Data.Function (Fn4(), runFn4, Fn5(), runFn5)
+import Data.Int (Int())
+import Data.Maybe (Maybe(..), isJust)
+import Data.Monoid (Monoid)
 import qualified Data.String.Unsafe as U
 
 -- | Returns the character at the given index, if the index is within bounds.
@@ -271,3 +272,6 @@ foreign import joinWith
     };
   }
   """ :: String -> [String] -> String
+
+instance stringMonoid :: Monoid String where
+  mempty = ""

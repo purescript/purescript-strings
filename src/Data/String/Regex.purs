@@ -18,7 +18,7 @@ module Data.String.Regex
   , noFlags
   ) where
 
-import Data.Function
+import Data.Function (Fn4(), runFn4)
 import Data.Maybe (Maybe(..))
 import Data.Int (Int())
 import Data.String (contains)

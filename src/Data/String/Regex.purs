@@ -121,14 +121,23 @@ foreign import _match
   """
   function _match(r, s, Just, Nothing) {
     var m = s.match(r);
-    return m == null ? Nothing : Just(m);
+    if (m == null) {
+      return Nothing;
+    } else {
+      var list = [];
+      for (var i = 0; i < m.length; i++) {
+        list.push(m[i] == null ? Nothing : Just(m[i]));
+      }
+      return Just(list);
+    }
   }
-  """ :: forall r. Fn4 Regex String ([String] -> r) r r
+  """ :: Fn4 Regex String (forall r. r -> Maybe r) (forall r. Maybe r) (Maybe (Maybe r))
 
 -- | Matches the string against the `Regex` and returns an array of matches
--- | if there were any.
+-- | if there were any. Each match has type `Maybe String`, where `Nothing`
+-- | represents an unmatched optional capturing group.
 -- | See [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match).
-match :: Regex -> String -> Maybe [String]
+match :: Regex -> String -> Maybe [Maybe String]
 match r s = runFn4 _match r s Just Nothing
 
 -- | Replaces occurences of the `Regex` with the first string. The replacement

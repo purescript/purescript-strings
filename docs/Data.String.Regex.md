@@ -89,11 +89,12 @@ Returns `true` if the `Regex` matches the string.
 #### `match`
 
 ``` purescript
-match :: Regex -> String -> Maybe [String]
+match :: Regex -> String -> Maybe [Maybe String]
 ```
 
 Matches the string against the `Regex` and returns an array of matches
-if there were any.
+if there were any. Each match has type `Maybe String`, where `Nothing`
+represents an unmatched optional capturing group.
 See [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match).
 
 #### `replace`

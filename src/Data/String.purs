@@ -30,9 +30,11 @@ module Data.String
   , joinWith
   ) where
 
+import Prelude
+
 import Data.Char
 import Data.Function (Fn4(), runFn4, Fn5(), runFn5)
-import Data.Int (Int())
+import Data.Int ()
 import Data.Maybe (Maybe(..), isJust)
 import Data.Monoid (Monoid)
 import qualified Data.String.Unsafe as U
@@ -41,12 +43,7 @@ import qualified Data.String.Unsafe as U
 charAt :: Int -> String -> Maybe Char
 charAt n s = runFn4 _charAt n s Just Nothing
 
-foreign import _charAt
-  """
-  function _charAt(i, s, Just, Nothing) {
-    return i >= 0 && i < s.length ? Just(s.charAt(i)) : Nothing;
-  }
-  """ :: forall a. Fn4 Int String (a -> Maybe a) (Maybe a) (Maybe Char)
+foreign import _charAt :: forall a. Fn4 Int String (a -> Maybe a) (Maybe a) (Maybe Char)
 
 -- | Returns a string of length `1` containing the given character.
 fromChar :: Char -> String
@@ -57,12 +54,7 @@ fromChar = toString
 singleton :: Char -> String
 singleton = fromChar
 
-foreign import _charCodeAt
-  """
-  function _charCodeAt(i, s, Just, Nothing) {
-    return i >= 0 && i < s.length ? Just(s.charCodeAt(i)) : Nothing;
-  }
-  """ :: forall a. Fn4 Int String (a -> Maybe a) (Maybe a) (Maybe Int)
+foreign import _charCodeAt :: forall a. Fn4 Int String (a -> Maybe a) (Maybe a) (Maybe Int)
 
 -- | Returns the numeric Unicode value of the character at the given index,
 -- | if the index is within bounds.
@@ -89,12 +81,7 @@ dropWhile :: (Char -> Boolean) -> String -> String
 dropWhile p s = drop (count p s) s
 
 -- | Converts an array of characters into a string.
-foreign import fromCharArray
-  """
-  function fromCharArray(a) {
-    return a.join('');
-  }
-  """ :: [Char] -> String
+foreign import fromCharArray :: Array Char -> String
 
 -- | Checks whether the first string exists in the second string.
 contains :: String -> String -> Boolean
@@ -105,13 +92,7 @@ contains x s = isJust (indexOf x s)
 indexOf :: String -> String -> Maybe Int
 indexOf x s = runFn4 _indexOf Just Nothing x s
 
-foreign import _indexOf
-  """
-  function _indexOf(just, nothing, x, s) {
-    var i = s.indexOf(x);
-    return i == -1 ? nothing : just(i);
-  }
-  """ :: forall a. Fn4 (a -> Maybe a) (Maybe a) String String (Maybe Int)
+foreign import _indexOf :: forall a. Fn4 (a -> Maybe a) (Maybe a) String String (Maybe Int)
 
 -- | Returns the index of the first occurrence of the first string in the
 -- | second string, starting at the given index. Returns `Nothing` if there is
@@ -119,26 +100,14 @@ foreign import _indexOf
 indexOf' :: String -> Int -> String -> Maybe Int
 indexOf' x i s = runFn5 _indexOf' Just Nothing x i s
 
-foreign import _indexOf'
-  """
-  function _indexOf$prime(just, nothing, x, startAt, s) {
-    var i = s.indexOf(x, startAt);
-    return i == -1 ? nothing : just(i);
-  }
-  """ :: forall a. Fn5 (a -> Maybe a) (Maybe a) String Int String (Maybe Int)
+foreign import _indexOf' :: forall a. Fn5 (a -> Maybe a) (Maybe a) String Int String (Maybe Int)
 
 -- | Returns the index of the last occurrence of the first string in the
 -- | second string. Returns `-1` if there is no match.
 lastIndexOf :: String -> String -> Maybe Int
 lastIndexOf x s = runFn4 _lastIndexOf Just Nothing x s
 
-foreign import _lastIndexOf
-  """
-  function _lastIndexOf(just, nothing, x, s) {
-    var i = s.lastIndexOf(x);
-    return i == -1 ? nothing : just(i);
-  }
-  """ :: forall a. Fn4 (a -> Maybe a) (Maybe a) String String (Maybe Int)
+foreign import _lastIndexOf :: forall a. Fn4 (a -> Maybe a) (Maybe a) String String (Maybe Int)
 
 -- | Returns the index of the last occurrence of the first string in the
 -- | second string, starting at the given index. Returns `Nothing` if there is
@@ -146,132 +115,50 @@ foreign import _lastIndexOf
 lastIndexOf' :: String -> Int -> String -> Maybe Int
 lastIndexOf' x i s = runFn5 _lastIndexOf' Just Nothing x i s
 
-foreign import _lastIndexOf'
-  """
-  function _lastIndexOf$prime(just, nothing, x, startAt, s) {
-    var i = s.lastIndexOf(x, startAt);
-    return i == -1 ? nothing : just(i);
-  }
-  """ :: forall a. Fn5 (a -> Maybe a) (Maybe a) String Int String (Maybe Int)
+foreign import _lastIndexOf' :: forall a. Fn5 (a -> Maybe a) (Maybe a) String Int String (Maybe Int)
 
 -- | Returns the number of characters the string is composed of.
-foreign import length
-  """
-  function length(s) {
-    return s.length;
-  }
-  """ :: String -> Int
+foreign import length :: String -> Int
 
 -- | Locale-aware sort order comparison.
 localeCompare :: String -> String -> Ordering
 localeCompare s1 s2 = runFn5 _localeCompare LT EQ GT s1 s2
 
-foreign import _localeCompare
-  """
-  function localeCompare(lt, eq, gt, s1, s2) {
-    var result = s1.localeCompare(s2);
-    return result < 0 ? lt : result > 1 ? gt : eq;
-  }
-  """ :: Fn5 Ordering Ordering Ordering String String Ordering
+foreign import _localeCompare :: Fn5 Ordering Ordering Ordering String String Ordering
 
 -- | Replaces the first occurence of the first argument with the second argument.
-foreign import replace
-  """
-  function replace(s1) {
-    return function(s2) {
-      return function(s3) {
-        return s3.replace(s1, s2);
-      };
-    };
-  }
-  """ :: String -> String -> String -> String
+foreign import replace :: String -> String -> String -> String
 
 -- | Returns the first `n` characters of the string.
-foreign import take
-  """
-  function take(n) {
-    return function(s) {
-      return s.substr(0, n);
-    };
-  }
-  """ :: Int -> String -> String
+foreign import take :: Int -> String -> String
 
 -- | Returns the string without the first `n` characters.
-foreign import drop
-  """
-  function drop(n) {
-    return function(s) {
-      return s.substr(n);
-    };
-  }
-  """ :: Int -> String -> String
+foreign import drop :: Int -> String -> String
 
 -- | Returns the number of characters in the string for which the predicate holds.
-foreign import count
-  """
-  function count(p){
-    return function(s){
-      for(var i = 0; i < s.length && p(s.charAt(i)); i++){};
-      return i;
-    };
-  }
-  """ :: (Char -> Boolean) -> String -> Int
+foreign import count :: (Char -> Boolean) -> String -> Int
 
 -- | Returns the substrings of the first string separated along occurences
 -- | of the second string.
-foreign import split
-  """
-  function split(sep) {
-    return function(s) {
-      return s.split(sep);
-    };
-  }
-  """ :: String -> String -> [String]
+foreign import split :: String -> String -> Array String
 
 -- | Converts the string into an array of characters.
-foreign import toCharArray
-  """
-  function toCharArray(s) {
-    return s.split('');
-  }
-  """ :: String -> [Char]
+foreign import toCharArray :: String -> Array Char
 
 -- | Returns the argument converted to lowercase.
-foreign import toLower
-  """
-  function toLower(s) {
-    return s.toLowerCase();
-  }
-  """ :: String -> String
+foreign import toLower :: String -> String
 
 -- | Returns the argument converted to uppercase.
-foreign import toUpper
-  """
-  function toUpper(s) {
-    return s.toUpperCase();
-  }
-  """ :: String -> String
+foreign import toUpper :: String -> String
 
 -- | Removes whitespace from the beginning and end of a string, including
 -- | [whitespace characters](http://www.ecma-international.org/ecma-262/5.1/#sec-7.2)
 -- | and [line terminators](http://www.ecma-international.org/ecma-262/5.1/#sec-7.3).
-foreign import trim
-  """
-  function trim(s) {
-    return s.trim();
-  }
-  """ :: String -> String
+foreign import trim :: String -> String
 
 -- | Joins the strings in the array together, inserting the first argument
 -- | as separator between them.
-foreign import joinWith
-  """
-  function joinWith(s) {
-    return function(xs) {
-      return xs.join(s);
-    };
-  }
-  """ :: String -> [String] -> String
+foreign import joinWith :: String -> Array String -> String
 
 instance stringMonoid :: Monoid String where
   mempty = ""

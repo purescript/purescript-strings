@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/purescript/purescript-strings.svg?branch=master)](https://travis-ci.org/purescript/purescript-strings)
 
-String utility functions, Char type, regular expressions.
+String and char utility functions, regular expressions.
 
 ## Installation
 

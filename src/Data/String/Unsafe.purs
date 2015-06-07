@@ -5,10 +5,7 @@ module Data.String.Unsafe
   , charCodeAt
   ) where
 
-import Prelude
-
 import Data.Char
-import Data.Int ()
 
 -- | Returns the numeric Unicode value of the character at the given index.
 -- |

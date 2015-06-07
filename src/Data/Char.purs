@@ -7,8 +7,6 @@ module Data.Char
 
 import Prelude
 
-import Data.Int (fromNumber)
-
 -- | Returns the string of length `1` containing only the given character.
 foreign import toString :: Char -> String
 

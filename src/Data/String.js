@@ -3,91 +3,147 @@
 
 // module Data.String
 
-exports._charAt = function(i, s, Just, Nothing) {
-  return i >= 0 && i < s.length ? Just(s.charAt(i)) : Nothing;
+exports._charAt = function (just) {
+  return function (nothing) {
+    return function (i) {
+      return function (s) {
+        return i >= 0 && i < s.length ? just(s.charAt(i)) : nothing;
+      };
+    };
+  };
 };
 
-exports._charCodeAt = function(i, s, Just, Nothing) {
-  return i >= 0 && i < s.length ? Just(s.charCodeAt(i)) : Nothing;
+exports._charCodeAt = function (just) {
+  return function (nothing) {
+    return function (i) {
+      return function (s) {
+        return i >= 0 && i < s.length ? just(s.charCodeAt(i)) : nothing;
+      };
+    };
+  };
 };
 
-exports.fromCharArray = function(a) {
-  return a.join('');
+exports._toChar = function (just) {
+  return function (nothing) {
+    return function (s) {
+      return s.length === 1 ? just(s) : nothing;
+    };
+  };
 };
 
-exports._indexOf = function(just, nothing, x, s) {
-  var i = s.indexOf(x);
-  return i == -1 ? nothing : just(i);
+exports.fromCharArray = function (a) {
+  return a.join("");
 };
 
-exports._indexOf$prime = function(just, nothing, x, startAt, s) {
-  var i = s.indexOf(x, startAt);
-  return i == -1 ? nothing : just(i);
+exports._indexOf = function (just) {
+  return function (nothing) {
+    return function (x) {
+      return function (s) {
+        var i = s.indexOf(x);
+        return i === -1 ? nothing : just(i);
+      };
+    };
+  };
 };
 
-exports._lastIndexOf = function(just, nothing, x, s) {
-  var i = s.lastIndexOf(x);
-  return i == -1 ? nothing : just(i);
+exports["_indexOf'"] = function (just) {
+  return function (nothing) {
+    return function (x) {
+      return function (startAt) {
+        return function (s) {
+          var i = s.indexOf(x, startAt);
+          return i === -1 ? nothing : just(i);
+        };
+      };
+    };
+  };
 };
 
-exports._lastIndexOf$prime = function(just, nothing, x, startAt, s) {
-  var i = s.lastIndexOf(x, startAt);
-  return i == -1 ? nothing : just(i);
+exports._lastIndexOf = function (just) {
+  return function (nothing) {
+    return function (x) {
+      return function (s) {
+        var i = s.lastIndexOf(x);
+        return i === -1 ? nothing : just(i);
+      };
+    };
+  };
 };
 
-exports.length = function(s) {
+exports["_lastIndexOf'"] = function (just) {
+  return function (nothing) {
+    return function (x) {
+      return function (startAt) {
+        return function (s) {
+          var i = s.lastIndexOf(x, startAt);
+          return i === -1 ? nothing : just(i);
+        };
+      };
+    };
+  };
+};
+
+exports.length = function (s) {
   return s.length;
 };
 
-exports.localeCompare = function(lt, eq, gt, s1, s2) {
-  var result = s1.localeCompare(s2);
-  return result < 0 ? lt : result > 1 ? gt : eq;
+exports.localeCompare = function (lt) {
+  return function (eq) {
+    return function (gt) {
+      return function (s1) {
+        return function (s2) {
+          var result = s1.localeCompare(s2);
+          return result < 0 ? lt : result > 1 ? gt : eq;
+        };
+      };
+    };
+  };
 };
 
-exports.replace = function(s1) {
-  return function(s2) {
-    return function(s3) {
+exports.replace = function (s1) {
+  return function (s2) {
+    return function (s3) {
       return s3.replace(s1, s2);
     };
   };
 };
 
-exports.take = function(n) {
-  return function(s) {
+exports.take = function (n) {
+  return function (s) {
     return s.substr(0, n);
   };
 };
 
-exports.drop = function(n) {
-  return function(s) {
+exports.drop = function (n) {
+  return function (s) {
     return s.substr(n);
   };
 };
 
-exports.split = function(sep) {
-  return function(s) {
+exports.split = function (sep) {
+  return function (s) {
     return s.split(sep);
   };
 };
 
-exports.toCharArray = function(s) {
-  return s.split('');
+exports.toCharArray = function (s) {
+  return s.split("");
 };
 
-exports.toLower = function(s) {
+exports.toLower = function (s) {
   return s.toLowerCase();
 };
 
-exports.toUpper = function(s) {
+exports.toUpper = function (s) {
   return s.toUpperCase();
 };
 
-exports.trim = function(s) {
+exports.trim = function (s) {
   return s.trim();
 };
 
-exports.joinWith = function(s) {
-  return function(xs) {
+exports.joinWith = function (s) {
+  return function (xs) {
     return xs.join(s);
   };
 };

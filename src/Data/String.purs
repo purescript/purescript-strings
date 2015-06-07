@@ -6,6 +6,7 @@ module Data.String
   , charCodeAt
   , fromCharArray
   , fromChar
+  , toChar
   , contains
   , indexOf
   , indexOf'
@@ -31,19 +32,20 @@ module Data.String
   ) where
 
 import Prelude
-
 import Data.Char
-import Data.Function (Fn4(), runFn4, Fn5(), runFn5)
-import Data.Int ()
 import Data.Maybe (Maybe(..), isJust)
 import Data.Monoid (Monoid)
 import qualified Data.String.Unsafe as U
 
 -- | Returns the character at the given index, if the index is within bounds.
 charAt :: Int -> String -> Maybe Char
-charAt n s = runFn4 _charAt n s Just Nothing
+charAt = _charAt Just Nothing
 
-foreign import _charAt :: forall a. Fn4 Int String (a -> Maybe a) (Maybe a) (Maybe Char)
+foreign import _charAt :: (forall a. a -> Maybe a)
+                       -> (forall a. Maybe a)
+                       -> Int
+                       -> String
+                       -> Maybe Char
 
 -- | Returns a string of length `1` containing the given character.
 fromChar :: Char -> String
@@ -54,12 +56,24 @@ fromChar = toString
 singleton :: Char -> String
 singleton = fromChar
 
-foreign import _charCodeAt :: forall a. Fn4 Int String (a -> Maybe a) (Maybe a) (Maybe Int)
-
 -- | Returns the numeric Unicode value of the character at the given index,
 -- | if the index is within bounds.
 charCodeAt :: Int -> String -> Maybe Int
-charCodeAt n s = runFn4 _charCodeAt n s Just Nothing
+charCodeAt = _charCodeAt Just Nothing
+
+foreign import _charCodeAt :: (forall a. a -> Maybe a)
+                           -> (forall a. Maybe a)
+                           -> Int
+                           -> String
+                           -> Maybe Int
+
+toChar :: String -> Maybe Char
+toChar = _toChar Just Nothing
+
+foreign import _toChar :: (forall a. a -> Maybe a)
+                       -> (forall a. Maybe a)
+                       -> String
+                       -> Maybe Char
 
 -- | Returns `true` if the given string is empty.
 null :: String -> Boolean
@@ -90,41 +104,64 @@ contains x s = isJust (indexOf x s)
 -- | Returns the index of the first occurrence of the first string in the
 -- | second string. Returns `Nothing` if there is no match.
 indexOf :: String -> String -> Maybe Int
-indexOf x s = runFn4 _indexOf Just Nothing x s
+indexOf = _indexOf Just Nothing
 
-foreign import _indexOf :: forall a. Fn4 (a -> Maybe a) (Maybe a) String String (Maybe Int)
+foreign import _indexOf :: (forall a. a -> Maybe a)
+                        -> (forall a. Maybe a)
+                        -> String
+                        -> String
+                        -> Maybe Int
 
 -- | Returns the index of the first occurrence of the first string in the
 -- | second string, starting at the given index. Returns `Nothing` if there is
 -- | no match.
 indexOf' :: String -> Int -> String -> Maybe Int
-indexOf' x i s = runFn5 _indexOf' Just Nothing x i s
+indexOf' = _indexOf' Just Nothing
 
-foreign import _indexOf' :: forall a. Fn5 (a -> Maybe a) (Maybe a) String Int String (Maybe Int)
+foreign import _indexOf' :: (forall a. a -> Maybe a)
+                         -> (forall a. Maybe a)
+                         -> String
+                         -> Int
+                         -> String
+                         -> Maybe Int
 
 -- | Returns the index of the last occurrence of the first string in the
 -- | second string. Returns `-1` if there is no match.
 lastIndexOf :: String -> String -> Maybe Int
-lastIndexOf x s = runFn4 _lastIndexOf Just Nothing x s
+lastIndexOf = _lastIndexOf Just Nothing
 
-foreign import _lastIndexOf :: forall a. Fn4 (a -> Maybe a) (Maybe a) String String (Maybe Int)
+foreign import _lastIndexOf :: (forall a. a -> Maybe a)
+                            -> (forall a. Maybe a)
+                            -> String
+                            -> String
+                            -> Maybe Int
 
 -- | Returns the index of the last occurrence of the first string in the
 -- | second string, starting at the given index. Returns `Nothing` if there is
 -- | no match.
 lastIndexOf' :: String -> Int -> String -> Maybe Int
-lastIndexOf' x i s = runFn5 _lastIndexOf' Just Nothing x i s
+lastIndexOf' = _lastIndexOf' Just Nothing
 
-foreign import _lastIndexOf' :: forall a. Fn5 (a -> Maybe a) (Maybe a) String Int String (Maybe Int)
+foreign import _lastIndexOf' :: (forall a. a -> Maybe a)
+                             -> (forall a. Maybe a)
+                             -> String
+                             -> Int
+                             -> String
+                             -> Maybe Int
 
 -- | Returns the number of characters the string is composed of.
 foreign import length :: String -> Int
 
 -- | Locale-aware sort order comparison.
 localeCompare :: String -> String -> Ordering
-localeCompare s1 s2 = runFn5 _localeCompare LT EQ GT s1 s2
+localeCompare = _localeCompare LT EQ GT
 
-foreign import _localeCompare :: Fn5 Ordering Ordering Ordering String String Ordering
+foreign import _localeCompare :: Ordering
+                              -> Ordering
+                              -> Ordering
+                              -> String
+                              -> String
+                              -> Ordering
 
 -- | Replaces the first occurence of the first argument with the second argument.
 foreign import replace :: String -> String -> String -> String
@@ -159,6 +196,3 @@ foreign import trim :: String -> String
 -- | Joins the strings in the array together, inserting the first argument
 -- | as separator between them.
 foreign import joinWith :: String -> Array String -> String
-
-instance stringMonoid :: Monoid String where
-  mempty = ""

@@ -1,7 +1,4 @@
-# Module Documentation
-
 ## Module Data.String.Unsafe
-
 
 Unsafe string and character functions.
 
@@ -34,6 +31,5 @@ char :: String -> Char
 Converts a string of length `1` to a character.
 
 **Unsafe:** throws runtime exception if length is not `1`.
-
 
 

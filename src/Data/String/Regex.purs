@@ -19,10 +19,7 @@ module Data.String.Regex
   ) where
 
 import Prelude
-
-import Data.Function (Fn4(), runFn4)
 import Data.Maybe (Maybe(..))
-import Data.Int ()
 import Data.String (contains)
 
 -- | Wraps Javascript `RegExp` objects.
@@ -84,14 +81,18 @@ parseFlags s =
 -- | Returns `true` if the `Regex` matches the string.
 foreign import test :: Regex -> String -> Boolean
 
-foreign import _match :: Fn4 Regex String (forall r. r -> Maybe r) (forall r. Maybe r) (Maybe (Array (Maybe String)))
+foreign import _match :: (forall r. r -> Maybe r)
+                      -> (forall r. Maybe r)
+                      -> Regex
+                      -> String
+                      -> Maybe (Array (Maybe String))
 
 -- | Matches the string against the `Regex` and returns an array of matches
 -- | if there were any. Each match has type `Maybe String`, where `Nothing`
 -- | represents an unmatched optional capturing group.
 -- | See [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match).
 match :: Regex -> String -> Maybe (Array (Maybe String))
-match r s = runFn4 _match r s Just Nothing
+match = _match Just Nothing
 
 -- | Replaces occurences of the `Regex` with the first string. The replacement
 -- | string can include special replacement patterns escaped with `"$"`.

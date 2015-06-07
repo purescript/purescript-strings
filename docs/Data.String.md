@@ -1,7 +1,4 @@
-# Module Documentation
-
 ## Module Data.String
-
 
 Wraps the functions of Javascript's `String` object.
 A String represents a sequence of characters.
@@ -41,6 +38,12 @@ charCodeAt :: Int -> String -> Maybe Int
 Returns the numeric Unicode value of the character at the given index,
 if the index is within bounds.
 
+#### `toChar`
+
+``` purescript
+toChar :: String -> Maybe Char
+```
+
 #### `null`
 
 ``` purescript
@@ -52,7 +55,7 @@ Returns `true` if the given string is empty.
 #### `uncons`
 
 ``` purescript
-uncons :: String -> Maybe { tail :: String, head :: Char }
+uncons :: String -> Maybe { head :: Char, tail :: String }
 ```
 
 Returns the first character and the rest of the string,
@@ -78,7 +81,7 @@ Returns the suffix remaining after `takeWhile`.
 #### `fromCharArray`
 
 ``` purescript
-fromCharArray :: [Char] -> String
+fromCharArray :: Array Char -> String
 ```
 
 Converts an array of characters into a string.
@@ -180,7 +183,7 @@ Returns the number of characters in the string for which the predicate holds.
 #### `split`
 
 ``` purescript
-split :: String -> String -> [String]
+split :: String -> String -> Array String
 ```
 
 Returns the substrings of the first string separated along occurences
@@ -189,7 +192,7 @@ of the second string.
 #### `toCharArray`
 
 ``` purescript
-toCharArray :: String -> [Char]
+toCharArray :: String -> Array Char
 ```
 
 Converts the string into an array of characters.
@@ -223,18 +226,10 @@ and [line terminators](http://www.ecma-international.org/ecma-262/5.1/#sec-7.3).
 #### `joinWith`
 
 ``` purescript
-joinWith :: String -> [String] -> String
+joinWith :: String -> Array String -> String
 ```
 
 Joins the strings in the array together, inserting the first argument
 as separator between them.
-
-#### `stringMonoid`
-
-``` purescript
-instance stringMonoid :: Monoid String
-```
-
-
 
 

@@ -1,7 +1,4 @@
-# Module Documentation
-
 ## Module Data.String.Regex
-
 
 Wraps Javascript's `RegExp` object that enables matching strings with
 patternes defined by regular expressions.
@@ -15,17 +12,15 @@ data Regex :: *
 
 Wraps Javascript `RegExp` objects.
 
-#### `showRegex`
-
+##### Instances
 ``` purescript
 instance showRegex :: Show Regex
 ```
 
-
 #### `RegexFlags`
 
 ``` purescript
-type RegexFlags = { unicode :: Boolean, sticky :: Boolean, multiline :: Boolean, ignoreCase :: Boolean, global :: Boolean }
+type RegexFlags = { global :: Boolean, ignoreCase :: Boolean, multiline :: Boolean, sticky :: Boolean, unicode :: Boolean }
 ```
 
 Flags that control matching.
@@ -89,7 +84,7 @@ Returns `true` if the `Regex` matches the string.
 #### `match`
 
 ``` purescript
-match :: Regex -> String -> Maybe [Maybe String]
+match :: Regex -> String -> Maybe (Array (Maybe String))
 ```
 
 Matches the string against the `Regex` and returns an array of matches
@@ -110,7 +105,7 @@ See [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Referenc
 #### `replace'`
 
 ``` purescript
-replace' :: Regex -> (String -> [String] -> String) -> String -> String
+replace' :: Regex -> (String -> Array String -> String) -> String -> String
 ```
 
 Transforms occurences of the `Regex` using a function of the matched
@@ -129,10 +124,9 @@ Returns the index of the first match of the `Regex` in the string, or
 #### `split`
 
 ``` purescript
-split :: Regex -> String -> [String]
+split :: Regex -> String -> Array String
 ```
 
 Split the string into an array of substrings along occurences of the `Regex`.
-
 
 

@@ -1,7 +1,7 @@
 {
   "name": "purescript-strings",
   "homepage": "https://github.com/purescript/purescript-strings",
-  "description": "String utility functions, Char type, regular expressions.",
+  "description": "String and char utility functions, regular expressions.",
   "keywords": [
     "purescript"
   ],
@@ -16,7 +16,6 @@
     "package.json"
   ],
   "dependencies": {
-    "purescript-functions": "~0.1.0",
-    "purescript-maybe": "~0.3.0"
+    "purescript-maybe": "^0.3.0"
   }
 }

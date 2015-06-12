@@ -3,11 +3,11 @@
 
 // module Data.String.Regex
 
-exports.showRegex$prime = function (r) {
+exports["showRegex'"] = function (r) {
   return "" + r;
 };
 
-exports.regex$prime = function (s1) {
+exports["regex'"] = function (s1) {
   return function (s2) {
     return new RegExp(s1, s2);
   };
@@ -60,7 +60,7 @@ exports.replace = function (r) {
   };
 };
 
-exports.replace$prime = function (r) {
+exports["replace'"] = function (r) {
   return function (f) {
     return function (s2) {
       return s2.replace(r, function (match) {

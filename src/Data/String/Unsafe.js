@@ -17,7 +17,7 @@ exports.charAt = function (i) {
   };
 };
 
-exports.$$char = function (s) {
+exports["char"] = function (s) {
   if (s.length !== 1) return s.charAt(0);
   throw new Error("Data.String.Unsafe.char: Expected string of length 1.");
 };

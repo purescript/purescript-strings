@@ -6,13 +6,16 @@
     "purescript"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/purescript/purescript-strings.git"
+  },
   "ignore": [
     "**/.*",
     "bower_components",
     "node_modules",
     "output",
     "bower.json",
-    "gulpfile.js",
     "package.json"
   ],
   "dependencies": {

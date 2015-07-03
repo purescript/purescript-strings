@@ -87,7 +87,7 @@ exports.length = function (s) {
   return s.length;
 };
 
-exports["_localeCompare"] = function (lt) {
+exports._localeCompare = function (lt) {
   return function (eq) {
     return function (gt) {
       return function (s1) {

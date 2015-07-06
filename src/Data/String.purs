@@ -172,7 +172,8 @@ foreign import take :: Int -> String -> String
 -- | Returns the string without the first `n` characters.
 foreign import drop :: Int -> String -> String
 
--- | Returns the number of characters in the string for which the predicate holds.
+-- | Returns the number of contiguous characters at the beginning
+-- | of the string for which the predicate holds.
 foreign import count :: (Char -> Boolean) -> String -> Int
 
 -- | Returns the substrings of the first string separated along occurences

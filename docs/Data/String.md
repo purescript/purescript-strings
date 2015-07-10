@@ -86,8 +86,8 @@ stripPrefix :: String -> String -> Maybe String
 
 If the string starts with the given prefix, return the portion of the
 string left after removing it, as a Just value. Otherwise, return Nothing.
-* `stripPrefix "http:" "http://purescript.org" == Just "//purescript.org"
-* `stripPrefix "http:" "https://purescript.org" == Nothing
+* `stripPrefix "http:" "http://purescript.org" == Just "//purescript.org"`
+* `stripPrefix "http:" "https://purescript.org" == Nothing`
 
 #### `fromCharArray`
 
@@ -131,7 +131,7 @@ lastIndexOf :: String -> String -> Maybe Int
 ```
 
 Returns the index of the last occurrence of the first string in the
-second string. Returns `-1` if there is no match.
+second string. Returns `Nothing` if there is no match.
 
 #### `lastIndexOf'`
 

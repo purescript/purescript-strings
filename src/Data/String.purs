@@ -97,8 +97,8 @@ dropWhile p s = drop (count p s) s
 
 -- | If the string starts with the given prefix, return the portion of the
 -- | string left after removing it, as a Just value. Otherwise, return Nothing.
--- | * `stripPrefix "http:" "http://purescript.org" == Just "//purescript.org"
--- | * `stripPrefix "http:" "https://purescript.org" == Nothing
+-- | * `stripPrefix "http:" "http://purescript.org" == Just "//purescript.org"`
+-- | * `stripPrefix "http:" "https://purescript.org" == Nothing`
 stripPrefix :: String -> String -> Maybe String
 stripPrefix prefix str =
   case indexOf prefix str of
@@ -137,7 +137,7 @@ foreign import _indexOf' :: (forall a. a -> Maybe a)
                          -> Maybe Int
 
 -- | Returns the index of the last occurrence of the first string in the
--- | second string. Returns `-1` if there is no match.
+-- | second string. Returns `Nothing` if there is no match.
 lastIndexOf :: String -> String -> Maybe Int
 lastIndexOf = _lastIndexOf Just Nothing
 

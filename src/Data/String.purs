@@ -187,8 +187,9 @@ foreign import drop :: Int -> String -> String
 -- | of the string for which the predicate holds.
 foreign import count :: (Char -> Boolean) -> String -> Int
 
--- | Returns the substrings of the first string separated along occurences
--- | of the second string.
+-- | Returns the substrings of the second string separated along occurences
+-- | of the first string.
+-- | * `split " " "hello world" == ["hello", "world"]`
 foreign import split :: String -> String -> Array String
 
 -- | Converts the string into an array of characters.

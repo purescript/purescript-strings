@@ -78,6 +78,17 @@ dropWhile :: (Char -> Boolean) -> String -> String
 
 Returns the suffix remaining after `takeWhile`.
 
+#### `stripPrefix`
+
+``` purescript
+stripPrefix :: String -> String -> Maybe String
+```
+
+If the string starts with the given prefix, return the portion of the
+string left after removing it, as a Just value. Otherwise, return Nothing.
+* `stripPrefix "http:" "http://purescript.org" == Just "//purescript.org"
+* `stripPrefix "http:" "https://purescript.org" == Nothing
+
 #### `fromCharArray`
 
 ``` purescript

@@ -23,6 +23,7 @@ module Data.String
   , takeWhile
   , drop
   , dropWhile
+  , stripPrefix
   , split
   , toCharArray
   , toLower
@@ -93,6 +94,16 @@ takeWhile p s = take (count p s) s
 -- | Returns the suffix remaining after `takeWhile`.
 dropWhile :: (Char -> Boolean) -> String -> String
 dropWhile p s = drop (count p s) s
+
+-- | If the string starts with the given prefix, return the portion of the
+-- | string left after removing it, as a Just value. Otherwise, return Nothing.
+-- | * `stripPrefix "http:" "http://purescript.org" == Just "//purescript.org"
+-- | * `stripPrefix "http:" "https://purescript.org" == Nothing
+stripPrefix :: String -> String -> Maybe String
+stripPrefix prefix str =
+  case indexOf prefix str of
+    Just 0 -> Just $ drop (length prefix) str
+    _      -> Nothing
 
 -- | Converts an array of characters into a string.
 foreign import fromCharArray :: Array Char -> String

@@ -198,8 +198,9 @@ of the string for which the predicate holds.
 split :: String -> String -> Array String
 ```
 
-Returns the substrings of the first string separated along occurences
-of the second string.
+Returns the substrings of the second string separated along occurences
+of the first string.
+* `split " " "hello world" == ["hello", "world"]`
 
 #### `toCharArray`
 

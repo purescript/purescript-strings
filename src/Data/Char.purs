@@ -3,6 +3,8 @@ module Data.Char
   ( toString
   , fromCharCode
   , toCharCode
+  , toLowerChar
+  , toUpperChar
   ) where
 
 import Prelude
@@ -16,11 +18,13 @@ foreign import toCharCode :: Char -> Int
 -- | Constructs a character from the given Unicode numeric value.
 foreign import fromCharCode :: Int -> Char
 
+-- | Converts a character to lowercase.
+foreign import toLowerChar :: Char -> Char
+
+-- | Converts a character to uppercase.
+foreign import toUpperChar :: Char -> Char
+
 -- | Characters fall within the Unicode range.
 instance boundedChar :: Bounded Char where
   top = fromCharCode zero
   bottom = fromCharCode 65535
-
--- | Characters can be rendered as a string with `show`.
-instance showChar :: Show Char where
-  show c = "Char " ++ show (toString c)

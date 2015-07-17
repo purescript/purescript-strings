@@ -15,10 +15,10 @@ exports.fromCharCode = function (c) {
   return String.fromCharCode(c);
 };
 
-exports.toLowerChar = function (c) {
+exports.toLower = function (c) {
   return c.toLowerCase();
 };
 
-exports.toUpperChar = function (c) {
+exports.toUpper = function (c) {
   return c.toUpperCase();
 };

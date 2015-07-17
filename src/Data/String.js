@@ -51,6 +51,7 @@ exports["_indexOf'"] = function (just) {
     return function (x) {
       return function (startAt) {
         return function (s) {
+          if (startAt < 0 || startAt > s.length) return nothing;
           var i = s.indexOf(x, startAt);
           return i === -1 ? nothing : just(i);
         };
@@ -75,6 +76,7 @@ exports["_lastIndexOf'"] = function (just) {
     return function (x) {
       return function (startAt) {
         return function (s) {
+          if (startAt < 0 || startAt > s.length) return nothing;
           var i = s.lastIndexOf(x, startAt);
           return i === -1 ? nothing : just(i);
         };
@@ -93,7 +95,7 @@ exports._localeCompare = function (lt) {
       return function (s1) {
         return function (s2) {
           var result = s1.localeCompare(s2);
-          return result < 0 ? lt : result > 1 ? gt : eq;
+          return result < 0 ? lt : result > 0 ? gt : eq;
         };
       };
     };

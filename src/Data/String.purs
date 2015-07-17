@@ -33,7 +33,7 @@ module Data.String
   ) where
 
 import Prelude
-import Data.Char
+import qualified Data.Char as C
 import Data.Maybe (Maybe(..), isJust)
 import Data.Monoid (Monoid)
 import qualified Data.String.Unsafe as U
@@ -50,7 +50,7 @@ foreign import _charAt :: (forall a. a -> Maybe a)
 
 -- | Returns a string of length `1` containing the given character.
 fromChar :: Char -> String
-fromChar = toString
+fromChar = C.toString
 
 -- | Returns a string of length `1` containing the given character.
 -- | Same as `fromChar`.

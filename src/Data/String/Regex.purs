@@ -104,9 +104,16 @@ foreign import replace :: Regex -> String -> String -> String
 -- | See the [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_function_as_a_parameter).
 foreign import replace' :: Regex -> (String -> Array String -> String) -> String -> String
 
--- | Returns the index of the first match of the `Regex` in the string, or
--- | `-1` if there is no match.
-foreign import search :: Regex -> String -> Int
+foreign import _search :: (forall r. r -> Maybe r)
+                       -> (forall r. Maybe r)
+                       -> Regex
+                       -> String
+                       -> Maybe Int
+
+-- | Returns `Just` the index of the first match of the `Regex` in the string,
+-- | or `Nothing` if there is no match.
+search :: Regex -> String -> Maybe Int
+search = _search Just Nothing
 
 -- | Split the string into an array of substrings along occurences of the `Regex`.
 foreign import split :: Regex -> String -> Array String

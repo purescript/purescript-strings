@@ -3,8 +3,8 @@ module Data.Char
   ( toString
   , fromCharCode
   , toCharCode
-  , toLowerChar
-  , toUpperChar
+  , toLower
+  , toUpper
   ) where
 
 import Prelude
@@ -19,10 +19,10 @@ foreign import toCharCode :: Char -> Int
 foreign import fromCharCode :: Int -> Char
 
 -- | Converts a character to lowercase.
-foreign import toLowerChar :: Char -> Char
+foreign import toLower :: Char -> Char
 
 -- | Converts a character to uppercase.
-foreign import toUpperChar :: Char -> Char
+foreign import toUpper :: Char -> Char
 
 -- | Characters fall within the Unicode range.
 instance boundedChar :: Bounded Char where

@@ -20,7 +20,3 @@ foreign import fromCharCode :: Int -> Char
 instance boundedChar :: Bounded Char where
   top = fromCharCode zero
   bottom = fromCharCode 65535
-
--- | Characters can be rendered as a string with `show`.
-instance showChar :: Show Char where
-  show c = "Char " ++ show (toString c)

@@ -89,6 +89,17 @@ string left after removing it, as a Just value. Otherwise, return Nothing.
 * `stripPrefix "http:" "http://purescript.org" == Just "//purescript.org"`
 * `stripPrefix "http:" "https://purescript.org" == Nothing`
 
+#### `stripSuffix`
+
+``` purescript
+stripSuffix :: String -> String -> Maybe String
+```
+
+If the string ends with the given suffix, return the portion of the
+string left after removing it, as a Just value. Otherwise, return Nothing.
+* `stripSuffix ".exe" "psc.exe" == Just "psc"`
+* `stripSuffix ".exe" "psc" == Nothing`
+
 #### `fromCharArray`
 
 ``` purescript
@@ -198,8 +209,9 @@ of the string for which the predicate holds.
 split :: String -> String -> Array String
 ```
 
-Returns the substrings of the first string separated along occurences
-of the second string.
+Returns the substrings of the second string separated along occurences
+of the first string.
+* `split " " "hello world" == ["hello", "world"]`
 
 #### `toCharArray`
 

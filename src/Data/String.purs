@@ -24,6 +24,7 @@ module Data.String
   , drop
   , dropWhile
   , stripPrefix
+  , stripSuffix
   , split
   , toCharArray
   , toLower
@@ -104,6 +105,18 @@ stripPrefix prefix str =
   case indexOf prefix str of
     Just 0 -> Just $ drop (length prefix) str
     _      -> Nothing
+
+-- | If the string ends with the given suffix, return the portion of the
+-- | string left after removing it, as a Just value. Otherwise, return Nothing.
+-- | * `stripSuffix ".exe" "psc.exe" == Just "psc"`
+-- | * `stripSuffix ".exe" "psc" == Nothing`
+stripSuffix :: String -> String -> Maybe String
+stripSuffix suffix str =
+  case lastIndexOf suffix str of
+    Just x | x == length str - length suffix ->
+      Just $ take x str
+    _ ->
+      Nothing
 
 -- | Converts an array of characters into a string.
 foreign import fromCharArray :: Array Char -> String

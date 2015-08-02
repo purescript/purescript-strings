@@ -115,11 +115,11 @@ See the [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 #### `search`
 
 ``` purescript
-search :: Regex -> String -> Int
+search :: Regex -> String -> Maybe Int
 ```
 
-Returns the index of the first match of the `Regex` in the string, or
-`-1` if there is no match.
+Returns `Just` the index of the first match of the `Regex` in the string,
+or `Nothing` if there is no match.
 
 #### `split`
 

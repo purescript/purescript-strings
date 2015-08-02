@@ -26,4 +26,20 @@ fromCharCode :: Int -> Char
 
 Constructs a character from the given Unicode numeric value.
 
+#### `toLower`
+
+``` purescript
+toLower :: Char -> Char
+```
+
+Converts a character to lowercase.
+
+#### `toUpper`
+
+``` purescript
+toUpper :: Char -> Char
+```
+
+Converts a character to uppercase.
+
 

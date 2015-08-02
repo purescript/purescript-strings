@@ -70,9 +70,14 @@ exports["replace'"] = function (r) {
   };
 };
 
-exports.search = function (r) {
-  return function (s) {
-    return s.search(r);
+exports._search = function (just) {
+  return function (nothing) {
+    return function (r) {
+      return function (s) {
+        var result = s.search(r);
+        return result === -1 ? nothing : just(result);
+      };
+    };
   };
 };
 

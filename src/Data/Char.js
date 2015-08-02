@@ -14,3 +14,11 @@ exports.toCharCode = function (c) {
 exports.fromCharCode = function (c) {
   return String.fromCharCode(c);
 };
+
+exports.toLower = function (c) {
+  return c.toLowerCase();
+};
+
+exports.toUpper = function (c) {
+  return c.toUpperCase();
+};

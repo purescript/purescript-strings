@@ -23,8 +23,3 @@ foreign import toLower :: Char -> Char
 
 -- | Converts a character to uppercase.
 foreign import toUpper :: Char -> Char
-
--- | Characters fall within the Unicode range.
-instance boundedChar :: Bounded Char where
-  top = fromCharCode zero
-  bottom = fromCharCode 65535

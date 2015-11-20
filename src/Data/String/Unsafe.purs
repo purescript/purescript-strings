@@ -5,8 +5,6 @@ module Data.String.Unsafe
   , charCodeAt
   ) where
 
-import Data.Char
-
 -- | Returns the numeric Unicode value of the character at the given index.
 -- |
 -- | **Unsafe:** throws runtime exception if the index is out of bounds.

@@ -118,7 +118,7 @@ exports.take = function (n) {
 
 exports.drop = function (n) {
   return function (s) {
-    return s.substr(n);
+    return s.substring(n);
   };
 };
 

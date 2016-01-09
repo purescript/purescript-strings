@@ -37,7 +37,10 @@ exports.flags = function (r) {
 
 exports.test = function (r) {
   return function (s) {
-    return r.test(s);
+    var lastIndex = r.lastIndex;
+    var result = r.test(s);
+    r.lastIndex = lastIndex;
+    return result;
   };
 };
 

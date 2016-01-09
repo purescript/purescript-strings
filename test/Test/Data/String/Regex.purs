@@ -36,3 +36,10 @@ testStringRegex = do
   assert $ split (regex' "" noFlags) "abc" == ["a", "b", "c"]
   assert $ split (regex' "b" noFlags) "" == [""]
   assert $ split (regex' "b" noFlags) "abc" == ["a", "c"]
+
+  log "test"
+  -- Ensure that we have referential transparency for calls to 'test'. No
+  -- global state should be maintained between these two calls:
+  let pattern = regex' "a" (parseFlags "g")
+  assert $ test pattern "a"
+  assert $ test pattern "a"

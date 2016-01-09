@@ -20,6 +20,7 @@ module Data.String.Regex
 
 import Prelude
 import Data.Maybe (Maybe(..))
+import Data.Either (Either(..))
 import Data.String (contains)
 
 -- | Wraps Javascript `RegExp` objects.
@@ -47,11 +48,16 @@ noFlags = { global     : false
           , sticky     : false
           , unicode    : false }
 
-foreign import regex' :: String -> String -> Regex
+foreign import regex' :: (String -> Either String Regex)
+                      -> (Regex -> Either String Regex)
+                      -> String
+                      -> String
+                      -> Either String Regex
 
--- | Constructs a `Regex` from a pattern string and flags.
-regex :: String -> RegexFlags -> Regex
-regex s f = regex' s $ renderFlags f
+-- | Constructs a `Regex` from a pattern string and flags. Fails with
+-- | `Left error` if the pattern contains a syntax error.
+regex :: String -> RegexFlags -> Either String Regex
+regex s f = regex' Left Right s $ renderFlags f
 
 -- | Returns the pattern string used to construct the given `Regex`.
 foreign import source :: Regex -> String

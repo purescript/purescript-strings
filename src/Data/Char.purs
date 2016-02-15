@@ -7,8 +7,6 @@ module Data.Char
   , toUpper
   ) where
 
-import Prelude
-
 -- | Returns the string of length `1` containing only the given character.
 foreign import toString :: Char -> String
 

@@ -18,7 +18,7 @@ module Data.String.Regex
   , noFlags
   ) where
 
-import Prelude
+import Prelude (class Show, (++), ($))
 import Data.Maybe (Maybe(..))
 import Data.String (contains)
 

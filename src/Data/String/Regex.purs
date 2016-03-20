@@ -18,7 +18,7 @@ module Data.String.Regex
   , noFlags
   ) where
 
-import Prelude (class Show, (++), ($))
+import Prelude (class Show, append, ($))
 import Data.Maybe (Maybe(..))
 import Data.String (contains)
 
@@ -62,10 +62,10 @@ foreign import flags :: Regex -> RegexFlags
 -- | Returns the string representation of the given `RegexFlags`.
 renderFlags :: RegexFlags -> String
 renderFlags f =
-  (if f.global then "g" else "") ++
-  (if f.ignoreCase then "i" else "") ++
-  (if f.multiline then "m" else "") ++
-  (if f.sticky then "y" else "") ++
+  (if f.global then "g" else "") `append`
+  (if f.ignoreCase then "i" else "") `append`
+  (if f.multiline then "m" else "") `append`
+  (if f.sticky then "y" else "") `append`
   (if f.unicode then "u" else "")
 
 -- | Parses the string representation of `RegexFlags`.

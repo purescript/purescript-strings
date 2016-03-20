@@ -33,11 +33,10 @@ module Data.String
   , joinWith
   ) where
 
-import Prelude
-import qualified Data.Char as C
+import Prelude (Ordering(GT, EQ, LT), ($), (-), (==), one, zero)
+import Data.Char as C
 import Data.Maybe (Maybe(..), isJust)
-import Data.Monoid (Monoid)
-import qualified Data.String.Unsafe as U
+import Data.String.Unsafe as U
 
 -- | Returns the character at the given index, if the index is within bounds.
 charAt :: Int -> String -> Maybe Char

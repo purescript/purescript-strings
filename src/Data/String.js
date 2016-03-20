@@ -13,6 +13,10 @@ exports._charAt = function (just) {
   };
 };
 
+exports.singleton = function (c) {
+  return c;
+};
+
 exports._charCodeAt = function (just) {
   return function (nothing) {
     return function (i) {

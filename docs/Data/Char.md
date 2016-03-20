@@ -2,14 +2,6 @@
 
 A type and functions for single characters.
 
-#### `toString`
-
-``` purescript
-toString :: Char -> String
-```
-
-Returns the string of length `1` containing only the given character.
-
 #### `toCharCode`
 
 ``` purescript

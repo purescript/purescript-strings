@@ -12,14 +12,6 @@ charAt :: Int -> String -> Maybe Char
 
 Returns the character at the given index, if the index is within bounds.
 
-#### `fromChar`
-
-``` purescript
-fromChar :: Char -> String
-```
-
-Returns a string of length `1` containing the given character.
-
 #### `singleton`
 
 ``` purescript

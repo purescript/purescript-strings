@@ -15,9 +15,6 @@ testString = do
   assert $ charAt 1 "ab" == Just 'b'
   assert $ charAt 2 "ab" == Nothing
 
-  log "fromChar"
-  assert $ fromChar 'a' == "a"
-
   log "singleton"
   assert $ singleton 'a' == "a"
 

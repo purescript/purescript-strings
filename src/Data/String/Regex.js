@@ -7,9 +7,17 @@ exports["showRegex'"] = function (r) {
   return "" + r;
 };
 
-exports["regex'"] = function (s1) {
-  return function (s2) {
-    return new RegExp(s1, s2);
+exports["regex'"] = function (left) {
+  return function (right) {
+    return function (s1) {
+      return function (s2) {
+        try {
+          return right(new RegExp(s1, s2));
+        } catch (e) {
+          return left(e.message);
+        }
+      };
+    };
   };
 };
 

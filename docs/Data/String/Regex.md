@@ -36,10 +36,11 @@ All flags set to false.
 #### `regex`
 
 ``` purescript
-regex :: String -> RegexFlags -> Regex
+regex :: String -> RegexFlags -> Either String Regex
 ```
 
-Constructs a `Regex` from a pattern string and flags.
+Constructs a `Regex` from a pattern string and flags. Fails with
+`Left error` if the pattern contains a syntax error.
 
 #### `source`
 

@@ -137,15 +137,6 @@ testString = do
   assert $ drop 3 "ab" == ""
   assert $ drop (-1) "ab" == "ab"
 
-  log "count"
-  assert $ count (\c -> true) "" == 0
-  assert $ count (\c -> true) "ab" == 2
-  assert $ count (\c -> false) "ab" == 0
-  assert $ count (\c -> c == 'a') "aabbcc" == 2
-  assert $ count (\c -> c == 'b') "aabbcc" == 0
-  assert $ count (\c -> c /= 'a') "aabbcc" == 0
-  assert $ count (\c -> c /= 'b') "aabbcc" == 2
-
   log "split"
   assert $ split "" "" == []
   assert $ split "" "a" == ["a"]

@@ -186,15 +186,6 @@ drop :: Int -> String -> String
 
 Returns the string without the first `n` characters.
 
-#### `count`
-
-``` purescript
-count :: (Char -> Boolean) -> String -> Int
-```
-
-Returns the number of contiguous characters at the beginning
-of the string for which the predicate holds.
-
 #### `split`
 
 ``` purescript

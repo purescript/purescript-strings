@@ -17,7 +17,6 @@ module Data.String
   , singleton
   , localeCompare
   , replace
-  , count
   , take
   , takeWhile
   , drop

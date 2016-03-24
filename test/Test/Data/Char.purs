@@ -6,9 +6,6 @@ import Data.Char
 import Test.Assert (assert)
 
 testChar = do
-  log "toString"
-  assert $ toString 'a' == "a"
-
   log "toCharCode"
   assert $ toCharCode 'a' == 97
   assert $ toCharCode '\n' == 10

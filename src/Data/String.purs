@@ -5,7 +5,6 @@ module Data.String
   ( charAt
   , charCodeAt
   , fromCharArray
-  , fromChar
   , toChar
   , contains
   , indexOf
@@ -50,13 +49,8 @@ foreign import _charAt :: (forall a. a -> Maybe a)
                        -> Maybe Char
 
 -- | Returns a string of length `1` containing the given character.
-fromChar :: Char -> String
-fromChar = C.toString
-
--- | Returns a string of length `1` containing the given character.
 -- | Same as `fromChar`.
-singleton :: Char -> String
-singleton = fromChar
+foreign import singleton :: Char -> String
 
 -- | Returns the numeric Unicode value of the character at the given index,
 -- | if the index is within bounds.

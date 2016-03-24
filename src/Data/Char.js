@@ -3,10 +3,6 @@
 
 // module Data.Char
 
-exports.toString = function (c) {
-  return c;
-};
-
 exports.toCharCode = function (c) {
   return c.charCodeAt(0);
 };

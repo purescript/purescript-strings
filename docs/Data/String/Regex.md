@@ -14,7 +14,7 @@ Wraps Javascript `RegExp` objects.
 
 ##### Instances
 ``` purescript
-instance showRegex :: Show Regex
+Show Regex
 ```
 
 #### `RegexFlags`

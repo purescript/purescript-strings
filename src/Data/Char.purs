@@ -1,16 +1,12 @@
 -- | A type and functions for single characters.
 module Data.Char
-  ( toString
-  , fromCharCode
+  ( fromCharCode
   , toCharCode
   , toLower
   , toUpper
   ) where
 
 import Prelude
-
--- | Returns the string of length `1` containing only the given character.
-foreign import toString :: Char -> String
 
 -- | Returns the numeric Unicode value of the character.
 foreign import toCharCode :: Char -> Int

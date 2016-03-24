@@ -84,7 +84,9 @@ parseFlags s =
   , unicode: contains "u" s
   }
 
--- | Returns `true` if the `Regex` matches the string.
+-- | Returns `true` if the `Regex` matches the string. In contrast to
+-- | `RegExp.prototype.test()` in JavaScript, `test` does not affect
+-- | the `lastIndex` property of the Regex.
 foreign import test :: Regex -> String -> Boolean
 
 foreign import _match :: (forall r. r -> Maybe r)

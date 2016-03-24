@@ -1,17 +1,23 @@
 module Test.Data.String.Regex (testStringRegex) where
 
-import Prelude
-import Data.Maybe
-import Control.Monad.Eff.Console (log)
+import Prelude (Unit, ($), bind, (==), not)
+
+import Control.Monad.Eff (Eff)
+import Control.Monad.Eff.Console (CONSOLE, log)
+
+import Data.Either (isLeft, fromRight)
+import Data.Maybe (Maybe(..))
 import Data.String.Regex
-import Data.Either (isLeft)
-import Data.Either.Unsafe (fromRight)
-import Test.Assert (assert)
+
+import Partial.Unsafe (unsafePartial)
+
+import Test.Assert (ASSERT, assert)
 
 -- | Unsafe version of `regex`.
 regex' :: String -> RegexFlags -> Regex
-regex' pattern flags = fromRight (regex pattern flags)
+regex' pattern flags = unsafePartial $ fromRight (regex pattern flags)
 
+testStringRegex :: forall eff. Eff (console :: CONSOLE, assert :: ASSERT | eff) Unit
 testStringRegex = do
   log "regex"
   assert $ test (regex' "^a" noFlags) "abc"

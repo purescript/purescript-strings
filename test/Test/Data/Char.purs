@@ -1,10 +1,15 @@
 module Test.Data.Char (testChar) where
 
-import Prelude
-import Control.Monad.Eff.Console (log)
-import Data.Char
-import Test.Assert (assert)
+import Prelude (Unit, (==), ($), bind)
 
+import Control.Monad.Eff (Eff)
+import Control.Monad.Eff.Console (CONSOLE, log)
+
+import Data.Char
+
+import Test.Assert (ASSERT, assert)
+
+testChar :: forall eff. Eff (console :: CONSOLE, assert :: ASSERT | eff) Unit
 testChar = do
   log "toCharCode"
   assert $ toCharCode 'a' == 97

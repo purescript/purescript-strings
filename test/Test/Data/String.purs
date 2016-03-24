@@ -1,11 +1,16 @@
 module Test.Data.String (testString) where
 
-import Prelude
-import Data.Maybe
-import Control.Monad.Eff.Console (log)
-import Data.String
-import Test.Assert (assert)
+import Prelude (Unit, Ordering(..), (==), ($), bind, negate, not, (/=), (&&))
 
+import Control.Monad.Eff (Eff)
+import Control.Monad.Eff.Console (CONSOLE, log)
+
+import Data.Maybe (Maybe(..), isNothing)
+import Data.String
+
+import Test.Assert (ASSERT, assert)
+
+testString :: forall eff. Eff (console :: CONSOLE, assert :: ASSERT | eff) Unit
 testString = do
   log "charAt"
   assert $ charAt 0 "" == Nothing

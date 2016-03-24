@@ -128,12 +128,14 @@ testString = do
   assert $ take 1 "ab" == "a"
   assert $ take 2 "ab" == "ab"
   assert $ take 3 "ab" == "ab"
+  assert $ take (-1) "ab" == ""
 
   log "drop"
   assert $ drop 0 "ab" == "ab"
   assert $ drop 1 "ab" == "b"
   assert $ drop 2 "ab" == ""
   assert $ drop 3 "ab" == ""
+  assert $ drop (-1) "ab" == "ab"
 
   log "count"
   assert $ count (\c -> true) "" == 0

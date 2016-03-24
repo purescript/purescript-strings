@@ -19,8 +19,9 @@ module Data.String.Regex
   ) where
 
 import Prelude
-import Data.Maybe (Maybe(..))
+
 import Data.Either (Either(..))
+import Data.Maybe (Maybe(..))
 import Data.String (contains)
 
 -- | Wraps Javascript `RegExp` objects.
@@ -68,10 +69,10 @@ foreign import flags :: Regex -> RegexFlags
 -- | Returns the string representation of the given `RegexFlags`.
 renderFlags :: RegexFlags -> String
 renderFlags f =
-  (if f.global then "g" else "") ++
-  (if f.ignoreCase then "i" else "") ++
-  (if f.multiline then "m" else "") ++
-  (if f.sticky then "y" else "") ++
+  (if f.global then "g" else "") <>
+  (if f.ignoreCase then "i" else "") <>
+  (if f.multiline then "m" else "") <>
+  (if f.sticky then "y" else "") <>
   (if f.unicode then "u" else "")
 
 -- | Parses the string representation of `RegexFlags`.

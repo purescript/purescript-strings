@@ -12,9 +12,6 @@ String and char utility functions, regular expressions.
 bower install purescript-strings
 ```
 
-## Module documentation
+## Documentation
 
-- [Data.Char](docs/Data/Char.md)
-- [Data.String](docs/Data/String.md)
-- [Data.String.Regex](docs/Data/String/Regex.md)
-- [Data.String.Unsafe](docs/Data/String/Unsafe.md)
+Module documentation is [published on Pursuit](http://pursuit.purescript.org/packages/purescript-strings).

@@ -23,6 +23,6 @@
   "devDependencies": {
     "purescript-assert": "^1.0.0-rc.1",
     "purescript-console": "^1.0.0-rc.1",
-    "purescript-partial": "^1.1.0"
+    "purescript-partial": "^1.1.2"
   }
 }

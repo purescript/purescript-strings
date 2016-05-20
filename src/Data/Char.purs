@@ -6,8 +6,6 @@ module Data.Char
   , toUpper
   ) where
 
-import Prelude
-
 -- | Returns the numeric Unicode value of the character.
 foreign import toCharCode :: Char -> Int
 

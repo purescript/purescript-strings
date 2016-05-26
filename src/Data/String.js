@@ -27,6 +27,16 @@ exports._charCodeAt = function (just) {
   };
 };
 
+exports._codePointAt = function (just) {
+  return function (nothing) {
+    return function (i) {
+      return function (s) {
+        return i >= 0 && i < s.length ? just(s.codePointAt(i)) : nothing;
+      };
+    };
+  };
+};
+
 exports._toChar = function (just) {
   return function (nothing) {
     return function (s) {

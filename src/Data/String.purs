@@ -47,7 +47,6 @@ foreign import _charAt :: (forall a. a -> Maybe a)
                        -> Maybe Char
 
 -- | Returns a string of length `1` containing the given character.
--- | Same as `fromChar`.
 foreign import singleton :: Char -> String
 
 -- | Returns the numeric Unicode value of the character at the given index,

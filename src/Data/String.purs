@@ -23,6 +23,7 @@ module Data.String
   , dropWhile
   , stripPrefix
   , stripSuffix
+  , count
   , split
   , toCharArray
   , toLower

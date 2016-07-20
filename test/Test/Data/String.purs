@@ -142,6 +142,12 @@ testString = do
   assert $ drop 3 "ab" == ""
   assert $ drop (-1) "ab" == "ab"
 
+  log "count"
+  assert $ count (_ == 'a') "" == 0
+  assert $ count (_ == 'a') "ab" == 1
+  assert $ count (_ == 'a') "aaab" == 3
+  assert $ count (_ == 'a') "abaa" == 1
+
   log "split"
   assert $ split "" "" == []
   assert $ split "" "a" == ["a"]
@@ -167,4 +173,3 @@ testString = do
   assert $ joinWith "" [] == ""
   assert $ joinWith "" ["a", "b"] == "ab"
   assert $ joinWith "--" ["a", "b", "c"] == "a--b--c"
-

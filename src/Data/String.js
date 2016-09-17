@@ -139,6 +139,17 @@ exports.split = function (sep) {
   };
 };
 
+exports._splitAt = function (just) {
+  return function (nothing) {
+    return function (i) {
+      return function (s) {
+        return i >= 0 && i < s.length ?
+               just([s.substring(0, i), s.substring(i)]) : nothing;
+      };
+    };
+  };
+};
+
 exports.toCharArray = function (s) {
   return s.split("");
 };

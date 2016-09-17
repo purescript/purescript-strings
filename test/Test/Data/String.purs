@@ -155,6 +155,13 @@ testString = do
   assert $ split "b" "aabcc" == ["aa", "cc"]
   assert $ split "d" "abc" == ["abc"]
 
+  log "splitAt"
+  assert $ splitAt 1 "" == Nothing
+  assert $ splitAt 0 "a" == Just ["", "a"]
+  assert $ splitAt 1 "ab" == Just ["a", "b"]
+  assert $ splitAt 3 "aabcc" == Just ["aab", "cc"]
+  assert $ splitAt (-1) "abc" == Nothing
+
   log "toCharArray"
   assert $ toCharArray "" == []
   assert $ toCharArray "a" == ['a']

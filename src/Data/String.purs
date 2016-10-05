@@ -25,6 +25,7 @@ module Data.String
   , stripSuffix
   , count
   , split
+  , splitAt
   , toCharArray
   , toLower
   , toUpper
@@ -196,6 +197,16 @@ foreign import count :: (Char -> Boolean) -> String -> Int
 -- | of the first string.
 -- | * `split " " "hello world" == ["hello", "world"]`
 foreign import split :: String -> String -> Array String
+
+-- | Returns the substrings of split at the given index, if the index is within bounds.
+splitAt :: Int -> String -> Maybe (Array String)
+splitAt = _splitAt Just Nothing
+
+foreign import _splitAt :: (forall a. a -> Maybe a)
+                        -> (forall a. Maybe a)
+                        -> Int
+                        -> String
+                        -> Maybe (Array String)
 
 -- | Converts the string into an array of characters.
 foreign import toCharArray :: String -> Array Char

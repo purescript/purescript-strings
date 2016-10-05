@@ -17,12 +17,12 @@
     "package.json"
   ],
   "dependencies": {
-    "purescript-either": "^1.0.0",
-    "purescript-maybe": "^1.0.0"
+    "purescript-either": "^2.0.0",
+    "purescript-maybe": "^2.0.0"
   },
   "devDependencies": {
-    "purescript-assert": "^1.0.0",
-    "purescript-console": "^1.0.0",
+    "purescript-assert": "^2.0.0",
+    "purescript-console": "^2.0.0",
     "purescript-partial": "^1.1.2"
   }
 }

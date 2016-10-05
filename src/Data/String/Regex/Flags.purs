@@ -1,6 +1,6 @@
 module Data.String.Regex.Flags where
 
-import Prelude (class Semigroup, (||))
+import Prelude
 import Data.Monoid (class Monoid)
 
 type RegexFlagsRec =

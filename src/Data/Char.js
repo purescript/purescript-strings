@@ -1,7 +1,4 @@
-/* global exports */
 "use strict";
-
-// module Data.Char
 
 exports.toCharCode = function (c) {
   return c.charCodeAt(0);

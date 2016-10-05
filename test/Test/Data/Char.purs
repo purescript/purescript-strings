@@ -26,4 +26,3 @@ testChar = do
   log "toUpper"
   assert $ toUpper 'a' == 'A'
   assert $ toUpper 'A' == 'A'
-

@@ -25,7 +25,7 @@ exports.source = function (r) {
   return r.source;
 };
 
-exports.flags = function (r) {
+exports["flags'"] = function (r) {
   return {
     multiline: r.multiline,
     ignoreCase: r.ignoreCase,

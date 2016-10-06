@@ -1,6 +1,6 @@
 module Test.Data.String.Regex (testStringRegex) where
 
-import Prelude (Unit, ($), bind, (==), not)
+import Prelude (Unit, ($), (<>), bind, (==), not)
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
@@ -23,6 +23,11 @@ testStringRegex = do
   assert $ test (regex' "^a" noFlags) "abc"
   assert $ not (test (regex' "^b" noFlags) "abc")
   assert $ isLeft (regex "+" noFlags)
+
+  log "flags"
+  assert $ "quxbarfoobaz" == replace (regex' "foo" noFlags)  "qux" "foobarfoobaz"
+  assert $ "quxbarquxbaz" == replace (regex' "foo" g)        "qux" "foobarfoobaz"
+  assert $ "quxbarquxbaz" == replace (regex' "foo" (g <> i)) "qux" "foobarFOObaz"
 
   log "match"
   assert $ match (regex' "^abc$" noFlags) "abc" == Just [Just "abc"]

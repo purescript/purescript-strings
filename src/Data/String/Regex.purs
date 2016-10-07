@@ -3,7 +3,6 @@
 -- | For details of the underlying implementation, see [RegExp Reference at MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
 module Data.String.Regex
   ( Regex(..)
-  , RegexFlags(..)
   , regex
   , source
   , flags
@@ -15,7 +14,6 @@ module Data.String.Regex
   , replace'
   , search
   , split
-  , noFlags
   ) where
 
 import Prelude
@@ -23,6 +21,7 @@ import Prelude
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
 import Data.String (contains)
+import Data.String.Regex.Flags (RegexFlags(..), RegexFlagsRec)
 
 -- | Wraps Javascript `RegExp` objects.
 foreign import data Regex :: *
@@ -31,23 +30,6 @@ foreign import showRegex' :: Regex -> String
 
 instance showRegex :: Show Regex where
   show = showRegex'
-
--- | Flags that control matching.
-type RegexFlags =
-  { global :: Boolean
-  , ignoreCase :: Boolean
-  , multiline :: Boolean
-  , sticky :: Boolean
-  , unicode :: Boolean
-  }
-
--- | All flags set to false.
-noFlags :: RegexFlags
-noFlags = { global     : false
-          , ignoreCase : false
-          , multiline  : false
-          , sticky     : false
-          , unicode    : false }
 
 foreign import regex' :: (String -> Either String Regex)
                       -> (Regex -> Either String Regex)
@@ -64,11 +46,15 @@ regex s f = regex' Left Right s $ renderFlags f
 foreign import source :: Regex -> String
 
 -- | Returns the `RegexFlags` used to construct the given `Regex`.
-foreign import flags :: Regex -> RegexFlags
+flags :: Regex -> RegexFlags
+flags = RegexFlags <<< flags'
+
+-- | Returns the `RegexFlags` inner record used to construct the given `Regex`.
+foreign import flags' :: Regex -> RegexFlagsRec
 
 -- | Returns the string representation of the given `RegexFlags`.
 renderFlags :: RegexFlags -> String
-renderFlags f =
+renderFlags (RegexFlags f) =
   (if f.global then "g" else "") <>
   (if f.ignoreCase then "i" else "") <>
   (if f.multiline then "m" else "") <>
@@ -77,7 +63,7 @@ renderFlags f =
 
 -- | Parses the string representation of `RegexFlags`.
 parseFlags :: String -> RegexFlags
-parseFlags s =
+parseFlags s = RegexFlags
   { global: contains "g" s
   , ignoreCase: contains "i" s
   , multiline: contains "m" s

@@ -1,7 +1,11 @@
 module Data.String.Regex.Flags where
 
 import Prelude
+
+import Control.MonadPlus (guard)
+
 import Data.Monoid (class Monoid)
+import Data.String (joinWith)
 
 type RegexFlagsRec =
   { global :: Boolean
@@ -85,3 +89,26 @@ instance semigroupRegexFlags :: Semigroup RegexFlags where
 
 instance monoidRegexFlags :: Monoid RegexFlags where
   mempty = noFlags
+
+instance eqRegexFlags :: Eq RegexFlags where
+  eq (RegexFlags x) (RegexFlags y)
+    = x.global == y.global
+    && x.ignoreCase == y.ignoreCase
+    && x.multiline == y.multiline
+    && x.sticky == y.sticky
+    && x.unicode == y.unicode
+
+instance showRegexFlags :: Show RegexFlags where
+  show (RegexFlags flags) =
+    let
+      usedFlags =
+        []
+        <> (guard flags.global $> "global")
+        <> (guard flags.ignoreCase $> "ignoreCase")
+        <> (guard flags.multiline $> "multiline")
+        <> (guard flags.sticky $> "sticky")
+        <> (guard flags.unicode $> "unicode")
+    in
+      if usedFlags == []
+      then "noFlags"
+      else "(" <> joinWith " <> " usedFlags <> ")"

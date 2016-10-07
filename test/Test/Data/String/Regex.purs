@@ -8,6 +8,7 @@ import Control.Monad.Eff.Console (CONSOLE, log)
 import Data.Either (isLeft, fromRight)
 import Data.Maybe (Maybe(..))
 import Data.String.Regex
+import Data.String.Regex.Flags (RegexFlags, global, ignoreCase, noFlags)
 
 import Partial.Unsafe (unsafePartial)
 
@@ -25,9 +26,9 @@ testStringRegex = do
   assert $ isLeft (regex "+" noFlags)
 
   log "flags"
-  assert $ "quxbarfoobaz" == replace (regex' "foo" noFlags)  "qux" "foobarfoobaz"
-  assert $ "quxbarquxbaz" == replace (regex' "foo" g)        "qux" "foobarfoobaz"
-  assert $ "quxbarquxbaz" == replace (regex' "foo" (g <> i)) "qux" "foobarFOObaz"
+  assert $ "quxbarfoobaz" == replace (regex' "foo" noFlags) "qux" "foobarfoobaz"
+  assert $ "quxbarquxbaz" == replace (regex' "foo" global) "qux" "foobarfoobaz"
+  assert $ "quxbarquxbaz" == replace (regex' "foo" (global <> ignoreCase)) "qux" "foobarFOObaz"
 
   log "match"
   assert $ match (regex' "^abc$" noFlags) "abc" == Just [Just "abc"]

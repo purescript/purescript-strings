@@ -3,8 +3,6 @@
 -- | For details of the underlying implementation, see [RegExp Reference at MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
 module Data.String.Regex
   ( Regex(..)
-  , RegexFlags(..)
-  , RegexFlagsRec
   , regex
   , source
   , flags
@@ -16,8 +14,6 @@ module Data.String.Regex
   , replace'
   , search
   , split
-  , noFlags
-  , g, i, m, s, u
   ) where
 
 import Prelude
@@ -25,7 +21,7 @@ import Prelude
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
 import Data.String (contains)
-import Data.Monoid (class Monoid)
+import Data.String.Regex.Flags (RegexFlags(..), RegexFlagsRec)
 
 -- | Wraps Javascript `RegExp` objects.
 foreign import data Regex :: *
@@ -34,92 +30,6 @@ foreign import showRegex' :: Regex -> String
 
 instance showRegex :: Show Regex where
   show = showRegex'
-
-type RegexFlagsRec =
-  { global     :: Boolean
-  , ignoreCase :: Boolean
-  , multiline  :: Boolean
-  , sticky     :: Boolean
-  , unicode    :: Boolean
-  }
-
--- | Flags that control matching.
-data RegexFlags = RegexFlags RegexFlagsRec
-
--- | All flags set to false.
-noFlags :: RegexFlags
-noFlags = RegexFlags
-  { global     : false
-  , ignoreCase : false
-  , multiline  : false
-  , sticky     : false
-  , unicode    : false
-  }
-
--- | Only global flag set to true
-g :: RegexFlags
-g = RegexFlags
-  { global     : true
-  , ignoreCase : false
-  , multiline  : false
-  , sticky     : false
-  , unicode    : false
-  }
-
--- | Only ignoreCase flag set to true
-i :: RegexFlags
-i = RegexFlags
-  { global     : false
-  , ignoreCase : true
-  , multiline  : false
-  , sticky     : false
-  , unicode    : false
-  }
-
--- | Only multiline flag set to true
-m :: RegexFlags
-m = RegexFlags
-  { global     : false
-  , ignoreCase : false
-  , multiline  : true
-  , sticky     : false
-  , unicode    : false
-  }
-
--- | Only sticky flag set to true
-s :: RegexFlags
-s = RegexFlags
-  { global     : false
-  , ignoreCase : false
-  , multiline  : false
-  , sticky     : true
-  , unicode    : false
-  }
-
--- | Only unicode flag set to true
-u :: RegexFlags
-u = RegexFlags
-  { global     : false
-  , ignoreCase : false
-  , multiline  : false
-  , sticky     : false
-  , unicode    : true
-  }
-
-instance semigroupRegexFlags :: Semigroup RegexFlags where
-  append (RegexFlags x) (RegexFlags y) = RegexFlags 
-    { global     : x.global     || y.global
-    , ignoreCase : x.ignoreCase || y.ignoreCase
-    , multiline  : x.multiline  || y.multiline
-    , sticky     : x.sticky     || y.sticky
-    , unicode    : x.unicode    || y.unicode
-    }
-
-instance monoidRegexFlags :: Monoid RegexFlags where
-  mempty = noFlags
-
-instance showRegexFlags :: Show RegexFlags where
-  show = renderFlags
 
 foreign import regex' :: (String -> Either String Regex)
                       -> (Regex -> Either String Regex)
@@ -130,7 +40,7 @@ foreign import regex' :: (String -> Either String Regex)
 -- | Constructs a `Regex` from a pattern string and flags. Fails with
 -- | `Left error` if the pattern contains a syntax error.
 regex :: String -> RegexFlags -> Either String Regex
-regex str f = regex' Left Right str $ renderFlags f
+regex s f = regex' Left Right s $ renderFlags f
 
 -- | Returns the pattern string used to construct the given `Regex`.
 foreign import source :: Regex -> String
@@ -145,20 +55,20 @@ foreign import flags' :: Regex -> RegexFlagsRec
 -- | Returns the string representation of the given `RegexFlags`.
 renderFlags :: RegexFlags -> String
 renderFlags (RegexFlags f) =
-  (if f.global     then "g" else "") <>
+  (if f.global then "g" else "") <>
   (if f.ignoreCase then "i" else "") <>
-  (if f.multiline  then "m" else "") <>
-  (if f.sticky     then "y" else "") <>
-  (if f.unicode    then "u" else "")
+  (if f.multiline then "m" else "") <>
+  (if f.sticky then "y" else "") <>
+  (if f.unicode then "u" else "")
 
 -- | Parses the string representation of `RegexFlags`.
 parseFlags :: String -> RegexFlags
-parseFlags str = RegexFlags
-  { global     : contains "g" str
-  , ignoreCase : contains "i" str
-  , multiline  : contains "m" str
-  , sticky     : contains "y" str
-  , unicode    : contains "u" str
+parseFlags s = RegexFlags
+  { global: contains "g" s
+  , ignoreCase: contains "i" s
+  , multiline: contains "m" s
+  , sticky: contains "y" s
+  , unicode: contains "u" s
   }
 
 -- | Returns `true` if the `Regex` matches the string. In contrast to

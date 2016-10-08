@@ -1,7 +1,4 @@
-/* global exports */
 "use strict";
-
-// module Data.String
 
 exports._charAt = function (just) {
   return function (nothing) {
@@ -110,6 +107,14 @@ exports.replace = function (s1) {
   return function (s2) {
     return function (s3) {
       return s3.replace(s1, s2);
+    };
+  };
+};
+
+exports.replaceAll = function (s1) {
+  return function (s2) {
+    return function (s3) {
+      return s3.replace(new RegExp(s1.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"), "g"), s2);
     };
   };
 };

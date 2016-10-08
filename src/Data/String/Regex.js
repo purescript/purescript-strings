@@ -1,7 +1,4 @@
-/* global exports */
 "use strict";
-
-// module Data.String.Regex
 
 exports["showRegex'"] = function (r) {
   return "" + r;

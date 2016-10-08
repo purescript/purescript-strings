@@ -1,7 +1,4 @@
-/* global exports */
 "use strict";
-
-// module Data.String.Unsafe
 
 exports.charCodeAt = function (i) {
   return function (s) {

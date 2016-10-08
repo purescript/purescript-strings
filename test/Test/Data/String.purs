@@ -60,57 +60,57 @@ testString = do
   assert $ dropWhile (\c -> c /= 'b') "aabbcc" == "bbcc"
 
   log "stripPrefix"
-  assert $ stripPrefix "" "" == Just ""
-  assert $ stripPrefix "" "abc" == Just "abc"
-  assert $ stripPrefix "a" "abc" == Just "bc"
-  assert $ stripPrefix "!" "abc" == Nothing
-  assert $ stripPrefix "!" "" == Nothing
+  assert $ stripPrefix (Pattern "") "" == Just ""
+  assert $ stripPrefix (Pattern "") "abc" == Just "abc"
+  assert $ stripPrefix (Pattern "a") "abc" == Just "bc"
+  assert $ stripPrefix (Pattern "!") "abc" == Nothing
+  assert $ stripPrefix (Pattern "!") "" == Nothing
 
   log "fromCharArray"
   assert $ fromCharArray [] == ""
   assert $ fromCharArray ['a', 'b'] == "ab"
 
   log "contains"
-  assert $ contains "" ""
-  assert $ contains "" "abcd"
-  assert $ contains "bc" "abcd"
-  assert $ not (contains "cb" "abcd")
+  assert $ contains (Pattern "") ""
+  assert $ contains (Pattern "") "abcd"
+  assert $ contains (Pattern "bc") "abcd"
+  assert $ not (contains (Pattern "cb") "abcd")
 
   log "indexOf"
-  assert $ indexOf "" "" == Just 0
-  assert $ indexOf "" "abcd" == Just 0
-  assert $ indexOf "bc" "abcd" == Just 1
-  assert $ indexOf "cb" "abcd" == Nothing
+  assert $ indexOf (Pattern "") "" == Just 0
+  assert $ indexOf (Pattern "") "abcd" == Just 0
+  assert $ indexOf (Pattern "bc") "abcd" == Just 1
+  assert $ indexOf (Pattern "cb") "abcd" == Nothing
 
   log "indexOf'"
-  assert $ indexOf' "" 0 "" == Just 0
-  assert $ indexOf' "" (-1) "ab" == Nothing
-  assert $ indexOf' "" 0 "ab" == Just 0
-  assert $ indexOf' "" 1 "ab" == Just 1
-  assert $ indexOf' "" 2 "ab" == Just 2
-  assert $ indexOf' "" 3 "ab" == Nothing
-  assert $ indexOf' "bc" 0 "abcd" == Just 1
-  assert $ indexOf' "bc" 1 "abcd" == Just 1
-  assert $ indexOf' "bc" 2 "abcd" == Nothing
-  assert $ indexOf' "cb" 0 "abcd" == Nothing
+  assert $ indexOf' (Pattern "") 0 "" == Just 0
+  assert $ indexOf' (Pattern "") (-1) "ab" == Nothing
+  assert $ indexOf' (Pattern "") 0 "ab" == Just 0
+  assert $ indexOf' (Pattern "") 1 "ab" == Just 1
+  assert $ indexOf' (Pattern "") 2 "ab" == Just 2
+  assert $ indexOf' (Pattern "") 3 "ab" == Nothing
+  assert $ indexOf' (Pattern "bc") 0 "abcd" == Just 1
+  assert $ indexOf' (Pattern "bc") 1 "abcd" == Just 1
+  assert $ indexOf' (Pattern "bc") 2 "abcd" == Nothing
+  assert $ indexOf' (Pattern "cb") 0 "abcd" == Nothing
 
   log "lastIndexOf"
-  assert $ lastIndexOf "" "" == Just 0
-  assert $ lastIndexOf "" "abcd" == Just 4
-  assert $ lastIndexOf "bc" "abcd" == Just 1
-  assert $ lastIndexOf "cb" "abcd" == Nothing
+  assert $ lastIndexOf (Pattern "") "" == Just 0
+  assert $ lastIndexOf (Pattern "") "abcd" == Just 4
+  assert $ lastIndexOf (Pattern "bc") "abcd" == Just 1
+  assert $ lastIndexOf (Pattern "cb") "abcd" == Nothing
 
   log "lastIndexOf'"
-  assert $ lastIndexOf' "" 0 "" == Just 0
-  assert $ lastIndexOf' "" (-1) "ab" == Nothing
-  assert $ lastIndexOf' "" 0 "ab" == Just 0
-  assert $ lastIndexOf' "" 1 "ab" == Just 1
-  assert $ lastIndexOf' "" 2 "ab" == Just 2
-  assert $ lastIndexOf' "" 3 "ab" == Nothing
-  assert $ lastIndexOf' "bc" 0 "abcd" == Nothing
-  assert $ lastIndexOf' "bc" 1 "abcd" == Just 1
-  assert $ lastIndexOf' "bc" 2 "abcd" == Just 1
-  assert $ lastIndexOf' "cb" 0 "abcd" == Nothing
+  assert $ lastIndexOf' (Pattern "") 0 "" == Just 0
+  assert $ lastIndexOf' (Pattern "") (-1) "ab" == Nothing
+  assert $ lastIndexOf' (Pattern "") 0 "ab" == Just 0
+  assert $ lastIndexOf' (Pattern "") 1 "ab" == Just 1
+  assert $ lastIndexOf' (Pattern "") 2 "ab" == Just 2
+  assert $ lastIndexOf' (Pattern "") 3 "ab" == Nothing
+  assert $ lastIndexOf' (Pattern "bc") 0 "abcd" == Nothing
+  assert $ lastIndexOf' (Pattern "bc") 1 "abcd" == Just 1
+  assert $ lastIndexOf' (Pattern "bc") 2 "abcd" == Just 1
+  assert $ lastIndexOf' (Pattern "cb") 0 "abcd" == Nothing
 
   log "length"
   assert $ length "" == 0
@@ -124,9 +124,13 @@ testString = do
   assert $ localeCompare "b" "a" == GT
 
   log "replace"
-  assert $ replace "b" "" "abc" == "ac"
-  assert $ replace "b" "!" "abc" == "a!c"
-  assert $ replace "d" "!" "abc" == "abc"
+  assert $ replace (Pattern "b") (Replacement "") "abc" == "ac"
+  assert $ replace (Pattern "b") (Replacement "!") "abc" == "a!c"
+  assert $ replace (Pattern "d") (Replacement "!") "abc" == "abc"
+
+  log "replaceAll"
+  assert $ replaceAll (Pattern "b") (Replacement "") "abbbbbc" == "ac"
+  assert $ replaceAll (Pattern "[b]") (Replacement "!") "a[b]c" == "a!c"
 
   log "take"
   assert $ take 0 "ab" == ""
@@ -149,11 +153,11 @@ testString = do
   assert $ count (_ == 'a') "abaa" == 1
 
   log "split"
-  assert $ split "" "" == []
-  assert $ split "" "a" == ["a"]
-  assert $ split "" "ab" == ["a", "b"]
-  assert $ split "b" "aabcc" == ["aa", "cc"]
-  assert $ split "d" "abc" == ["abc"]
+  assert $ split (Pattern "") "" == []
+  assert $ split (Pattern "") "a" == ["a"]
+  assert $ split (Pattern "") "ab" == ["a", "b"]
+  assert $ split (Pattern "b") "aabcc" == ["aa", "cc"]
+  assert $ split (Pattern "d") "abc" == ["abc"]
 
   log "splitAt"
   assert $ splitAt 1 "" == Nothing

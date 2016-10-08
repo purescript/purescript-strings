@@ -20,7 +20,7 @@ import Prelude
 
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
-import Data.String (contains)
+import Data.String (Pattern(..), contains)
 import Data.String.Regex.Flags (RegexFlags(..), RegexFlagsRec)
 
 -- | Wraps Javascript `RegExp` objects.
@@ -31,11 +31,12 @@ foreign import showRegex' :: Regex -> String
 instance showRegex :: Show Regex where
   show = showRegex'
 
-foreign import regex' :: (String -> Either String Regex)
-                      -> (Regex -> Either String Regex)
-                      -> String
-                      -> String
-                      -> Either String Regex
+foreign import regex'
+  :: (String -> Either String Regex)
+  -> (Regex -> Either String Regex)
+  -> String
+  -> String
+  -> Either String Regex
 
 -- | Constructs a `Regex` from a pattern string and flags. Fails with
 -- | `Left error` if the pattern contains a syntax error.
@@ -64,11 +65,11 @@ renderFlags (RegexFlags f) =
 -- | Parses the string representation of `RegexFlags`.
 parseFlags :: String -> RegexFlags
 parseFlags s = RegexFlags
-  { global: contains "g" s
-  , ignoreCase: contains "i" s
-  , multiline: contains "m" s
-  , sticky: contains "y" s
-  , unicode: contains "u" s
+  { global: contains (Pattern "g") s
+  , ignoreCase: contains (Pattern "i") s
+  , multiline: contains (Pattern "m") s
+  , sticky: contains (Pattern "y") s
+  , unicode: contains (Pattern "u") s
   }
 
 -- | Returns `true` if the `Regex` matches the string. In contrast to
@@ -76,11 +77,12 @@ parseFlags s = RegexFlags
 -- | the `lastIndex` property of the Regex.
 foreign import test :: Regex -> String -> Boolean
 
-foreign import _match :: (forall r. r -> Maybe r)
-                      -> (forall r. Maybe r)
-                      -> Regex
-                      -> String
-                      -> Maybe (Array (Maybe String))
+foreign import _match
+  :: (forall r. r -> Maybe r)
+  -> (forall r. Maybe r)
+  -> Regex
+  -> String
+  -> Maybe (Array (Maybe String))
 
 -- | Matches the string against the `Regex` and returns an array of matches
 -- | if there were any. Each match has type `Maybe String`, where `Nothing`
@@ -99,11 +101,12 @@ foreign import replace :: Regex -> String -> String -> String
 -- | See the [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_function_as_a_parameter).
 foreign import replace' :: Regex -> (String -> Array String -> String) -> String -> String
 
-foreign import _search :: (forall r. r -> Maybe r)
-                       -> (forall r. Maybe r)
-                       -> Regex
-                       -> String
-                       -> Maybe Int
+foreign import _search
+  :: (forall r. r -> Maybe r)
+  -> (forall r. Maybe r)
+  -> Regex
+  -> String
+  -> Maybe Int
 
 -- | Returns `Just` the index of the first match of the `Regex` in the string,
 -- | or `Nothing` if there is no match.

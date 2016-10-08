@@ -99,7 +99,7 @@ foreign import _toChar
 
 -- | Returns `true` if the given string is empty.
 null :: String -> Boolean
-null s = length s == zero
+null s = s == ""
 
 -- | Returns the first character and the rest of the string,
 -- | if the string is not empty.

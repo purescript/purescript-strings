@@ -36,6 +36,7 @@ module Data.String
 import Prelude
 
 import Data.Maybe (Maybe(..), isJust)
+import Data.Monoid (mempty)
 import Data.String.Unsafe as U
 
 -- | Returns the character at the given index, if the index is within bounds.
@@ -72,7 +73,7 @@ foreign import _toChar :: (forall a. a -> Maybe a)
 
 -- | Returns `true` if the given string is empty.
 null :: String -> Boolean
-null s = length s == zero
+null = eq mempty
 
 -- | Returns the first character and the rest of the string,
 -- | if the string is not empty.

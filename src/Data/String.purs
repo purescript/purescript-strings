@@ -228,7 +228,7 @@ foreign import count :: (Char -> Boolean) -> String -> Int
 
 -- | Returns the substrings of the second string separated along occurences
 -- | of the first string.
--- | * `split " " "hello world" == ["hello", "world"]`
+-- | * `split (Pattern " ") "hello world" == ["hello", "world"]`
 foreign import split :: Pattern -> String -> Array String
 
 -- | Returns the substrings of split at the given index, if the index is within bounds.

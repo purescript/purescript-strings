@@ -1,8 +1,7 @@
 # purescript-strings
 
-[![Latest release](http://img.shields.io/bower/v/purescript-strings.svg)](https://github.com/purescript/purescript-strings/releases)
-[![Build Status](https://travis-ci.org/purescript/purescript-strings.svg?branch=master)](https://travis-ci.org/purescript/purescript-strings)
-[![Dependency Status](https://www.versioneye.com/user/projects/55848c29363861001b000193/badge.svg?style=flat)](https://www.versioneye.com/user/projects/55848c29363861001b000193)
+[![Latest release](http://img.shields.io/github/release/purescript/purescript-strings.svg)](https://github.com/purescript/purescript-strings/releases)
+[![Build status](https://travis-ci.org/purescript/purescript-strings.svg?branch=master)](https://travis-ci.org/purescript/purescript-strings)
 
 String and char utility functions, regular expressions.
 

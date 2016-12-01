@@ -41,6 +41,7 @@ import Prelude
 import Data.Maybe (Maybe(..), isJust)
 import Data.Newtype (class Newtype)
 import Data.String.Unsafe as U
+import Data.Tuple (Tuple(..))
 
 -- | A newtype used in cases where there is a string to be matched.
 newtype Pattern = Pattern String
@@ -232,14 +233,15 @@ foreign import count :: (Char -> Boolean) -> String -> Int
 foreign import split :: Pattern -> String -> Array String
 
 -- | Returns the substrings of split at the given index, if the index is within bounds.
-splitAt :: Int -> String -> Maybe (Array String)
-splitAt = _splitAt Just Nothing
+splitAt :: Int -> String -> Maybe (Tuple String String)
+splitAt = _splitAt Just Nothing Tuple
 
 foreign import _splitAt :: (forall a. a -> Maybe a)
                         -> (forall a. Maybe a)
+                        -> (forall a b. a -> b -> Tuple a b)
                         -> Int
                         -> String
-                        -> Maybe (Array String)
+                        -> Maybe (Tuple String String)
 
 -- | Converts the string into an array of characters.
 foreign import toCharArray :: String -> Array Char

@@ -6,6 +6,7 @@ import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
 
 import Data.Maybe (Maybe(..), isNothing)
+import Data.Tuple (Tuple(..))
 import Data.String
 
 import Test.Assert (ASSERT, assert)
@@ -161,9 +162,9 @@ testString = do
 
   log "splitAt"
   assert $ splitAt 1 "" == Nothing
-  assert $ splitAt 0 "a" == Just ["", "a"]
-  assert $ splitAt 1 "ab" == Just ["a", "b"]
-  assert $ splitAt 3 "aabcc" == Just ["aab", "cc"]
+  assert $ splitAt 0 "a" == Just (Tuple "" "a")
+  assert $ splitAt 1 "ab" == Just (Tuple "a" "b")
+  assert $ splitAt 3 "aabcc" == Just (Tuple "aab" "cc")
   assert $ splitAt (-1) "abc" == Nothing
 
   log "toCharArray"

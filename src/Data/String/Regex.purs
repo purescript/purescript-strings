@@ -4,7 +4,6 @@
 module Data.String.Regex
   ( Regex(..)
   , regex
-  , unsafeRegex
   , source
   , flags
   , renderFlags
@@ -19,12 +18,10 @@ module Data.String.Regex
 
 import Prelude
 
-import Data.Either (Either(..), fromRight)
+import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
 import Data.String (Pattern(..), contains)
 import Data.String.Regex.Flags (RegexFlags(..), RegexFlagsRec)
-
-import Partial.Unsafe (unsafePartial)
 
 -- | Wraps Javascript `RegExp` objects.
 foreign import data Regex :: *
@@ -45,11 +42,6 @@ foreign import regex'
 -- | `Left error` if the pattern contains a syntax error.
 regex :: String -> RegexFlags -> Either String Regex
 regex s f = regex' Left Right s $ renderFlags f
-
--- | Constructs a `Regex` from a pattern string and flags. Fails with
--- | an exception if the pattern contains a syntax error.
-unsafeRegex :: String -> RegexFlags -> Regex
-unsafeRegex s f = unsafePartial $ fromRight (regex s f)
 
 -- | Returns the pattern string used to construct the given `Regex`.
 foreign import source :: Regex -> String

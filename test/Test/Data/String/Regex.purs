@@ -9,6 +9,7 @@ import Data.Either (isLeft)
 import Data.Maybe (Maybe(..))
 import Data.String.Regex
 import Data.String.Regex.Flags (global, ignoreCase, noFlags)
+import Data.String.Regex.Unsafe (unsafeRegex)
 
 import Test.Assert (ASSERT, assert)
 

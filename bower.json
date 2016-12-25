@@ -18,11 +18,11 @@
   ],
   "dependencies": {
     "purescript-either": "^2.0.0",
-    "purescript-maybe": "^2.0.0"
+    "purescript-maybe": "^2.0.0",
+    "purescript-partial": "^1.1.2"
   },
   "devDependencies": {
     "purescript-assert": "^2.0.0",
-    "purescript-console": "^2.0.0",
-    "purescript-partial": "^1.1.2"
+    "purescript-console": "^2.0.0"
   }
 }

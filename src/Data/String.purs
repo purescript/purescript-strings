@@ -17,9 +17,9 @@ module Data.String
   , uncons
   , length
   , singleton
-  , localeCompare
-  , replace
-  , replaceAll
+  -- , localeCompare
+  -- , replace
+  -- , replaceAll
   , take
   , takeWhile
   , drop
@@ -198,23 +198,23 @@ foreign import _lastIndexOf'
 -- | Returns the number of characters the string is composed of.
 foreign import length :: String -> Int
 
--- | Locale-aware sort order comparison.
-localeCompare :: String -> String -> Ordering
-localeCompare = _localeCompare LT EQ GT
+-- -- | Locale-aware sort order comparison.
+-- localeCompare :: String -> String -> Ordering
+-- localeCompare = _localeCompare LT EQ GT
+--
+-- foreign import _localeCompare
+--   :: Ordering
+--   -> Ordering
+--   -> Ordering
+--   -> String
+--   -> String
+--   -> Ordering
 
-foreign import _localeCompare
-  :: Ordering
-  -> Ordering
-  -> Ordering
-  -> String
-  -> String
-  -> Ordering
-
--- | Replaces the first occurence of the first argument with the second argument.
-foreign import replace :: Pattern -> Replacement -> String -> String
-
--- | Replaces all occurences of the first argument with the second argument.
-foreign import replaceAll :: Pattern -> Replacement -> String -> String
+-- -- | Replaces the first occurence of the first argument with the second argument.
+-- foreign import replace :: Pattern -> Replacement -> String -> String
+--
+-- -- | Replaces all occurences of the first argument with the second argument.
+-- foreign import replaceAll :: Pattern -> Replacement -> String -> String
 
 -- | Returns the first `n` characters of the string.
 foreign import take :: Int -> String -> String

@@ -24,7 +24,7 @@ import Data.String (Pattern(..), contains)
 import Data.String.Regex.Flags (RegexFlags(..), RegexFlagsRec)
 
 -- | Wraps Javascript `RegExp` objects.
-foreign import data Regex :: *
+foreign import data Regex :: Type
 
 foreign import showRegex' :: Regex -> String
 

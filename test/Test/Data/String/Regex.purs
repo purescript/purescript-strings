@@ -1,6 +1,6 @@
 module Test.Data.String.Regex (testStringRegex) where
 
-import Prelude (Unit, ($), (<>), bind, (==), not)
+import Prelude (Unit, ($), (<>), discard, (==), not)
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)

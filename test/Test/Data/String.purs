@@ -1,12 +1,13 @@
 module Test.Data.String (testString) where
 
-import Prelude (Unit, Ordering(..), (==), ($), discard, negate, not, (/=), (&&))
+import Prelude (Unit, Ordering(..), (==), ($), discard, negate, not, (/=), (&&), (||))
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
 
 import Data.Maybe (Maybe(..), isNothing, maybe)
 import Data.String
+import Data.Char as C
 
 import Test.Assert (ASSERT, assert)
 
@@ -145,6 +146,12 @@ testString = do
   assert $ drop 2 "ab" == ""
   assert $ drop 3 "ab" == ""
   assert $ drop (-1) "ab" == "ab"
+
+  log "filter"  
+  assert $ filter (\c -> c == 'a' || c == 'c') "aabbac" == "aaac"
+
+  log "map"  
+  assert $ map C.toUpper "abc" == "ABC"
 
   log "count"
   assert $ count (_ == 'a') "" == 0

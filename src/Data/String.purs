@@ -24,6 +24,8 @@ module Data.String
   , takeWhile
   , drop
   , dropWhile
+  , filter
+  , map
   , stripPrefix
   , stripSuffix
   , count
@@ -41,6 +43,7 @@ import Prelude
 import Data.Maybe (Maybe(..), isJust)
 import Data.Newtype (class Newtype)
 import Data.String.Unsafe as U
+import Data.Foldable (foldr)
 
 -- | A newtype used in cases where there is a string to be matched.
 newtype Pattern = Pattern String
@@ -101,6 +104,10 @@ foreign import _toChar
 null :: String -> Boolean
 null s = s == ""
 
+-- | Adds a character to the front of a String
+cons :: Char -> String -> String
+cons c s = (singleton c) <> s
+
 -- | Returns the first character and the rest of the string,
 -- | if the string is not empty.
 uncons :: String -> Maybe { head :: Char, tail :: String }
@@ -115,6 +122,21 @@ takeWhile p s = take (count p s) s
 -- | Returns the suffix remaining after `takeWhile`.
 dropWhile :: (Char -> Boolean) -> String -> String
 dropWhile p s = drop (count p s) s
+
+
+-- | Returns the string for which each character satisfies a predicate
+filter :: (Char -> Boolean) -> String -> String
+filter p s = foldr f "" (toCharArray s) 
+  where  
+  f a b = case p(a) of 
+    true  -> cons a b
+    false -> b
+
+-- | Returns the resulting string after applying a function to each character
+map ::  (Char -> Char) -> String -> String
+map f s = foldr ff "" (toCharArray s)
+  where
+  ff a b = cons (f a) b
 
 -- | If the string starts with the given prefix, return the portion of the
 -- | string left after removing it, as a Just value. Otherwise, return Nothing.

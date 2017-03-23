@@ -41,6 +41,9 @@ testString = do
   assert $ null ""
   assert $ not (null "a")
 
+  log "cons"  
+  assert $ cons 'a' "bc" == "abc"
+
   log "uncons"
   assert $ isNothing (uncons "")
   assert $ case uncons "a" of

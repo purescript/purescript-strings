@@ -14,6 +14,7 @@ module Data.String
   , lastIndexOf
   , lastIndexOf'
   , null
+  , cons
   , uncons
   , length
   , singleton

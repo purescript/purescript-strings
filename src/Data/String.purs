@@ -129,7 +129,7 @@ dropWhile p s = drop (count p s) s
 filter :: (Char -> Boolean) -> String -> String
 filter p s = foldr f "" (toCharArray s) 
   where  
-  f a b = case p(a) of 
+  f a b = case p a of 
     true  -> cons a b
     false -> b
 

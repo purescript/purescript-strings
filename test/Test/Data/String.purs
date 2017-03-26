@@ -1,6 +1,6 @@
 module Test.Data.String (testString) where
 
-import Prelude (Unit, Ordering(..), (==), ($), bind, negate, not, (/=), (&&))
+import Prelude (Unit, Ordering(..), (==), ($), discard, negate, not, (/=), (&&))
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)

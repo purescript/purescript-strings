@@ -15,7 +15,10 @@ singleton(C) -> <<C>>.
 '_toChar'(Just,Nothing,<<C>>) -> Just(C);
 '_toChar'(Just,Nothing,_) -> Nothing.
 
-fromCharArray(A) -> unicode:characters_to_binary(array:to_list(A)).
+fromCharArray(A) -> case unicode:characters_to_binary(array:to_list(A)) of
+  {error, S, _} -> S; % In case of hitting bad character, return initial portion!
+  S -> S
+end.
 
 '_indexOf'(Just,Nothing,<<>>,_) -> Just(0);
 '_indexOf'(Just,Nothing,X,S) ->

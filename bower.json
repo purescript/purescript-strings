@@ -18,6 +18,7 @@
   ],
   "dependencies": {
     "purescript-either": "^3.0.0",
+    "purescript-gen": "^1.1.0",
     "purescript-maybe": "^3.0.0",
     "purescript-partial": "^1.2.0"
   },

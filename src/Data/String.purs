@@ -6,6 +6,7 @@ module Data.String
   , Replacement(..)
   , charAt
   , charCodeAt
+  , codePointAt
   , fromCharArray
   , toChar
   , contains
@@ -87,6 +88,17 @@ foreign import _charCodeAt
   -> Int
   -> String
   -> Maybe Int
+
+-- | Returns the Unicode code point value of the character at the given index,
+-- | if the index is within bounds.
+codePointAt :: Int -> String -> Maybe Int
+codePointAt = _codePointAt Just Nothing
+
+foreign import _codePointAt :: (forall a. a -> Maybe a)
+                            -> (forall a. Maybe a)
+                            -> Int
+                            -> String
+                            -> Maybe Int
 
 toChar :: String -> Maybe Char
 toChar = _toChar Just Nothing

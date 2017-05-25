@@ -5,7 +5,7 @@ module CodePoints
   , codePointFromInt
   , codePointToInt
   --, contains
-  --, count
+  , count
   --, drop
   --, dropWhile
   --, indexOf
@@ -27,13 +27,13 @@ module CodePoints
   --, fromCodePointArray
   ) where
 
-import Prelude ((&&), (*), (+), (-), (<$>), (<=))
+import Prelude ((&&), (*), (+), (-), (<$>), (<=), (<<<))
 import Data.Maybe (Maybe(Just, Nothing))
 import Data.String (toCharArray)
 import Data.Unfoldable (unfoldr)
 import Data.List (List(Cons, Nil), fromFoldable)
 import Data.Tuple (Tuple(Tuple))
-import Data.Array (index)
+import Data.Array (index, length, filter)
 import Data.Char (toCharCode)
 
 newtype CodePoint = CodePoint Int
@@ -73,6 +73,10 @@ foreign import _codePointAt
 
 codePointAtFallback :: Int -> String -> Maybe CodePoint
 codePointAtFallback n s = index (toCodePointArray s) n
+
+
+count :: (CodePoint -> Boolean) -> String -> Int
+count pred = length <<< filter pred <<< toCodePointArray
 
 
 toCodePointArray :: String -> Array CodePoint

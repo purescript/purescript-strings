@@ -12,7 +12,7 @@ module CodePoints
   --, indexOf'
   --, lastIndexOf
   --, lastIndexOf'
-  --, length
+  , length
   --, replace
   --, replaceAll
   --, singleton
@@ -81,6 +81,10 @@ count pred = Array.length <<< Array.filter pred <<< toCodePointArray
 
 drop :: Int -> String -> String
 drop n s = fromCodePointArray (Array.drop n (toCodePointArray s))
+
+
+length :: String -> Int
+length = Array.length <<< toCodePointArray
 
 
 take :: Int -> String -> String

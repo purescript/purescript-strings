@@ -1,7 +1,7 @@
 module CodePoints
   ( CodePoint()
   --, Pattern()
-  --, codePointAt
+  , codePointAt
   --, fromCodePointArray
   --, contains
   --, indexOf
@@ -22,11 +22,17 @@ module CodePoints
   --, count
   --, split
   --, splitAt
-  --, toCodePointArray
+  , toCodePointArray
   ) where
 
-import Prelude ((&&), (<=), (*), (+), (-))
+import Prelude ((&&), (*), (+), (-), (<$>), (<=))
 import Data.Maybe (Maybe(Just, Nothing))
+import Data.String (toCharArray)
+import Data.Unfoldable (unfoldr)
+import Data.List (List(Cons, Nil), fromFoldable)
+import Data.Tuple (Tuple(Tuple))
+import Data.Array (index)
+import Data.Char (toCharCode)
 
 newtype CodePoint = CodePoint Int
 
@@ -40,8 +46,10 @@ codePointToInt (CodePoint n) = n
 codePointFromSurrogatePair :: Int -> Int -> Maybe CodePoint
 codePointFromSurrogatePair lead trail | isLead lead && isTrail trail
   = Just (CodePoint (unsurrogate lead trail))
-    where unsurrogate h l = (h - 0xD800) * 0x400 + (l - 0xDC00) + 0x10000
 codePointFromSurrogatePair _ _ = Nothing
+
+unsurrogate :: Int -> Int -> Int
+unsurrogate h l = (h - 0xD800) * 0x400 + (l - 0xDC00) + 0x10000
 
 isLead :: Int -> Boolean
 isLead cu = 0xD800 <= cu && cu <= 0xDBFF
@@ -50,7 +58,7 @@ isTrail :: Int -> Boolean
 isTrail cu = 0xDC00 <= cu && cu <= 0xDFFF
 
 codePointAt :: Int -> String -> Maybe CodePoint
-codePointAt = _codePointAt (Just . CodePoint) Nothing
+codePointAt = _codePointAt codePointAtFallback Just Nothing
 
 foreign import _codePointAt
   :: (Int -> String -> Maybe CodePoint)
@@ -61,6 +69,21 @@ foreign import _codePointAt
   -> Maybe CodePoint
 
 codePointAtFallback :: Int -> String -> Maybe CodePoint
-codePointAtFallback n s = CodePoint <$> index (toCodePointArray s) n
+codePointAtFallback n s = index (toCodePointArray s) n
 
-foreign import _toCodePointArray :: String -> Array CodePoint
+toCodePointArray :: String -> Array CodePoint
+toCodePointArray = _toCodePointArray toCodePointArrayFallback
+
+foreign import _toCodePointArray
+  :: (String -> Array CodePoint)
+  -> String
+  -> Array CodePoint
+
+toCodePointArrayFallback :: String -> Array CodePoint
+toCodePointArrayFallback s = unfoldr decode (fromFoldable (toCharCode <$> toCharArray s))
+  where
+  decode :: List Int -> Maybe (Tuple CodePoint (List Int))
+  decode (Cons h (Cons l rest)) | isLead h && isTrail l
+    = Just (Tuple (CodePoint (unsurrogate h l)) rest)
+  decode (Cons c rest) = Just (Tuple (CodePoint c) rest)
+  decode Nil = Nothing

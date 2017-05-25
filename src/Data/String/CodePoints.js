@@ -38,6 +38,8 @@ exports._codePointAt = function (fallback) {
   };
 };
 
+exports.singleton = fromCodePoint;
+
 exports._take = function (fallback) {
   return function (n) {
     return function (str) {

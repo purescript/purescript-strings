@@ -15,7 +15,7 @@ module CodePoints
   , length
   --, replace
   --, replaceAll
-  --, singleton
+  , singleton
   --, split
   --, splitAt
   --, stripPrefix
@@ -85,6 +85,9 @@ drop n s = fromCodePointArray (Array.drop n (toCodePointArray s))
 
 length :: String -> Int
 length = Array.length <<< toCodePointArray
+
+
+foreign import singleton :: CodePoint -> String
 
 
 take :: Int -> String -> String

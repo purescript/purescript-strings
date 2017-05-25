@@ -21,6 +21,7 @@ exports._codePointAt = function (fallback) {
             if (cps.length <= index) return Nothing;
             return Just(cps[index]);
           } else if (hasStringIterator) {
+            var i = index;
             var iter = str[Symbol.iterator]();
             for (;;) {
               var o = iter.next();

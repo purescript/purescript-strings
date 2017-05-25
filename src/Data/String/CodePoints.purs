@@ -2,27 +2,29 @@ module CodePoints
   ( CodePoint()
   --, Pattern()
   , codePointAt
-  --, fromCodePointArray
+  , codePointFromInt
+  , codePointToInt
   --, contains
+  --, count
+  --, drop
+  --, dropWhile
   --, indexOf
   --, indexOf'
   --, lastIndexOf
   --, lastIndexOf'
-  --, uncons
   --, length
-  --, singleton
   --, replace
   --, replaceAll
-  --, take
-  --, takeWhile
-  --, drop
-  --, dropWhile
-  --, stripPrefix
-  --, stripSuffix
-  --, count
+  --, singleton
   --, split
   --, splitAt
+  --, stripPrefix
+  --, stripSuffix
+  --, take
+  --, takeWhile
+  --, uncons
   , toCodePointArray
+  --, fromCodePointArray
   ) where
 
 import Prelude ((&&), (*), (+), (-), (<$>), (<=))
@@ -57,6 +59,7 @@ isLead cu = 0xD800 <= cu && cu <= 0xDBFF
 isTrail :: Int -> Boolean
 isTrail cu = 0xDC00 <= cu && cu <= 0xDFFF
 
+
 codePointAt :: Int -> String -> Maybe CodePoint
 codePointAt = _codePointAt codePointAtFallback Just Nothing
 
@@ -70,6 +73,7 @@ foreign import _codePointAt
 
 codePointAtFallback :: Int -> String -> Maybe CodePoint
 codePointAtFallback n s = index (toCodePointArray s) n
+
 
 toCodePointArray :: String -> Array CodePoint
 toCodePointArray = _toCodePointArray toCodePointArrayFallback

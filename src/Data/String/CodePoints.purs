@@ -6,7 +6,7 @@ module CodePoints
   , codePointToInt
   --, contains
   , count
-  --, drop
+  , drop
   --, dropWhile
   --, indexOf
   --, indexOf'
@@ -20,7 +20,7 @@ module CodePoints
   --, splitAt
   --, stripPrefix
   --, stripSuffix
-  --, take
+  , take
   --, takeWhile
   --, uncons
   , toCodePointArray
@@ -33,7 +33,7 @@ import Data.String (toCharArray)
 import Data.Unfoldable (unfoldr)
 import Data.List (List(Cons, Nil), fromFoldable)
 import Data.Tuple (Tuple(Tuple))
-import Data.Array (index, length, filter)
+import Data.Array as Array
 import Data.Char (toCharCode)
 
 newtype CodePoint = CodePoint Int
@@ -72,11 +72,24 @@ foreign import _codePointAt
   -> Maybe CodePoint
 
 codePointAtFallback :: Int -> String -> Maybe CodePoint
-codePointAtFallback n s = index (toCodePointArray s) n
+codePointAtFallback n s = Array.index (toCodePointArray s) n
 
 
 count :: (CodePoint -> Boolean) -> String -> Int
-count pred = length <<< filter pred <<< toCodePointArray
+count pred = Array.length <<< Array.filter pred <<< toCodePointArray
+
+
+drop :: Int -> String -> String
+drop n s = fromCodePointArray (Array.drop n (toCodePointArray s))
+
+
+take :: Int -> String -> String
+take = _take takeFallback
+
+foreign import _take :: (Int -> String -> String) -> Int -> String -> String
+
+takeFallback :: Int -> String -> String
+takeFallback n s = fromCodePointArray (Array.take n (toCodePointArray s))
 
 
 toCodePointArray :: String -> Array CodePoint
@@ -95,3 +108,6 @@ toCodePointArrayFallback s = unfoldr decode (fromFoldable (toCharCode <$> toChar
     = Just (Tuple (CodePoint (unsurrogate h l)) rest)
   decode (Cons c rest) = Just (Tuple (CodePoint c) rest)
   decode Nil = Nothing
+
+
+foreign import fromCodePointArray :: Array CodePoint -> String

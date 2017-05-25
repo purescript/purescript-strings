@@ -4,6 +4,7 @@ var hasStringIterator =
   Symbol != null &&
   typeof Symbol.iterator !== 'undefined' &&
   typeof String.prototype[Symbol.iterator] === 'function';
+var hasFromCodePoint = typeof String.prototype.fromCodePoint === 'function';
 
 exports._codePointAt = function (fallback) {
   return function (Just) {
@@ -37,6 +38,26 @@ exports._codePointAt = function (fallback) {
   };
 };
 
+exports._take = function (fallback) {
+  return function (n) {
+    return function (str) {
+      if (hasArrayFrom) {
+        return Array.from(str);
+      } else if (hasStringIterator) {
+        var accum = "";
+        var iter = str[Symbol.iterator]();
+        for (var i = 0; i < n; ++i) {
+          var o = iter.next();
+          if (o.done) return accum;
+          accum += o.value;
+        }
+        return accum;
+      }
+      return fallback(str);
+    };
+  };
+};
+
 exports._toCodePointArray = function (fallback) {
   return function (str) {
     if (hasArrayFrom) {
@@ -53,3 +74,18 @@ exports._toCodePointArray = function (fallback) {
     return fallback(str);
   };
 };
+
+
+exports.fromCodePointArray = function (cps) {
+  if (hasFromCodePoint) {
+    return String.fromCodePoint.apply(cps);
+  }
+  return cps.map(fromCodePoint).join('');
+};
+
+function fromCodePoint(cp) {
+  if (cp <= 0xFFFF) return String.fromCharCode(cp);
+  var cu1 = String.fromCharCode(Math.floor((cp - 0x10000) / 0x400) + 0xD800);
+  var cu2 = String.fromCharCode((cp - 0x10000) % 0x400 + 0xDC00);
+  return cu1 + cu2;
+}

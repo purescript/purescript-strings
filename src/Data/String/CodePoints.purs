@@ -17,7 +17,7 @@ module CodePoints
   --, replaceAll
   , singleton
   --, split
-  --, splitAt
+  , splitAt
   --, stripPrefix
   --, stripSuffix
   , take
@@ -27,7 +27,7 @@ module CodePoints
   --, fromCodePointArray
   ) where
 
-import Prelude ((&&), (*), (+), (-), (<$>), (<=), (<<<))
+import Prelude ((&&), (||), (*), (+), (-), (<$>), (<), (<=), (<<<))
 import Data.Maybe (Maybe(Just, Nothing))
 import Data.String (toCharArray)
 import Data.Unfoldable (unfoldr)
@@ -88,6 +88,17 @@ length = Array.length <<< toCodePointArray
 
 
 foreign import singleton :: CodePoint -> String
+
+
+splitAt :: Int -> String -> Maybe { before :: String, after :: String }
+splitAt i s =
+  let cps = toCodePointArray s in
+  if i < 0 || Array.length cps <= i
+    then Nothing
+    else Just {
+        before: fromCodePointArray (Array.take i cps),
+        after: fromCodePointArray (Array.drop i cps)
+      }
 
 
 take :: Int -> String -> String

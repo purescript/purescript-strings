@@ -16,7 +16,7 @@ module CodePoints
   , splitAt
   , take
   --, takeWhile
-  --, uncons
+  , uncons
   , toCodePointArray
 
   , module StringReExports
@@ -79,6 +79,9 @@ drop :: Int -> String -> String
 drop n s = fromCodePointArray (Array.drop n (toCodePointArray s))
 
 
+foreign import fromCodePointArray :: Array CodePoint -> String
+
+
 length :: String -> Int
 length = Array.length <<< toCodePointArray
 
@@ -124,4 +127,5 @@ toCodePointArrayFallback s = unfoldr decode (fromFoldable (toCharCode <$> toChar
   decode Nil = Nothing
 
 
-foreign import fromCodePointArray :: Array CodePoint -> String
+uncons :: String -> Maybe { head :: CodePoint, tail :: String }
+uncons s  = { head: _, tail: drop 1 s } <$> codePointAt 0 s

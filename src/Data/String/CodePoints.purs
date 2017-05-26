@@ -1,40 +1,36 @@
 module CodePoints
   ( CodePoint()
-  --, Pattern()
   , codePointAt
   , codePointFromInt
   , codePointToInt
-  --, contains
   , count
   , drop
   --, dropWhile
+  , fromCodePointArray
   --, indexOf
   --, indexOf'
   --, lastIndexOf
   --, lastIndexOf'
   , length
-  --, replace
-  --, replaceAll
   , singleton
-  --, split
   , splitAt
-  --, stripPrefix
-  --, stripSuffix
   , take
   --, takeWhile
   --, uncons
   , toCodePointArray
-  --, fromCodePointArray
+
+  , module StringReExports
   ) where
 
-import Prelude ((&&), (||), (*), (+), (-), (<$>), (<), (<=), (<<<))
-import Data.Maybe (Maybe(Just, Nothing))
-import Data.String (toCharArray)
-import Data.Unfoldable (unfoldr)
-import Data.List (List(Cons, Nil), fromFoldable)
-import Data.Tuple (Tuple(Tuple))
 import Data.Array as Array
 import Data.Char (toCharCode)
+import Data.List (List(Cons, Nil), fromFoldable)
+import Data.Maybe (Maybe(Just, Nothing))
+import Data.String (toCharArray)
+import Data.String hiding (count, drop, dropWhile, indexOf, indexOf', lastIndexOf, lastIndexOf', length, singleton, splitAt, take, takeWhile, uncons) as StringReExports
+import Data.Tuple (Tuple(Tuple))
+import Data.Unfoldable (unfoldr)
+import Prelude ((&&), (||), (*), (+), (-), (<$>), (<), (<=), (<<<))
 
 newtype CodePoint = CodePoint Int
 

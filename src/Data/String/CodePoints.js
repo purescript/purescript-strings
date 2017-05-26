@@ -38,7 +38,7 @@ exports._codePointAt = function (fallback) {
   };
 };
 
-exports.singleton = fromCodePoint;
+exports.singleton = hasFromCodePoint ? String.fromCodePoint : fromCodePoint;
 
 exports._take = function (fallback) {
   return function (n) {
@@ -80,7 +80,7 @@ exports._toCodePointArray = function (fallback) {
 
 exports.fromCodePointArray = function (cps) {
   if (hasFromCodePoint) {
-    return String.fromCodePoint.apply(cps);
+    return String.fromCodePoint.apply(String, cps);
   }
   return cps.map(fromCodePoint).join('');
 };

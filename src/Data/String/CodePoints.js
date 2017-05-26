@@ -38,6 +38,30 @@ exports._codePointAt = function (fallback) {
   };
 };
 
+exports._count = function (isLead) {
+  return function (isTrail) {
+    return function (unsurrogate) {
+      return function (pred) {
+        return function (str) {
+          for (var cuCount = 0, cpCount = 0; cuCount < str.length; ++cuCount, ++cpCount) {
+            var lead = str.charCodeAt(cuCount);
+            var cp = lead;
+            if (isLead(lead) && cuCount + 1 < str.length) {
+              var trail = str.charCodeAt(cuCount + 1);
+              if (isTrail(trail)) {
+                cp = unsurrogate(lead, trail);
+                ++cuCount;
+              }
+            }
+            if (!pred(cp)) return cpCount;
+          }
+          return str.length;
+        };
+      };
+    };
+  };
+};
+
 exports.fromCodePointArray = function (cps) {
   if (hasFromCodePoint) {
     return String.fromCodePoint.apply(String, cps);

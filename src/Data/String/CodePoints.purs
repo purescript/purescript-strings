@@ -1,5 +1,6 @@
 module CodePoints
-  ( CodePoint()
+  ( module StringReExports
+  , CodePoint()
   , codePointAt
   , codePointFromInt
   , codePointToInt
@@ -16,10 +17,8 @@ module CodePoints
   , splitAt
   , take
   --, takeWhile
-  , uncons
   , toCodePointArray
-
-  , module StringReExports
+  , uncons
   ) where
 
 import Data.Array as Array

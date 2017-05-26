@@ -38,6 +38,13 @@ exports._codePointAt = function (fallback) {
   };
 };
 
+exports.fromCodePointArray = function (cps) {
+  if (hasFromCodePoint) {
+    return String.fromCodePoint.apply(String, cps);
+  }
+  return cps.map(fromCodePoint).join('');
+};
+
 exports.singleton = hasFromCodePoint ? String.fromCodePoint : fromCodePoint;
 
 exports._take = function (fallback) {
@@ -75,14 +82,6 @@ exports._toCodePointArray = function (fallback) {
     }
     return fallback(str);
   };
-};
-
-
-exports.fromCodePointArray = function (cps) {
-  if (hasFromCodePoint) {
-    return String.fromCodePoint.apply(String, cps);
-  }
-  return cps.map(fromCodePoint).join('');
 };
 
 function fromCodePoint(cp) {

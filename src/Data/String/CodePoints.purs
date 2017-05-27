@@ -104,7 +104,9 @@ indexOf p s = (\i -> length (String.take i s)) <$> String.indexOf p s
 
 
 indexOf' :: String.Pattern -> Int -> String -> Maybe Int
-indexOf' p i s = (\k -> length (String.take k s)) <$> String.indexOf' p i s
+indexOf' p i s =
+  let s' = drop i s in
+  (\k -> i + length (String.take k s')) <$> String.indexOf p s'
 
 
 lastIndexOf :: String.Pattern -> String -> Maybe Int
@@ -112,7 +114,9 @@ lastIndexOf p s = (\i -> length (String.take i s)) <$> String.lastIndexOf p s
 
 
 lastIndexOf' :: String.Pattern -> Int -> String -> Maybe Int
-lastIndexOf' p i s = (\k -> length (String.take k s)) <$> String.lastIndexOf' p i s
+lastIndexOf' p i s =
+  let s' = drop i s in
+  (\k -> i + length (String.take k s')) <$> String.lastIndexOf p s'
 
 
 length :: String -> Int
@@ -125,7 +129,7 @@ foreign import singleton :: CodePoint -> String
 splitAt :: Int -> String -> Maybe { before :: String, after :: String }
 splitAt i s =
   let cps = toCodePointArray s in
-  if i < 0 || Array.length cps <= i
+  if i < 0 || Array.length cps < i
     then Nothing
     else Just {
         before: fromCodePointArray (Array.take i cps),

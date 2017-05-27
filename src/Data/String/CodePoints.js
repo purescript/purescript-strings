@@ -69,7 +69,7 @@ exports._take = function (fallback) {
   return function (n) {
     if (hasArrayFrom) {
       return function (str) {
-        return Array.from(str).slice(0, n).join('');
+        return Array.from(str).slice(0, Math.max(0, n)).join('');
       };
     } else if (hasStringIterator) {
       return function (str) {

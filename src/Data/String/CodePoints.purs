@@ -1,4 +1,4 @@
-module CodePoints
+module Data.String.CodePoints
   ( module StringReExports
   , CodePoint()
   , codePointAt
@@ -25,14 +25,19 @@ import Data.Array as Array
 import Data.Char (toCharCode)
 import Data.List (List(Cons, Nil), fromFoldable)
 import Data.Maybe (Maybe(Just, Nothing))
+import Data.Newtype (class Newtype)
 import Data.String as String
 import Data.String hiding (count, drop, dropWhile, indexOf, indexOf', lastIndexOf, lastIndexOf', length, singleton, splitAt, take, takeWhile, uncons) as StringReExports
 import Data.Tuple (Tuple(Tuple))
 import Data.Unfoldable (unfoldr)
-import Prelude ((&&), (||), (*), (+), (-), (<$>), (<), (<=), (<<<))
+import Prelude (class Eq, class Ord, (&&), (||), (*), (+), (-), (<$>), (<), (<=), (<<<))
 
 
 newtype CodePoint = CodePoint Int
+
+derive instance eqCodePoint :: Eq CodePoint
+derive instance ordCodePoint :: Ord CodePoint
+derive instance newtypeCodePoint :: Newtype CodePoint _
 
 codePointFromInt :: Int -> Maybe CodePoint
 codePointFromInt n | 0 <= n && n <= 0x10FFFF = Just (CodePoint n)

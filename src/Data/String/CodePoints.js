@@ -5,30 +5,25 @@ var hasStringIterator =
   typeof Symbol.iterator !== 'undefined' &&
   typeof String.prototype[Symbol.iterator] === 'function';
 var hasFromCodePoint = typeof String.prototype.fromCodePoint === 'function';
+var hasCodePointAt = typeof String.prototype.codePointAt === 'function';
 
 exports._codePointAt = function (fallback) {
   return function (Just) {
     return function (Nothing) {
-      return function (relIndex) {
+      return function (index) {
         return function (str) {
           var length = str.length;
-          if (length <= relIndex) return Nothing;
-          var index = relIndex < 0 ? ((relIndex % length) + length) % length : relIndex;
-          if (typeof String.prototype.codePointAt === 'function') {
-            var cp = str.codePointAt(index);
-            return cp == null ? Nothing : Just(cp);
-          } else if (hasArrayFrom) {
+          if (index < 0 || index >= length) return Nothing;
+          if (hasArrayFrom && hasCodePointAt) {
             var cps = Array.from(str);
-            if (cps.length <= index) return Nothing;
-            return Just(cps[index]);
+            if (index >= cps.length) return Nothing;
+            return Just(cps[index].codePointAt(0));
           } else if (hasStringIterator) {
-            var i = index;
             var iter = str[Symbol.iterator]();
-            for (;;) {
+            for (var i = index;; --i) {
               var o = iter.next();
               if (o.done) return Nothing;
               if (i == 0) return Just(o.value);
-              --i;
             }
           }
           return fallback(index)(str);
@@ -43,40 +38,41 @@ exports._count = function (isLead) {
     return function (unsurrogate) {
       return function (pred) {
         return function (str) {
-          for (var cuCount = 0, cpCount = 0; cuCount < str.length; ++cuCount, ++cpCount) {
+          var cpCount = 0;
+          for (var cuCount = 0; cuCount < str.length; ++cuCount) {
             var lead = str.charCodeAt(cuCount);
             var cp = lead;
             if (isLead(lead) && cuCount + 1 < str.length) {
               var trail = str.charCodeAt(cuCount + 1);
               if (isTrail(trail)) {
-                cp = unsurrogate(lead, trail);
+                cp = unsurrogate(lead)(trail);
                 ++cuCount;
               }
             }
             if (!pred(cp)) return cpCount;
+            ++cpCount;
           }
-          return str.length;
+          return cpCount;
         };
       };
     };
   };
 };
 
-exports.fromCodePointArray = function (cps) {
-  if (hasFromCodePoint) {
-    return String.fromCodePoint.apply(String, cps);
-  }
-  return cps.map(fromCodePoint).join('');
-};
+exports.fromCodePointArray = hasFromCodePoint
+  ? function (cps) { return String.fromCodePoint.apply(String, cps); }
+  : function (cps) { return cps.map(fromCodePoint).join(''); };
 
 exports.singleton = hasFromCodePoint ? String.fromCodePoint : fromCodePoint;
 
 exports._take = function (fallback) {
   return function (n) {
-    return function (str) {
-      if (hasArrayFrom) {
-        return Array.from(str);
-      } else if (hasStringIterator) {
+    if (hasArrayFrom) {
+      return function (str) {
+        return Array.from(str).slice(0, n).join('');
+      };
+    } else if (hasStringIterator) {
+      return function (str) {
         var accum = "";
         var iter = str[Symbol.iterator]();
         for (var i = 0; i < n; ++i) {
@@ -85,27 +81,29 @@ exports._take = function (fallback) {
           accum += o.value;
         }
         return accum;
-      }
-      return fallback(str);
-    };
+      };
+    }
+    return fallback;
   };
 };
 
 exports._toCodePointArray = function (fallback) {
-  return function (str) {
-    if (hasArrayFrom) {
-      return Array.from(str);
-    } else if (hasStringIterator) {
+  if (hasArrayFrom && hasCodePointAt) {
+    return function (str) {
+      return Array.from(str, function (x) { return x.codePointAt(0); });
+    };
+  } else if (hasStringIterator && hasCodePointAt) {
+    return function (str) {
       var accum = [];
       var iter = str[Symbol.iterator]();
       for (;;) {
         var o = iter.next();
         if (o.done) return accum;
-        accum.push(o.value);
+        accum.push(o.value.codePointAt(0));
       }
-    }
-    return fallback(str);
-  };
+    };
+  }
+  return fallback;
 };
 
 function fromCodePoint(cp) {

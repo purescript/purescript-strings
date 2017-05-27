@@ -1,5 +1,5 @@
 var hasArrayFrom = typeof Array.from === 'function';
-var hasStringIterator = 
+var hasStringIterator =
   typeof Symbol !== 'undefined' &&
   Symbol != null &&
   typeof Symbol.iterator !== 'undefined' &&

@@ -1,11 +1,21 @@
-var hasArrayFrom = typeof Array.from === 'function';
+"use strict";
+/* global Symbol */
+
+var hasArrayFrom = typeof Array.from === "function";
 var hasStringIterator =
-  typeof Symbol !== 'undefined' &&
+  typeof Symbol !== "undefined" &&
   Symbol != null &&
-  typeof Symbol.iterator !== 'undefined' &&
-  typeof String.prototype[Symbol.iterator] === 'function';
-var hasFromCodePoint = typeof String.prototype.fromCodePoint === 'function';
-var hasCodePointAt = typeof String.prototype.codePointAt === 'function';
+  typeof Symbol.iterator !== "undefined" &&
+  typeof String.prototype[Symbol.iterator] === "function";
+var hasFromCodePoint = typeof String.prototype.fromCodePoint === "function";
+var hasCodePointAt = typeof String.prototype.codePointAt === "function";
+
+function fromCodePoint(cp) {
+  if (cp <= 0xFFFF) return String.fromCharCode(cp);
+  var cu1 = String.fromCharCode(Math.floor((cp - 0x10000) / 0x400) + 0xD800);
+  var cu2 = String.fromCharCode((cp - 0x10000) % 0x400 + 0xDC00);
+  return cu1 + cu2;
+}
 
 exports._codePointAt = function (fallback) {
   return function (Just) {
@@ -23,7 +33,7 @@ exports._codePointAt = function (fallback) {
             for (var i = index;; --i) {
               var o = iter.next();
               if (o.done) return Nothing;
-              if (i == 0) return Just(o.value);
+              if (i === 0) return Just(o.value);
             }
           }
           return fallback(index)(str);
@@ -61,7 +71,7 @@ exports._count = function (isLead) {
 
 exports.fromCodePointArray = hasFromCodePoint
   ? function (cps) { return String.fromCodePoint.apply(String, cps); }
-  : function (cps) { return cps.map(fromCodePoint).join(''); };
+  : function (cps) { return cps.map(fromCodePoint).join(""); };
 
 exports.singleton = hasFromCodePoint ? String.fromCodePoint : fromCodePoint;
 
@@ -69,7 +79,7 @@ exports._take = function (fallback) {
   return function (n) {
     if (hasArrayFrom) {
       return function (str) {
-        return Array.from(str).slice(0, Math.max(0, n)).join('');
+        return Array.from(str).slice(0, Math.max(0, n)).join("");
       };
     } else if (hasStringIterator) {
       return function (str) {
@@ -105,10 +115,3 @@ exports._toCodePointArray = function (fallback) {
   }
   return fallback;
 };
-
-function fromCodePoint(cp) {
-  if (cp <= 0xFFFF) return String.fromCharCode(cp);
-  var cu1 = String.fromCharCode(Math.floor((cp - 0x10000) / 0x400) + 0xD800);
-  var cu2 = String.fromCharCode((cp - 0x10000) % 0x400 + 0xDC00);
-  return cu1 + cu2;
-}

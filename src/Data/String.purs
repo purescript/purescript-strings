@@ -36,11 +36,11 @@ module Data.String
   , joinWith
   ) where
 
-import Prelude
+import Prelude (class Ord, class Eq, class Show, Ordering(LT, EQ, GT), zero, one, (<<<), (<>), (==), ($), (-))
 
 import Data.Maybe (Maybe(..), isJust)
 import Data.Newtype (class Newtype)
-import Data.String.Unsafe as U
+import Data.String.Unsafe (charAt) as U
 
 -- | A newtype used in cases where there is a string to be matched.
 newtype Pattern = Pattern String

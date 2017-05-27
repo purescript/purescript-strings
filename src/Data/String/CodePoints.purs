@@ -8,10 +8,10 @@ module CodePoints
   , drop
   , dropWhile
   , fromCodePointArray
-  --, indexOf
-  --, indexOf'
-  --, lastIndexOf
-  --, lastIndexOf'
+  , indexOf
+  , indexOf'
+  , lastIndexOf
+  , lastIndexOf'
   , length
   , singleton
   , splitAt
@@ -25,7 +25,7 @@ import Data.Array as Array
 import Data.Char (toCharCode)
 import Data.List (List(Cons, Nil), fromFoldable)
 import Data.Maybe (Maybe(Just, Nothing))
-import Data.String (toCharArray)
+import Data.String as String
 import Data.String hiding (count, drop, dropWhile, indexOf, indexOf', lastIndexOf, lastIndexOf', length, singleton, splitAt, take, takeWhile, uncons) as StringReExports
 import Data.Tuple (Tuple(Tuple))
 import Data.Unfoldable (unfoldr)
@@ -94,6 +94,22 @@ dropWhile p s = drop (count p s) s
 foreign import fromCodePointArray :: Array CodePoint -> String
 
 
+indexOf :: String.Pattern -> String -> Maybe Int
+indexOf p s = (\i -> length (String.take i s)) <$> String.indexOf p s
+
+
+indexOf' :: String.Pattern -> Int -> String -> Maybe Int
+indexOf' p i s = (\k -> length (String.take k s)) <$> String.indexOf' p i s
+
+
+lastIndexOf :: String.Pattern -> String -> Maybe Int
+lastIndexOf p s = (\i -> length (String.take i s)) <$> String.lastIndexOf p s
+
+
+lastIndexOf' :: String.Pattern -> Int -> String -> Maybe Int
+lastIndexOf' p i s = (\k -> length (String.take k s)) <$> String.lastIndexOf' p i s
+
+
 length :: String -> Int
 length = Array.length <<< toCodePointArray
 
@@ -134,7 +150,7 @@ foreign import _toCodePointArray
   -> Array CodePoint
 
 toCodePointArrayFallback :: String -> Array CodePoint
-toCodePointArrayFallback s = unfoldr decode (fromFoldable (toCharCode <$> toCharArray s))
+toCodePointArrayFallback s = unfoldr decode (fromFoldable (toCharCode <$> String.toCharArray s))
   where
   decode :: List Int -> Maybe (Tuple CodePoint (List Int))
   decode (Cons h (Cons l rest)) | isLead h && isTrail l

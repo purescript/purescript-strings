@@ -41,6 +41,7 @@ module Data.String
 
 import Prelude
 import Data.Array as A
+import Data.Functor as F
 import Data.Maybe (Maybe(..), isJust)
 import Data.Newtype (class Newtype)
 import Data.String.Unsafe as U
@@ -130,7 +131,7 @@ filter p = toCharArray >>> A.filter p >>> fromCharArray
 
 -- | Returns the resulting string after applying a function to each character
 map ::  (Char -> Char) -> String -> String
-map f = toCharArray >>> A.map f >>> fromCharArray
+map f = toCharArray >>> F.map f >>> fromCharArray
 
 -- | If the string starts with the given prefix, return the portion of the
 -- | string left after removing it, as a Just value. Otherwise, return Nothing.

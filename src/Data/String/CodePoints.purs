@@ -22,7 +22,7 @@ module Data.String.CodePoints
   ) where
 
 import Data.Array as Array
-import Data.Char (toCharCode)
+import Data.Char as Char
 import Data.List (List(Cons, Nil), fromFoldable)
 import Data.Maybe (Maybe(Just, Nothing))
 import Data.Newtype (class Newtype)
@@ -31,7 +31,7 @@ import Data.String as String
 import Data.String (Pattern(..), Replacement(..), charAt, charCodeAt, contains, fromCharArray, joinWith, localeCompare, null, replace, replaceAll, split, stripPrefix, stripSuffix, toChar, toCharArray, toLower, toUpper, trim) as StringReExports
 import Data.Tuple (Tuple(Tuple))
 import Data.Unfoldable (unfoldr)
-import Prelude (class Eq, class Ord, (&&), (||), (*), (+), (-), (<$>), (<), (<=), (<<<))
+import Prelude (class Eq, class Ord, (&&), (||), (*), (+), (-), (<$>), (<), (<=), (<<<), (/), (<>), mod)
 
 
 newtype CodePoint = CodePoint Int
@@ -60,6 +60,9 @@ isLead cu = 0xD800 <= cu && cu <= 0xDBFF
 
 isTrail :: Int -> Boolean
 isTrail cu = 0xDC00 <= cu && cu <= 0xDFFF
+
+fromCharCode :: Int -> String
+fromCharCode = String.singleton <<< Char.fromCharCode
 
 
 codePointAt :: Int -> String -> Maybe CodePoint
@@ -97,7 +100,13 @@ dropWhile :: (CodePoint -> Boolean) -> String -> String
 dropWhile p s = drop (count p s) s
 
 
-foreign import fromCodePointArray :: Array CodePoint -> String
+fromCodePointArray :: Array CodePoint -> String
+fromCodePointArray = _fromCodePointArray singletonFallback
+
+foreign import _fromCodePointArray
+  :: (CodePoint -> String)
+  -> Array CodePoint
+  -> String
 
 
 indexOf :: String.Pattern -> String -> Maybe Int
@@ -124,7 +133,20 @@ length :: String -> Int
 length = Array.length <<< toCodePointArray
 
 
-foreign import singleton :: CodePoint -> String
+singleton :: CodePoint -> String
+singleton = _singleton singletonFallback
+
+foreign import _singleton
+  :: (CodePoint -> String)
+  -> CodePoint
+  -> String
+
+singletonFallback :: CodePoint -> String
+singletonFallback (CodePoint cp) | cp <= 0xFFFF = fromCharCode cp
+singletonFallback (CodePoint cp) = fromCharCode lead <> fromCharCode trail
+  where
+    lead = ((cp - 0x10000) / 0x400) + 0xD800
+    trail = (cp - 0x10000) `mod` 0x400 + 0xDC00
 
 
 splitAt :: Int -> String -> Maybe { before :: String, after :: String }
@@ -160,7 +182,7 @@ foreign import _toCodePointArray
   -> Array CodePoint
 
 toCodePointArrayFallback :: String -> Array CodePoint
-toCodePointArrayFallback s = unfoldr decode (fromFoldable (toCharCode <$> String.toCharArray s))
+toCodePointArrayFallback s = unfoldr decode (fromFoldable (Char.toCharCode <$> String.toCharArray s))
   where
   decode :: List Int -> Maybe (Tuple CodePoint (List Int))
   decode (Cons h (Cons l rest)) | isLead h && isTrail l

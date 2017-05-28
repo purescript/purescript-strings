@@ -10,13 +10,6 @@ var hasStringIterator =
 var hasFromCodePoint = typeof String.prototype.fromCodePoint === "function";
 var hasCodePointAt = typeof String.prototype.codePointAt === "function";
 
-function fromCodePoint(cp) {
-  if (cp <= 0xFFFF) return String.fromCharCode(cp);
-  var cu1 = String.fromCharCode(Math.floor((cp - 0x10000) / 0x400) + 0xD800);
-  var cu2 = String.fromCharCode((cp - 0x10000) % 0x400 + 0xDC00);
-  return cu1 + cu2;
-}
-
 var codePointAt0 = hasCodePointAt
   ? function (str) { return str.codePointAt(0); }
   : function (str) {
@@ -78,12 +71,16 @@ exports._count = function (isLead) {
   };
 };
 
-exports.fromCodePointArray = hasFromCodePoint
-  // TODO: using F.p.apply here will fail for very large strings; use alternative implementation for very large strings
-  ? function (cps) { return String.fromCodePoint.apply(String, cps); }
-  : function (cps) { return cps.map(fromCodePoint).join(""); };
+exports._fromCodePointArray = function (singleton) {
+  return hasFromCodePoint
+    // TODO: using F.p.apply here will fail for very large strings; use alternative implementation for very large strings
+    ? function (cps) { return String.fromCodePoint.apply(String, cps); }
+    : function (cps) { return cps.map(singleton).join(""); };
+};
 
-exports.singleton = hasFromCodePoint ? String.fromCodePoint : fromCodePoint;
+exports._singleton = function (fallback) {
+  return hasFromCodePoint ? String.fromCodePoint : fallback;
+};
 
 exports._take = function (fallback) {
   return function (n) {

@@ -31,7 +31,7 @@ import Data.String as String
 import Data.String (Pattern(..), Replacement(..), charAt, charCodeAt, contains, fromCharArray, joinWith, localeCompare, null, replace, replaceAll, split, stripPrefix, stripSuffix, toChar, toCharArray, toLower, toUpper, trim) as StringReExports
 import Data.Tuple (Tuple(Tuple))
 import Data.Unfoldable (unfoldr)
-import Prelude (class Eq, class Ord, (&&), (||), (*), (+), (-), (<$>), (<), (<=), (<<<), (/), (<>), mod)
+import Prelude (class Eq, class Ord, (&&), (||), (*), (+), (-), (<$>), (<), (<=), (<<<), (/), (<>), (==), mod)
 
 
 newtype CodePoint = CodePoint Int
@@ -48,8 +48,8 @@ codePointToInt :: CodePoint -> Int
 codePointToInt (CodePoint n) = n
 
 codePointFromSurrogatePair :: Int -> Int -> Maybe CodePoint
-codePointFromSurrogatePair lead trail | isLead lead && isTrail trail
-  = Just (unsurrogate lead trail)
+codePointFromSurrogatePair lead trail | isLead lead && isTrail trail =
+  Just (unsurrogate lead trail)
 codePointFromSurrogatePair _ _ = Nothing
 
 unsurrogate :: Int -> Int -> CodePoint
@@ -64,14 +64,34 @@ isTrail cu = 0xDC00 <= cu && cu <= 0xDFFF
 fromCharCode :: Int -> String
 fromCharCode = String.singleton <<< Char.fromCharCode
 
+unsafeCodePointAt0 :: String -> CodePoint
+unsafeCodePointAt0 = _unsafeCodePointAt0 unsafeCodePointAt0Fallback
+
+foreign import _unsafeCodePointAt0
+  :: (String -> CodePoint)
+  -> String
+  -> CodePoint
+
+unsafeCodePointAt0Fallback :: String -> CodePoint
+unsafeCodePointAt0Fallback s | String.length s == 1 = CodePoint (_unsafeCharCodeAt 0 s)
+unsafeCodePointAt0Fallback s = CodePoint (((lead - 0xD800) * 0x400) + (trail - 0xDC00) + 0x10000)
+  where
+    lead = _unsafeCharCodeAt 0 s
+    trail = _unsafeCharCodeAt 1 s
+
+foreign import _unsafeCharCodeAt :: Int -> String -> Int
+
 
 codePointAt :: Int -> String -> Maybe CodePoint
-codePointAt = _codePointAt codePointAtFallback Just Nothing
+codePointAt 0 "" = Nothing
+codePointAt 0 s = Just (unsafeCodePointAt0 s)
+codePointAt n s = _codePointAt codePointAtFallback Just Nothing unsafeCodePointAt0 n s
 
 foreign import _codePointAt
   :: (Int -> String -> Maybe CodePoint)
   -> (forall a. a -> Maybe a)
   -> (forall a. Maybe a)
+  -> (String -> CodePoint)
   -> Int
   -> String
   -> Maybe CodePoint
@@ -174,10 +194,11 @@ takeWhile p s = take (count p s) s
 
 
 toCodePointArray :: String -> Array CodePoint
-toCodePointArray = _toCodePointArray toCodePointArrayFallback
+toCodePointArray = _toCodePointArray toCodePointArrayFallback unsafeCodePointAt0
 
 foreign import _toCodePointArray
   :: (String -> Array CodePoint)
+  -> (String -> CodePoint)
   -> String
   -> Array CodePoint
 

@@ -10,35 +10,40 @@ var hasStringIterator =
 var hasFromCodePoint = typeof String.prototype.fromCodePoint === "function";
 var hasCodePointAt = typeof String.prototype.codePointAt === "function";
 
-var codePointAt0 = hasCodePointAt
-  ? function (str) { return str.codePointAt(0); }
-  : function (str) {
-    if (str.length === 1) {
-      return str.charCodeAt(0);
-    }
-    return ((str.charCodeAt(0) - 0xD800) * 0x400 + (str.charCodeAt(1) - 0xDC00) + 0x10000);
+exports._unsafeCharCodeAt = function (i) {
+  return function (str) {
+    return str.charCodeAt(i);
   };
+};
+
+exports._unsafeCodePointAt0 = function (fallback) {
+  return hasCodePointAt
+    ? function (str) { return str.codePointAt(0); }
+    : fallback;
+};
 
 exports._codePointAt = function (fallback) {
   return function (Just) {
     return function (Nothing) {
-      return function (index) {
-        return function (str) {
-          var length = str.length;
-          if (index < 0 || index >= length) return Nothing;
-          if (hasArrayFrom) {
-            var cps = Array.from(str);
-            if (index >= cps.length) return Nothing;
-            return Just(codePointAt0(cps[index]));
-          } else if (hasStringIterator) {
-            var iter = str[Symbol.iterator]();
-            for (var i = index;; --i) {
-              var o = iter.next();
-              if (o.done) return Nothing;
-              if (i === 0) return Just(codePointAt0(o.value));
+      return function (unsafeCodePointAt0) {
+        return function (index) {
+          return function (str) {
+            var length = str.length;
+            if (index < 0 || index >= length) return Nothing;
+            if (hasArrayFrom) {
+              var cps = Array.from(str);
+              if (index >= cps.length) return Nothing;
+              return Just(unsafeCodePointAt0(cps[index]));
+            } else if (hasStringIterator) {
+              var iter = str[Symbol.iterator]();
+              for (var i = index;; --i) {
+                var o = iter.next();
+                if (o.done) return Nothing;
+                if (i === 0) return Just(unsafeCodePointAt0(o.value));
+              }
             }
-          }
-          return fallback(index)(str);
+            return fallback(index)(str);
+          };
         };
       };
     };
@@ -105,20 +110,22 @@ exports._take = function (fallback) {
 };
 
 exports._toCodePointArray = function (fallback) {
-  if (hasArrayFrom) {
-    return function (str) {
-      return Array.from(str, codePointAt0);
-    };
-  } else if (hasStringIterator) {
-    return function (str) {
-      var accum = [];
-      var iter = str[Symbol.iterator]();
-      for (;;) {
-        var o = iter.next();
-        if (o.done) return accum;
-        accum.push(codePointAt0(o.value));
-      }
-    };
-  }
-  return fallback;
+  return function (unsafeCodePointAt0) {
+    if (hasArrayFrom) {
+      return function (str) {
+        return Array.from(str, unsafeCodePointAt0);
+      };
+    } else if (hasStringIterator) {
+      return function (str) {
+        var accum = [];
+        var iter = str[Symbol.iterator]();
+        for (;;) {
+          var o = iter.next();
+          if (o.done) return accum;
+          accum.push(unsafeCodePointAt0(o.value));
+        }
+      };
+    }
+    return fallback;
+  };
 };

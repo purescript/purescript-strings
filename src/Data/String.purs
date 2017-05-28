@@ -40,11 +40,10 @@ module Data.String
   ) where
 
 import Prelude
-
+import Data.Array as A
 import Data.Maybe (Maybe(..), isJust)
 import Data.Newtype (class Newtype)
 import Data.String.Unsafe as U
-import Data.Foldable (foldr)
 
 -- | A newtype used in cases where there is a string to be matched.
 newtype Pattern = Pattern String
@@ -127,17 +126,11 @@ dropWhile p s = drop (count p s) s
 
 -- | Returns the string for which each character satisfies a predicate
 filter :: (Char -> Boolean) -> String -> String
-filter p s = foldr f "" (toCharArray s) 
-  where  
-  f a b = case p a of 
-    true  -> cons a b
-    false -> b
+filter p = toCharArray >>> A.filter p >>> fromCharArray
 
 -- | Returns the resulting string after applying a function to each character
 map ::  (Char -> Char) -> String -> String
-map f s = foldr ff "" (toCharArray s)
-  where
-  ff a b = cons (f a) b
+map f = toCharArray >>> A.map f >>> fromCharArray
 
 -- | If the string starts with the given prefix, return the portion of the
 -- | string left after removing it, as a Just value. Otherwise, return Nothing.

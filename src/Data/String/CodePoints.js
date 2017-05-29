@@ -78,8 +78,12 @@ exports._count = function (isLead) {
 
 exports._fromCodePointArray = function (singleton) {
   return hasFromCodePoint
-    // TODO: using F.p.apply here will fail for very large strings; use alternative implementation for very large strings
-    ? function (cps) { return String.fromCodePoint.apply(String, cps); }
+    ? function (cps) {
+      if (cps.length < 10240) {
+        return String.fromCodePoint.apply(String, cps);
+      }
+      return cps.map(singleton).join("");
+    }
     : function (cps) { return cps.map(singleton).join(""); };
 };
 

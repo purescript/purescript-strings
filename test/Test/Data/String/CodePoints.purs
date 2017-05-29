@@ -66,11 +66,6 @@ testStringCodePoints = do
   assert $ indexOf (Pattern "z") str == Just 6
   assert $ indexOf (Pattern "\0") str == Nothing
   assert $ indexOf (Pattern "\xD81A") str == Just 4
-  -- TODO: Should this be Nothing? It matches the trail surrogate of a surrogate pair.
-  -- It'd be nice if (drop (indexOf pattern str) str) was guaranteed to start with pattern.
-  -- If we change this, we'll also need to add a matching contains implementation to the CodePoints module.
-  -- I vote we just delete the test. Passing surrogate halves to the CodePoints functions should not be supported.
-  assert $ indexOf (Pattern "\xDC05") str == Just 5
 
   log "indexOf'"
   assert $ indexOf' (Pattern "") 0 "" == Just 0

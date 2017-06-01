@@ -27,6 +27,7 @@ import Data.List (List(Cons, Nil), fromFoldable)
 import Data.Maybe (Maybe(Just, Nothing))
 import Data.Newtype (class Newtype)
 import Data.String as String
+import Data.String.Unsafe as Unsafe
 -- WARN: This list must be updated to re-export any exports added to Data.String. That makes me sad.
 import Data.String (Pattern(..), Replacement(..), charAt, charCodeAt, contains, fromCharArray, joinWith, localeCompare, null, replace, replaceAll, split, stripPrefix, stripSuffix, toChar, toCharArray, toLower, toUpper, trim) as StringReExports
 import Data.Tuple (Tuple(Tuple))
@@ -73,13 +74,11 @@ foreign import _unsafeCodePointAt0
   -> CodePoint
 
 unsafeCodePointAt0Fallback :: String -> CodePoint
-unsafeCodePointAt0Fallback s | String.length s == 1 = CodePoint (_unsafeCharCodeAt 0 s)
+unsafeCodePointAt0Fallback s | String.length s == 1 = CodePoint (Unsafe.charCodeAt 0 s)
 unsafeCodePointAt0Fallback s = CodePoint (((lead - 0xD800) * 0x400) + (trail - 0xDC00) + 0x10000)
   where
-    lead = _unsafeCharCodeAt 0 s
-    trail = _unsafeCharCodeAt 1 s
-
-foreign import _unsafeCharCodeAt :: Int -> String -> Int
+    lead = Unsafe.charCodeAt 0 s
+    trail = Unsafe.charCodeAt 1 s
 
 
 codePointAt :: Int -> String -> Maybe CodePoint

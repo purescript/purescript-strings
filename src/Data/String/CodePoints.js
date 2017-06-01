@@ -10,12 +10,6 @@ var hasStringIterator =
 var hasFromCodePoint = typeof String.prototype.fromCodePoint === "function";
 var hasCodePointAt = typeof String.prototype.codePointAt === "function";
 
-exports._unsafeCharCodeAt = function (i) {
-  return function (str) {
-    return str.charCodeAt(i);
-  };
-};
-
 exports._unsafeCodePointAt0 = function (fallback) {
   return hasCodePointAt
     ? function (str) { return str.codePointAt(0); }

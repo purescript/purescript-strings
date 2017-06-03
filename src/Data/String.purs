@@ -107,7 +107,7 @@ null s = s == ""
 
 -- | Adds a character to the front of a String
 cons :: Char -> String -> String
-cons c s = (singleton c) <> s
+cons c s = singleton c <> s
 
 -- | Returns the first character and the rest of the string,
 -- | if the string is not empty.
@@ -130,7 +130,7 @@ filter :: (Char -> Boolean) -> String -> String
 filter p = toCharArray >>> A.filter p >>> fromCharArray
 
 -- | Returns the resulting string after applying a function to each character
-map ::  (Char -> Char) -> String -> String
+map :: (Char -> Char) -> String -> String
 map f = toCharArray >>> F.map f >>> fromCharArray
 
 -- | If the string starts with the given prefix, return the portion of the

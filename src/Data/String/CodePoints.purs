@@ -21,6 +21,8 @@ module Data.String.CodePoints
   , uncons
   ) where
 
+import Prelude
+
 import Data.Array as Array
 import Data.Char as Char
 import Data.List (List(Cons, Nil), fromFoldable)
@@ -32,7 +34,6 @@ import Data.String.Unsafe as Unsafe
 import Data.String (Pattern(..), Replacement(..), charAt, charCodeAt, contains, fromCharArray, joinWith, localeCompare, null, replace, replaceAll, split, stripPrefix, stripSuffix, toChar, toCharArray, toLower, toUpper, trim) as StringReExports
 import Data.Tuple (Tuple(Tuple))
 import Data.Unfoldable (unfoldr)
-import Prelude (class Eq, class Ord, (&&), (||), (*), (+), (-), (<$>), (<), (<=), (<<<), (/), (<>), (==), mod)
 
 
 newtype CodePoint = CodePoint Int

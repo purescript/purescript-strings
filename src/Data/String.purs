@@ -36,7 +36,7 @@ module Data.String
   , joinWith
   ) where
 
-import Prelude (class Ord, class Eq, class Show, Ordering(LT, EQ, GT), zero, one, (<<<), (<>), (==), ($), (-))
+import Prelude
 
 import Data.Maybe (Maybe(..), isJust)
 import Data.Newtype (class Newtype)

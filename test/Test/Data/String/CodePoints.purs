@@ -46,8 +46,8 @@ testStringCodePoints = do
   assert $ drop 8 str == ""
 
   log "dropWhile"
-  assert $ dropWhile (\c -> true) str == ""
-  assert $ dropWhile (\c -> false) str == str
+  assert $ dropWhile (\_ -> true) str == ""
+  assert $ dropWhile (\_ -> false) str == str
   assert $ dropWhile (\c -> codePointToInt c < 0xFFFF) str == "\x16805\x16A06\&z"
   assert $ dropWhile (\c -> codePointToInt c < 0xDC00) str == "\xDC00\xD800\xD800\x16805\x16A06\&z"
 
@@ -161,8 +161,8 @@ testStringCodePoints = do
   assert $ take 8 str == str
 
   log "takeWhile"
-  assert $ takeWhile (\c -> true) str == str
-  assert $ takeWhile (\c -> false) str == ""
+  assert $ takeWhile (\_ -> true) str == str
+  assert $ takeWhile (\_ -> false) str == ""
   assert $ takeWhile (\c -> codePointToInt c < 0xFFFF) str == "a\xDC00\xD800\xD800"
   assert $ takeWhile (\c -> codePointToInt c < 0xDC00) str == "a"
 

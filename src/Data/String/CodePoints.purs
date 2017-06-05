@@ -1,3 +1,7 @@
+-- | These functions allow PureScript strings to be treated as if they were
+-- | sequences of Unicode code points instead of their true underlying
+-- | implementation (sequences of UTF-16 code units). For nearly all uses of
+-- | strings, these functions should be preferred over the ones in Data.String.
 module Data.String.CodePoints
   ( module StringReExports
   , CodePoint()
@@ -36,12 +40,17 @@ import Data.Tuple (Tuple(Tuple))
 import Data.Unfoldable (unfoldr)
 
 
+-- | CodePoint is an Int bounded between 0 and 0x10FFFF, corresponding to
+-- | Unicode code points.
 newtype CodePoint = CodePoint Int
 
 derive instance eqCodePoint :: Eq CodePoint
 derive instance ordCodePoint :: Ord CodePoint
 derive instance newtypeCodePoint :: Newtype CodePoint _
 
+-- I would prefer that this smart constructor not need to exist and instead
+-- CodePoint just implements Enum, but the Enum module already depends on this
+-- one. To avoid the circular dependency, we just expose these two functions.
 codePointFromInt :: Int -> Maybe CodePoint
 codePointFromInt n | 0 <= n && n <= 0x10FFFF = Just (CodePoint n)
 codePointFromInt n = Nothing

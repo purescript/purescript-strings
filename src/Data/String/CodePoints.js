@@ -73,6 +73,8 @@ exports._count = function (isLead) {
 exports._fromCodePointArray = function (singleton) {
   return hasFromCodePoint
     ? function (cps) {
+      // Function.prototype.apply will fail for very large second parameters,
+      // so we don't use it for arrays with 10KB or more entries.
       if (cps.length < 10240) {
         return String.fromCodePoint.apply(String, cps);
       }

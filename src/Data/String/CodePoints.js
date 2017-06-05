@@ -80,7 +80,9 @@ exports._fromCodePointArray = function (singleton) {
       }
       return cps.map(singleton).join("");
     }
-    : function (cps) { return cps.map(singleton).join(""); };
+    : function (cps) {
+      return cps.map(singleton).join("");
+    };
 };
 
 exports._singleton = function (fallback) {
@@ -89,11 +91,7 @@ exports._singleton = function (fallback) {
 
 exports._take = function (fallback) {
   return function (n) {
-    if (hasArrayFrom) {
-      return function (str) {
-        return Array.from(str).slice(0, Math.max(0, n)).join("");
-      };
-    } else if (hasStringIterator) {
+    if (hasStringIterator) {
       return function (str) {
         var accum = "";
         var iter = str[Symbol.iterator]();
@@ -114,16 +112,6 @@ exports._toCodePointArray = function (fallback) {
     if (hasArrayFrom) {
       return function (str) {
         return Array.from(str, unsafeCodePointAt0);
-      };
-    } else if (hasStringIterator) {
-      return function (str) {
-        var accum = [];
-        var iter = str[Symbol.iterator]();
-        for (;;) {
-          var o = iter.next();
-          if (o.done) return accum;
-          accum.push(unsafeCodePointAt0(o.value));
-        }
       };
     }
     return fallback;

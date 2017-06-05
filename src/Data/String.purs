@@ -40,7 +40,7 @@ import Prelude
 
 import Data.Maybe (Maybe(..), isJust)
 import Data.Newtype (class Newtype)
-import Data.String.Unsafe (charAt) as U
+import Data.String.Unsafe as U
 
 -- | A newtype used in cases where there is a string to be matched.
 newtype Pattern = Pattern String

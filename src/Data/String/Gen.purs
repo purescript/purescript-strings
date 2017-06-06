@@ -10,7 +10,7 @@ import Data.String as S
 -- | Generates a string using the specified character generator.
 genString :: forall m. MonadRec m => MonadGen m => m Char -> m String
 genString genChar = sized \size -> do
-  newSize <- chooseInt 1 size
+  newSize <- chooseInt 1 (max 1 size)
   resize (const newSize) $ S.fromCharArray <$> unfoldable genChar
 
 -- | Generates a string using characters from the Unicode basic multilingual

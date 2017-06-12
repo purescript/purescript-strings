@@ -6,7 +6,7 @@ import Control.Monad.Gen (class MonadGen, chooseInt, oneOf)
 import Data.Char as C
 import Data.NonEmpty ((:|))
 
--- | Generates a character of the Unicode basic multilingual plain.
+-- | Generates a character of the Unicode basic multilingual plane.
 genUnicodeChar :: forall m. MonadGen m => m Char
 genUnicodeChar = C.fromCharCode <$> chooseInt 0 65536
 

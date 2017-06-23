@@ -24,17 +24,17 @@ exports._codePointAt = function (fallback) {
           return function (str) {
             var length = str.length;
             if (index < 0 || index >= length) return Nothing;
-            if (hasArrayFrom) {
-              var cps = Array.from(str);
-              if (index >= cps.length) return Nothing;
-              return Just(unsafeCodePointAt0(cps[index]));
-            } else if (hasStringIterator) {
+            if (hasStringIterator) {
               var iter = str[Symbol.iterator]();
               for (var i = index;; --i) {
                 var o = iter.next();
                 if (o.done) return Nothing;
                 if (i === 0) return Just(unsafeCodePointAt0(o.value));
               }
+            } else if (hasArrayFrom) {
+              var cps = Array.from(str);
+              if (index >= cps.length) return Nothing;
+              return Just(unsafeCodePointAt0(cps[index]));
             }
             return fallback(index)(str);
           };

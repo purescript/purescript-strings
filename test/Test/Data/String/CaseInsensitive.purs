@@ -1,6 +1,6 @@
 module Test.Data.String.CaseInsensitive (testCaseInsensitiveString) where
 
-import Prelude (Unit, (==), ($), bind, compare, Ordering(..))
+import Prelude (Unit, (==), ($), discard, compare, Ordering(..))
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)

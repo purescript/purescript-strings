@@ -133,7 +133,8 @@ exports.drop = function (n) {
 
 exports.count = function (p) {
   return function (s) {
-    for (var i = 0; i < s.length && p(s.charAt(i)); i++); {}
+    var i = 0;
+    while (i < s.length && p(s.charAt(i))) i++;
     return i;
   };
 };
@@ -149,7 +150,8 @@ exports._splitAt = function (just) {
     return function (i) {
       return function (s) {
         return i >= 0 && i < s.length ?
-               just([s.substring(0, i), s.substring(i)]) : nothing;
+               just({ before: s.substring(0, i), after: s.substring(i) }) :
+               nothing;
       };
     };
   };

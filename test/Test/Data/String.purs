@@ -1,11 +1,11 @@
 module Test.Data.String (testString) where
 
-import Prelude (Unit, Ordering(..), (==), ($), bind, negate, not, (/=), (&&), show)
+import Prelude (Unit, Ordering(..), (==), ($), discard, negate, not, (/=), (&&))
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
 
-import Data.Maybe (Maybe(..), isNothing)
+import Data.Maybe (Maybe(..), isNothing, maybe)
 import Data.String
 
 import Test.Assert (ASSERT, assert)
@@ -160,11 +160,19 @@ testString = do
   assert $ split (Pattern "d") "abc" == ["abc"]
 
   log "splitAt"
-  assert $ splitAt 1 "" == Nothing
-  assert $ splitAt 0 "a" == Just ["", "a"]
-  assert $ splitAt 1 "ab" == Just ["a", "b"]
-  assert $ splitAt 3 "aabcc" == Just ["aab", "cc"]
-  assert $ splitAt (-1) "abc" == Nothing
+  let testSplitAt i str res =
+        assert $ case splitAt i str of
+          Nothing ->
+            isNothing res
+          Just { before, after } ->
+            maybe false (\r ->
+              r.before == before && r.after == after) res
+
+  testSplitAt 1 "" Nothing
+  testSplitAt 0 "a" $ Just {before: "", after: "a"}
+  testSplitAt 1 "ab" $ Just {before: "a", after: "b"}
+  testSplitAt 3 "aabcc" $ Just {before: "aab", after: "cc"}
+  testSplitAt (-1) "abc" $ Nothing
 
   log "toCharArray"
   assert $ toCharArray "" == []

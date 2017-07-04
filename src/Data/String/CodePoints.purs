@@ -31,7 +31,6 @@ import Data.Array as Array
 import Data.Char as Char
 import Data.List (List(Cons, Nil), fromFoldable)
 import Data.Maybe (Maybe(Just, Nothing))
-import Data.Newtype (class Newtype)
 import Data.String as String
 import Data.String.Unsafe as Unsafe
 -- WARN: This list must be updated to re-export any exports added to Data.String. That makes me sad.
@@ -46,7 +45,6 @@ newtype CodePoint = CodePoint Int
 
 derive instance eqCodePoint :: Eq CodePoint
 derive instance ordCodePoint :: Ord CodePoint
-derive instance newtypeCodePoint :: Newtype CodePoint _
 
 -- I would prefer that this smart constructor not need to exist and instead
 -- CodePoint just implements Enum, but the Enum module already depends on this

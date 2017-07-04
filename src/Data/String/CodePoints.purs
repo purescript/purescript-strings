@@ -62,7 +62,7 @@ codePointFromSurrogatePair lead trail | isLead lead && isTrail trail =
 codePointFromSurrogatePair _ _ = Nothing
 
 unsurrogate :: Int -> Int -> CodePoint
-unsurrogate h l = CodePoint ((h - 0xD800) * 0x400 + (l - 0xDC00) + 0x10000)
+unsurrogate lead trail = CodePoint ((lead - 0xD800) * 0x400 + (trail - 0xDC00) + 0x10000)
 
 isLead :: Int -> Boolean
 isLead cu = 0xD800 <= cu && cu <= 0xDBFF
@@ -83,7 +83,7 @@ foreign import _unsafeCodePointAt0
 
 unsafeCodePointAt0Fallback :: String -> CodePoint
 unsafeCodePointAt0Fallback s | String.length s == 1 = CodePoint (Unsafe.charCodeAt 0 s)
-unsafeCodePointAt0Fallback s = CodePoint (((lead - 0xD800) * 0x400) + (trail - 0xDC00) + 0x10000)
+unsafeCodePointAt0Fallback s = CodePoint (unsurrogate lead trail)
   where
     lead = Unsafe.charCodeAt 0 s
     trail = Unsafe.charCodeAt 1 s

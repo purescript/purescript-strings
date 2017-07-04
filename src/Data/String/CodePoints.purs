@@ -56,11 +56,6 @@ codePointFromInt n = Nothing
 codePointToInt :: CodePoint -> Int
 codePointToInt (CodePoint n) = n
 
-codePointFromSurrogatePair :: Int -> Int -> Maybe CodePoint
-codePointFromSurrogatePair lead trail | isLead lead && isTrail trail =
-  Just (unsurrogate lead trail)
-codePointFromSurrogatePair _ _ = Nothing
-
 unsurrogate :: Int -> Int -> CodePoint
 unsurrogate lead trail = CodePoint ((lead - 0xD800) * 0x400 + (trail - 0xDC00) + 0x10000)
 

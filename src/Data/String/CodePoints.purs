@@ -77,11 +77,13 @@ foreign import _unsafeCodePointAt0
   -> CodePoint
 
 unsafeCodePointAt0Fallback :: String -> CodePoint
-unsafeCodePointAt0Fallback s | String.length s == 1 = CodePoint (Unsafe.charCodeAt 0 s)
-unsafeCodePointAt0Fallback s = CodePoint (unsurrogate lead trail)
+unsafeCodePointAt0Fallback s =
+  if isLead cu0 && isTrail cu1
+     then unsurrogate cu0 cu1
+     else CodePoint cu0
   where
-    lead = Unsafe.charCodeAt 0 s
-    trail = Unsafe.charCodeAt 1 s
+    cu0 = Unsafe.charCodeAt 0 s
+    cu1 = Unsafe.charCodeAt 1 s
 
 
 codePointAt :: Int -> String -> Maybe CodePoint

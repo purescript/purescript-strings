@@ -210,9 +210,9 @@ toCodePointArrayFallback :: String -> Array CodePoint
 toCodePointArrayFallback s = unfoldr decode (fromFoldable (Char.toCharCode <$> String.toCharArray s))
   where
   decode :: List Int -> Maybe (Tuple CodePoint (List Int))
-  decode (Cons h (Cons l rest)) | isLead h && isTrail l
-    = Just (Tuple (unsurrogate h l) rest)
-  decode (Cons c rest) = Just (Tuple (CodePoint c) rest)
+  decode (Cons cu0 (Cons cu1 rest)) | isLead cu0 && isTrail cu1
+    = Just (Tuple (unsurrogate cu0 cu1) rest)
+  decode (Cons cu rest) = Just (Tuple (CodePoint cu) rest)
   decode Nil = Nothing
 
 

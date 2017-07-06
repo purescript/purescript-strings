@@ -149,8 +149,8 @@ lastIndexOf p s = (\i -> length (String.take i s)) <$> String.lastIndexOf p s
 
 lastIndexOf' :: String.Pattern -> Int -> String -> Maybe Int
 lastIndexOf' p i s =
-  let s' = drop i s in
-  (\k -> i + length (String.take k s')) <$> String.lastIndexOf p s'
+  let i' = String.length (take i s) in
+  (\k -> length (String.take k s)) <$> String.lastIndexOf' p i' s
 
 
 length :: String -> Int

@@ -101,17 +101,30 @@ testStringCodePoints = do
   log "lastIndexOf'"
   assert $ lastIndexOf' (Pattern "") 0 "" == Just 0
   assert $ lastIndexOf' (Pattern str) 0 str == Just 0
-  assert $ lastIndexOf' (Pattern str) 1 str == Nothing
+  assert $ lastIndexOf' (Pattern str) 1 str == Just 0
   assert $ lastIndexOf' (Pattern "a") 0 str == Just 0
-  assert $ lastIndexOf' (Pattern "a") 1 str == Nothing
-  assert $ lastIndexOf' (Pattern "z") 0 str == Just 6
-  assert $ lastIndexOf' (Pattern "z") 1 str == Just 6
-  assert $ lastIndexOf' (Pattern "z") 2 str == Just 6
-  assert $ lastIndexOf' (Pattern "z") 3 str == Just 6
-  assert $ lastIndexOf' (Pattern "z") 4 str == Just 6
-  assert $ lastIndexOf' (Pattern "z") 5 str == Just 6
+  assert $ lastIndexOf' (Pattern "a") 7 str == Just 0
+  assert $ lastIndexOf' (Pattern "z") 0 str == Nothing
+  assert $ lastIndexOf' (Pattern "z") 1 str == Nothing
+  assert $ lastIndexOf' (Pattern "z") 2 str == Nothing
+  assert $ lastIndexOf' (Pattern "z") 3 str == Nothing
+  assert $ lastIndexOf' (Pattern "z") 4 str == Nothing
+  assert $ lastIndexOf' (Pattern "z") 5 str == Nothing
   assert $ lastIndexOf' (Pattern "z") 6 str == Just 6
-  assert $ lastIndexOf' (Pattern "z") 7 str == Nothing
+  assert $ lastIndexOf' (Pattern "z") 7 str == Just 6
+  assert $ lastIndexOf' (Pattern "\xD800") 7 str == Just 3
+  assert $ lastIndexOf' (Pattern "\xD800") 6 str == Just 3
+  assert $ lastIndexOf' (Pattern "\xD800") 5 str == Just 3
+  assert $ lastIndexOf' (Pattern "\xD800") 4 str == Just 3
+  assert $ lastIndexOf' (Pattern "\xD800") 3 str == Just 3
+  assert $ lastIndexOf' (Pattern "\xD800") 2 str == Just 2
+  assert $ lastIndexOf' (Pattern "\xD800") 1 str == Nothing
+  assert $ lastIndexOf' (Pattern "\xD800") 0 str == Nothing
+  assert $ lastIndexOf' (Pattern "\x16A06") 7 str == Just 5
+  assert $ lastIndexOf' (Pattern "\x16A06") 6 str == Just 5
+  assert $ lastIndexOf' (Pattern "\x16A06") 5 str == Just 5
+  assert $ lastIndexOf' (Pattern "\x16A06") 4 str == Nothing
+  assert $ lastIndexOf' (Pattern "\x16A06") 3 str == Nothing
 
   log "length"
   assert $ length "" == 0

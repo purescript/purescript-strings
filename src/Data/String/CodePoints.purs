@@ -68,6 +68,7 @@ isTrail cu = 0xDC00 <= cu && cu <= 0xDFFF
 fromCharCode :: Int -> String
 fromCharCode = String.singleton <<< Char.fromCharCode
 
+-- WARN: this function expects the String parameter to be non-empty
 unsafeCodePointAt0 :: String -> CodePoint
 unsafeCodePointAt0 = _unsafeCodePointAt0 unsafeCodePointAt0Fallback
 
@@ -86,6 +87,9 @@ unsafeCodePointAt0Fallback s =
     cu1 = Unsafe.charCodeAt 1 s
 
 
+-- | Returns the first code point of the string after dropping the given number
+-- | of code points from the beginning, if there is such a code point. Operates
+-- | in constant space and in time linear to `n`.
 codePointAt :: Int -> String -> Maybe CodePoint
 codePointAt 0 "" = Nothing
 codePointAt 0 s = Just (unsafeCodePointAt0 s)
@@ -104,6 +108,9 @@ codePointAtFallback :: Int -> String -> Maybe CodePoint
 codePointAtFallback n s = Array.index (toCodePointArray s) n
 
 
+-- | Returns the number of code points in the leading sequence of code points
+-- | which all match the given predicate. Operates in constant space and in
+-- | time linear to the length of the given string.
 count :: (CodePoint -> Boolean) -> String -> Int
 count = _count isLead isTrail unsurrogate
 
@@ -116,14 +123,23 @@ foreign import _count
   -> Int
 
 
+-- | Drops the given number of code points from the beginning of the given
+-- | string. If the string does not have that many code points, returns the
+-- | empty string. Operates in space and time linear to the length of the given
+-- | string.
 drop :: Int -> String -> String
 drop n s = fromCodePointArray (Array.drop n (toCodePointArray s))
 
 
+-- | Drops the leading sequence of code points which all match the given
+-- | predicate from the given string. Operates in space and time linear to the
+-- | length of the given string.
 dropWhile :: (CodePoint -> Boolean) -> String -> String
 dropWhile p s = drop (count p s) s
 
 
+-- | Creates a string from an array of code points. Operates in space and time
+-- | linear to the length of the given array.
 fromCodePointArray :: Array CodePoint -> String
 fromCodePointArray = _fromCodePointArray singletonFallback
 
@@ -132,31 +148,44 @@ foreign import _fromCodePointArray
   -> Array CodePoint
   -> String
 
-
+-- | Returns the number of code points preceding the first match of the given
+-- | pattern in the given string. Returns Nothing when no matches are found.
 indexOf :: String.Pattern -> String -> Maybe Int
 indexOf p s = (\i -> length (String.take i s)) <$> String.indexOf p s
 
 
+-- | Returns the number of code points preceding the first match of the given
+-- | pattern in the given string. Pattern matches preceding the given index
+-- | will be ignored. Returns Nothing when no matches are found.
 indexOf' :: String.Pattern -> Int -> String -> Maybe Int
 indexOf' p i s =
   let s' = drop i s in
   (\k -> i + length (String.take k s')) <$> String.indexOf p s'
 
 
+-- | Returns the number of code points preceding the last match of the given
+-- | pattern in the given string. Returns Nothing when no matches are found.
 lastIndexOf :: String.Pattern -> String -> Maybe Int
 lastIndexOf p s = (\i -> length (String.take i s)) <$> String.lastIndexOf p s
 
 
+-- | Returns the number of code points preceding the first match of the given
+-- | pattern in the given string. Pattern matches following the given index
+-- | will be ignored. Returns Nothing when no matches are found.
 lastIndexOf' :: String.Pattern -> Int -> String -> Maybe Int
 lastIndexOf' p i s =
   let i' = String.length (take i s) in
   (\k -> length (String.take k s)) <$> String.lastIndexOf' p i' s
 
 
+-- | Returns the number of code points in the given string. Operates in
+-- | constant space and time linear to the length of the string.
 length :: String -> Int
 length = Array.length <<< toCodePointArray
 
 
+-- | Creates a string containing just the given code point. Operates in
+-- | constant space and time.
 singleton :: CodePoint -> String
 singleton = _singleton singletonFallback
 
@@ -173,6 +202,9 @@ singletonFallback (CodePoint cp) = fromCharCode lead <> fromCharCode trail
     trail = (cp - 0x10000) `mod` 0x400 + 0xDC00
 
 
+-- | Returns a record with strings created from the code points on either side
+-- | of the given index. If the index is not within the string, Nothing is
+-- | returned.
 splitAt :: Int -> String -> Maybe { before :: String, after :: String }
 splitAt i s =
   let cps = toCodePointArray s in
@@ -184,6 +216,10 @@ splitAt i s =
       }
 
 
+-- | Returns a string containing the given number of code points from the
+-- | beginning of the given string. If the string does not have that many code
+-- | points, returns the empty string. Operates in space and time linear to the
+-- | given number.
 take :: Int -> String -> String
 take = _take takeFallback
 
@@ -193,10 +229,15 @@ takeFallback :: Int -> String -> String
 takeFallback n s = fromCodePointArray (Array.take n (toCodePointArray s))
 
 
+-- | Returns a string containing the leading sequence of code points which all
+-- | match the given predicate from the given string. Operates in space and
+-- | time linear to the given number.
 takeWhile :: (CodePoint -> Boolean) -> String -> String
 takeWhile p s = take (count p s) s
 
 
+-- | Creates an array of code points from a string. Operates in space and time
+-- | linear to the length of the given string.
 toCodePointArray :: String -> Array CodePoint
 toCodePointArray = _toCodePointArray toCodePointArrayFallback unsafeCodePointAt0
 
@@ -216,5 +257,8 @@ toCodePointArrayFallback s = unfoldr decode (fromFoldable (Char.toCharCode <$> S
   decode Nil = Nothing
 
 
+-- | Returns a record with the first code point and the remaining code points
+-- | of the given string. Returns Nothing if the string is empty. Operates in
+-- | space and time linear to the length of the string.
 uncons :: String -> Maybe { head :: CodePoint, tail :: String }
 uncons s  = { head: _, tail: drop 1 s } <$> codePointAt 0 s

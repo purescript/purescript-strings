@@ -79,12 +79,11 @@ foreign import _unsafeCodePointAt0
 
 unsafeCodePointAt0Fallback :: String -> CodePoint
 unsafeCodePointAt0Fallback s =
+  let cu0 = Unsafe.charCodeAt 0 s in
+  let cu1 = Unsafe.charCodeAt 1 s in
   if isLead cu0 && isTrail cu1
      then unsurrogate cu0 cu1
      else CodePoint cu0
-  where
-    cu0 = Unsafe.charCodeAt 0 s
-    cu1 = Unsafe.charCodeAt 1 s
 
 
 -- | Returns the first code point of the string after dropping the given number
@@ -198,10 +197,10 @@ foreign import _singleton
 
 singletonFallback :: CodePoint -> String
 singletonFallback (CodePoint cp) | cp <= 0xFFFF = fromCharCode cp
-singletonFallback (CodePoint cp) = fromCharCode lead <> fromCharCode trail
-  where
-    lead = ((cp - 0x10000) / 0x400) + 0xD800
-    trail = (cp - 0x10000) `mod` 0x400 + 0xDC00
+singletonFallback (CodePoint cp) =
+  let lead = ((cp - 0x10000) / 0x400) + 0xD800 in
+  let trail = (cp - 0x10000) `mod` 0x400 + 0xDC00 in
+  fromCharCode lead <> fromCharCode trail
 
 
 -- | Returns a record with strings created from the code points on either side

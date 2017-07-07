@@ -40,29 +40,22 @@ exports._codePointAt = function (fallback) {
   };
 };
 
-exports._count = function (isLead) {
-  return function (isTrail) {
-    return function (unsurrogate) {
+exports._count = function (fallback) {
+  return function (unsafeCodePointAt0) {
+    if (hasStringIterator) {
       return function (pred) {
         return function (str) {
-          var cpCount = 0;
-          for (var cuCount = 0; cuCount < str.length; ++cuCount) {
-            var lead = str.charCodeAt(cuCount);
-            var cp = lead;
-            if (isLead(lead) && cuCount + 1 < str.length) {
-              var trail = str.charCodeAt(cuCount + 1);
-              if (isTrail(trail)) {
-                cp = unsurrogate(lead)(trail);
-                ++cuCount;
-              }
-            }
+          var iter = str[Symbol.iterator]();
+          for (var cpCount = 0; ; ++cpCount) {
+            var o = iter.next();
+            if (o.done) return cpCount;
+            var cp = unsafeCodePointAt0(o.value);
             if (!pred(cp)) return cpCount;
-            ++cpCount;
           }
-          return cpCount;
         };
       };
-    };
+    }
+    return fallback;
   };
 };
 

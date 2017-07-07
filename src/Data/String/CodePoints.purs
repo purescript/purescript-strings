@@ -90,6 +90,7 @@ unsafeCodePointAt0Fallback s =
 -- | of code points from the beginning, if there is such a code point. Operates
 -- | in constant space and in time linear to `n`.
 codePointAt :: Int -> String -> Maybe CodePoint
+codePointAt n _ | n < 0 = Nothing
 codePointAt 0 "" = Nothing
 codePointAt 0 s = Just (unsafeCodePointAt0 s)
 codePointAt n s = _codePointAt codePointAtFallback Just Nothing unsafeCodePointAt0 n s
@@ -113,15 +114,22 @@ codePointAtFallback n s = case uncons s of
 -- | which all match the given predicate. Operates in constant space and in
 -- | time linear to the length of the given string.
 count :: (CodePoint -> Boolean) -> String -> Int
-count = _count isLead isTrail unsurrogate
+count = _count countFallback unsafeCodePointAt0
 
 foreign import _count
-  :: (Int -> Boolean)
-  -> (Int -> Boolean)
-  -> (Int -> Int -> CodePoint)
+  :: ((CodePoint -> Boolean) -> String -> Int)
+  -> (String -> CodePoint)
   -> (CodePoint -> Boolean)
   -> String
   -> Int
+
+countFallback :: (CodePoint -> Boolean) -> String -> Int
+countFallback p s = countTail p s 0
+  where
+  countTail :: (CodePoint -> Boolean) -> String -> Int -> Int
+  countTail p' s' accum = case uncons s' of
+    Just { head, tail } -> if p' head then countTail p' tail (accum + 1) else accum
+    _ -> accum
 
 
 -- | Drops the given number of code points from the beginning of the given

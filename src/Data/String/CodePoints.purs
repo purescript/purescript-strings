@@ -29,7 +29,6 @@ import Prelude
 
 import Data.Array as Array
 import Data.Char as Char
-import Data.List (List(Cons, Nil), fromFoldable)
 import Data.Maybe (Maybe(Just, Nothing))
 import Data.String as String
 import Data.String.Unsafe as Unsafe
@@ -106,7 +105,9 @@ foreign import _codePointAt
   -> Maybe CodePoint
 
 codePointAtFallback :: Int -> String -> Maybe CodePoint
-codePointAtFallback n s = Array.index (toCodePointArray s) n
+codePointAtFallback n s = case uncons s of
+  Just { head, tail } -> if n == 0 then Just head else codePointAtFallback (n - 1) tail
+  _ -> Nothing
 
 
 -- | Returns the number of code points in the leading sequence of code points
@@ -129,7 +130,7 @@ foreign import _count
 -- | empty string. Operates in space and time linear to the length of the given
 -- | string.
 drop :: Int -> String -> String
-drop n s = fromCodePointArray (Array.drop n (toCodePointArray s))
+drop n s = String.drop (String.length (take n s)) s
 
 
 -- | Drops the leading sequence of code points which all match the given
@@ -227,7 +228,10 @@ take = _take takeFallback
 foreign import _take :: (Int -> String -> String) -> Int -> String -> String
 
 takeFallback :: Int -> String -> String
-takeFallback n s = fromCodePointArray (Array.take n (toCodePointArray s))
+takeFallback n _ | n < 1 = ""
+takeFallback n s = case uncons s of
+  Just { head, tail } -> singleton head <> takeFallback (n - 1) tail
+  _ -> s
 
 
 -- | Returns a string containing the leading sequence of code points which all
@@ -249,17 +253,22 @@ foreign import _toCodePointArray
   -> Array CodePoint
 
 toCodePointArrayFallback :: String -> Array CodePoint
-toCodePointArrayFallback s = unfoldr decode (fromFoldable (Char.toCharCode <$> String.toCharArray s))
+toCodePointArrayFallback s = unfoldr decode s
   where
-  decode :: List Int -> Maybe (Tuple CodePoint (List Int))
-  decode (Cons cu0 (Cons cu1 rest)) | isLead cu0 && isTrail cu1
-    = Just (Tuple (unsurrogate cu0 cu1) rest)
-  decode (Cons cu rest) = Just (Tuple (CodePoint cu) rest)
-  decode Nil = Nothing
+  decode :: String -> Maybe (Tuple CodePoint String)
+  decode s' = (\{ head, tail } -> Tuple head tail) <$> uncons s'
 
 
 -- | Returns a record with the first code point and the remaining code points
 -- | of the given string. Returns Nothing if the string is empty. Operates in
 -- | space and time linear to the length of the string.
 uncons :: String -> Maybe { head :: CodePoint, tail :: String }
-uncons s  = { head: _, tail: drop 1 s } <$> codePointAt 0 s
+uncons s = case String.length s of
+  0 -> Nothing
+  1 -> Just { head: CodePoint (Unsafe.charCodeAt 0 s), tail: "" }
+  _ ->
+    let cu0 = Unsafe.charCodeAt 0 s in
+    let cu1 = Unsafe.charCodeAt 1 s in
+    if isLead cu0 && isTrail cu1
+      then Just { head: unsurrogate cu0 cu1, tail: String.drop 2 s }
+      else Just { head: CodePoint cu0, tail: String.drop 1 s }

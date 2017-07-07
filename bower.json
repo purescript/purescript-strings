@@ -22,7 +22,6 @@
     "purescript-maybe": "^3.0.0",
     "purescript-partial": "^1.2.0",
     "purescript-unfoldable": "^3.0.0",
-    "purescript-lists": "^4.1.1",
     "purescript-arrays": "^4.0.1"
   },
   "devDependencies": {

@@ -31,10 +31,6 @@ exports._codePointAt = function (fallback) {
                 if (o.done) return Nothing;
                 if (i === 0) return Just(unsafeCodePointAt0(o.value));
               }
-            } else if (hasArrayFrom) {
-              var cps = Array.from(str);
-              if (index >= cps.length) return Nothing;
-              return Just(unsafeCodePointAt0(cps[index]));
             }
             return fallback(index)(str);
           };

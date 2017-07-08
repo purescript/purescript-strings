@@ -129,11 +129,11 @@ foreign import _count
 
 countFallback :: (CodePoint -> Boolean) -> String -> Int
 countFallback p s = countTail p s 0
-  where
-  countTail :: (CodePoint -> Boolean) -> String -> Int -> Int
-  countTail p' s' accum = case uncons s' of
-    Just { head, tail } -> if p' head then countTail p' tail (accum + 1) else accum
-    _ -> accum
+
+countTail :: (CodePoint -> Boolean) -> String -> Int -> Int
+countTail p s accum = case uncons s of
+  Just { head, tail } -> if p head then countTail p tail (accum + 1) else accum
+  _ -> accum
 
 
 -- | Drops the given number of code points from the beginning of the string. If
@@ -263,10 +263,10 @@ foreign import _toCodePointArray
   -> Array CodePoint
 
 toCodePointArrayFallback :: String -> Array CodePoint
-toCodePointArrayFallback s = unfoldr decode s
-  where
-  decode :: String -> Maybe (Tuple CodePoint String)
-  decode s' = (\{ head, tail } -> Tuple head tail) <$> uncons s'
+toCodePointArrayFallback s = unfoldr unconsButWithTuple s
+
+unconsButWithTuple :: String -> Maybe (Tuple CodePoint String)
+unconsButWithTuple s' = (\{ head, tail } -> Tuple head tail) <$> uncons s'
 
 
 -- | Returns a record with the first code point and the remaining code points

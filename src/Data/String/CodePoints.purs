@@ -138,14 +138,14 @@ countTail p s accum = case uncons s of
 
 -- | Drops the given number of code points from the beginning of the string. If
 -- | the string does not have that many code points, returns the empty string.
--- | Operates in space and time linear to the length of the string.
+-- | Operates in constant space and in time linear to the given number.
 drop :: Int -> String -> String
 drop n s = String.drop (String.length (take n s)) s
 
 
 -- | Drops the leading sequence of code points which all match the given
--- | predicate from the string. Operates in space and time linear to the
--- | length of the string.
+-- | predicate from the string. Operates in constant space and in time linear
+-- | to the length of the string.
 dropWhile :: (CodePoint -> Boolean) -> String -> String
 dropWhile p s = drop (count p s) s
 
@@ -230,8 +230,8 @@ splitAt i s =
 
 -- | Returns a string containing the given number of code points from the
 -- | beginning of the given string. If the string does not have that many code
--- | points, returns the empty string. Operates in space and time linear to the
--- | given number.
+-- | points, returns the empty string. Operates in constant space and in time
+-- | linear to the given number.
 take :: Int -> String -> String
 take = _take takeFallback
 
@@ -245,8 +245,8 @@ takeFallback n s = case uncons s of
 
 
 -- | Returns a string containing the leading sequence of code points which all
--- | match the given predicate from the string. Operates in space and time
--- | linear to the length of the string.
+-- | match the given predicate from the string. Operates in constant space and
+-- | in time linear to the length of the string.
 takeWhile :: (CodePoint -> Boolean) -> String -> String
 takeWhile p s = take (count p s) s
 

@@ -266,7 +266,7 @@ toCodePointArrayFallback :: String -> Array CodePoint
 toCodePointArrayFallback s = unfoldr unconsButWithTuple s
 
 unconsButWithTuple :: String -> Maybe (Tuple CodePoint String)
-unconsButWithTuple s' = (\{ head, tail } -> Tuple head tail) <$> uncons s'
+unconsButWithTuple s = (\{ head, tail } -> Tuple head tail) <$> uncons s
 
 
 -- | Returns a record with the first code point and the remaining code points

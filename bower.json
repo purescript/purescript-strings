@@ -20,7 +20,9 @@
     "purescript-either": "^3.0.0",
     "purescript-gen": "^1.1.0",
     "purescript-maybe": "^3.0.0",
-    "purescript-partial": "^1.2.0"
+    "purescript-partial": "^1.2.0",
+    "purescript-unfoldable": "^3.0.0",
+    "purescript-arrays": "^4.0.1"
   },
   "devDependencies": {
     "purescript-assert": "^3.0.0",

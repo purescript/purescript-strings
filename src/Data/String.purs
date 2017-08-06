@@ -50,7 +50,7 @@ derive instance ordPattern :: Ord Pattern
 derive instance newtypePattern :: Newtype Pattern _
 
 instance showPattern :: Show Pattern where
-  show (Pattern s) = "(Pattern " <> s <> ")"
+  show (Pattern s) = "(Pattern " <> show s <> ")"
 
 -- | A newtype used in cases to specify a replacement for a pattern.
 newtype Replacement = Replacement String
@@ -60,7 +60,7 @@ derive instance ordReplacement :: Ord Replacement
 derive instance newtypeReplacement :: Newtype Replacement _
 
 instance showReplacement :: Show Replacement where
-  show (Replacement s) = "(Replacement " <> s <> ")"
+  show (Replacement s) = "(Replacement " <> show s <> ")"
 
 -- | Returns the character at the given index, if the index is within bounds.
 charAt :: Int -> String -> Maybe Char

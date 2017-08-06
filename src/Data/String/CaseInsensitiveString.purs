@@ -17,6 +17,6 @@ instance ordCaseInsensitiveString :: Ord CaseInsensitiveString where
     compare (toLower s1) (toLower s2)
 
 instance showCaseInsensitiveString :: Show CaseInsensitiveString where
-  show (CaseInsensitiveString s) = "(CaseInsensitiveString " <> s <> ")"
+  show (CaseInsensitiveString s) = "(CaseInsensitiveString " <> show s <> ")"
 
 derive instance newtypeCaseInsensitiveString :: Newtype CaseInsensitiveString _

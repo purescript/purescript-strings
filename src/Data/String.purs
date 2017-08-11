@@ -232,8 +232,19 @@ foreign import count :: (Char -> Boolean) -> String -> Int
 foreign import split :: Pattern -> String -> Array String
 
 -- | Returns a string split into two substrings at the given index, where
--- | `before` includes all of the characters up to the given index, and `after`
--- | is the rest of the string, from the given index on.
+-- | `before` includes all of the characters up to (but not including) the
+-- | given index, and `after` is the rest of the string, from the given index
+-- | on.
+-- |
+-- | Thus the length of `(splitAt i s).before` will equal either `i` or
+-- | `length s`, if that is shorter. (Or if `i` is negative the length will be
+-- | 0.)
+-- |
+-- | In code:
+-- | ```purescript
+-- | length (splitAt i s).before == min (max i 0) (length s)
+-- | (splitAt i s).before <> (splitAt i s).after == s
+-- | ```
 foreign import splitAt :: Int -> String -> { before :: String, after :: String }
 
 -- | Converts the string into an array of characters.

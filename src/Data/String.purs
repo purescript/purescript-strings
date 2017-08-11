@@ -231,15 +231,10 @@ foreign import count :: (Char -> Boolean) -> String -> Int
 -- | * `split (Pattern " ") "hello world" == ["hello", "world"]`
 foreign import split :: Pattern -> String -> Array String
 
--- | Returns the substrings of split at the given index, if the index is within bounds.
-splitAt :: Int -> String -> Maybe { before :: String, after :: String }
-splitAt = _splitAt Just Nothing
-
-foreign import _splitAt :: (forall a. a -> Maybe a)
-                        -> (forall a. Maybe a)
-                        -> Int
-                        -> String
-                        -> Maybe { before :: String, after :: String }
+-- | Returns a string split into two substrings at the given index, where
+-- | `before` includes all of the characters up to the given index, and `after`
+-- | is the rest of the string, from the given index on.
+foreign import splitAt :: Int -> String -> { before :: String, after :: String }
 
 -- | Converts the string into an array of characters.
 foreign import toCharArray :: String -> Array Char

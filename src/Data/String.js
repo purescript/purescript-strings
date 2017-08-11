@@ -145,15 +145,9 @@ exports.split = function (sep) {
   };
 };
 
-exports._splitAt = function (just) {
-  return function (nothing) {
-    return function (i) {
-      return function (s) {
-        return i >= 0 && i < s.length ?
-               just({ before: s.substring(0, i), after: s.substring(i) }) :
-               nothing;
-      };
-    };
+exports.splitAt = function (i) {
+  return function (s) {
+    return { before: s.substring(0, i), after: s.substring(i) };
   };
 };
 

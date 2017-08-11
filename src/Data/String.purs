@@ -231,10 +231,9 @@ foreign import count :: (Char -> Boolean) -> String -> Int
 -- | * `split (Pattern " ") "hello world" == ["hello", "world"]`
 foreign import split :: Pattern -> String -> Array String
 
--- | Returns a string split into two substrings at the given index, where
--- | `before` includes all of the characters up to (but not including) the
--- | given index, and `after` is the rest of the string, from the given index
--- | on.
+-- | Splits a string into two substrings, where `before` contains the
+-- | characters up to (but not including) the given index, and `after` contains
+-- | the rest of the string, from that index on.
 -- |
 -- | Thus the length of `(splitAt i s).before` will equal either `i` or
 -- | `length s`, if that is shorter. (Or if `i` is negative the length will be
@@ -244,6 +243,7 @@ foreign import split :: Pattern -> String -> Array String
 -- | ```purescript
 -- | length (splitAt i s).before == min (max i 0) (length s)
 -- | (splitAt i s).before <> (splitAt i s).after == s
+-- | splitAt i s == {before: take i s, after: drop i s}
 -- | ```
 foreign import splitAt :: Int -> String -> { before :: String, after :: String }
 

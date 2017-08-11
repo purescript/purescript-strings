@@ -165,12 +165,12 @@ testString = do
           { before, after } ->
             r.before == before && r.after == after
 
-  testSplitAt 1 "" { before: "", after: "" }
-  testSplitAt 0 "a" { before: "", after: "a" }
-  testSplitAt 1 "a" { before: "a", after: "" }
-  testSplitAt 1 "ab" { before: "a", after: "b" }
-  testSplitAt 3 "aabcc" { before: "aab", after: "cc" }
-  testSplitAt (-1) "abc" { before: "", after: "abc" }
+  testSplitAt 1 "" {before: "", after: ""}
+  testSplitAt 0 "a" {before: "", after: "a"}
+  testSplitAt 1 "a" {before: "a", after: ""}
+  testSplitAt 1 "ab" {before: "a", after: "b"}
+  testSplitAt 3 "aabcc" {before: "aab", after: "cc"}
+  testSplitAt (-1) "abc" {before: "", after: "abc"}
 
   log "toCharArray"
   assert $ toCharArray "" == []

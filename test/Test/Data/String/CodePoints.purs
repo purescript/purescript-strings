@@ -137,29 +137,26 @@ testStringCodePoints = do
   assert $ (singleton <$> codePointFromInt 0x16805) == Just "\x16805"
 
   log "splitAt"
-  let testSplitAt i s res =
+  let testSplitAt i s r =
         assert $ case splitAt i s of
-          Nothing ->
-            isNothing res
-          Just { before, after } ->
-            maybe false (\r ->
-              r.before == before && r.after == after) res
+          { before, after } ->
+            r.before == before && r.after == after
 
-  testSplitAt 0 "" $ Just {before: "", after: ""}
-  testSplitAt 1 "" Nothing
-  testSplitAt 0 "a" $ Just {before: "", after: "a"}
-  testSplitAt 1 "ab" $ Just {before: "a", after: "b"}
-  testSplitAt 3 "aabcc" $ Just {before: "aab", after: "cc"}
-  testSplitAt (-1) "abc" $ Nothing
-  testSplitAt 0 str $ Just {before: "", after: str}
-  testSplitAt 1 str $ Just {before: "a", after: "\xDC00\xD800\xD800\x16805\x16A06\&z"}
-  testSplitAt 2 str $ Just {before: "a\xDC00", after: "\xD800\xD800\x16805\x16A06\&z"}
-  testSplitAt 3 str $ Just {before: "a\xDC00\xD800", after: "\xD800\x16805\x16A06\&z"}
-  testSplitAt 4 str $ Just {before: "a\xDC00\xD800\xD800", after: "\x16805\x16A06\&z"}
-  testSplitAt 5 str $ Just {before: "a\xDC00\xD800\xD800\x16805", after: "\x16A06\&z"}
-  testSplitAt 6 str $ Just {before: "a\xDC00\xD800\xD800\x16805\x16A06", after: "z"}
-  testSplitAt 7 str $ Just {before: str, after: ""}
-  testSplitAt 8 str $ Nothing
+  testSplitAt 0 "" {before: "", after: "" }
+  testSplitAt 1 "" {before: "", after: "" }
+  testSplitAt 0 "a" {before: "", after: "a"}
+  testSplitAt 1 "ab" {before: "a", after: "b"}
+  testSplitAt 3 "aabcc" {before: "aab", after: "cc"}
+  testSplitAt (-1) "abc" {before: "", after: "abc"}
+  testSplitAt 0 str {before: "", after: str}
+  testSplitAt 1 str {before: "a", after: "\xDC00\xD800\xD800\x16805\x16A06\&z"}
+  testSplitAt 2 str {before: "a\xDC00", after: "\xD800\xD800\x16805\x16A06\&z"}
+  testSplitAt 3 str {before: "a\xDC00\xD800", after: "\xD800\x16805\x16A06\&z"}
+  testSplitAt 4 str {before: "a\xDC00\xD800\xD800", after: "\x16805\x16A06\&z"}
+  testSplitAt 5 str {before: "a\xDC00\xD800\xD800\x16805", after: "\x16A06\&z"}
+  testSplitAt 6 str {before: "a\xDC00\xD800\xD800\x16805\x16A06", after: "z"}
+  testSplitAt 7 str {before: str, after: ""}
+  testSplitAt 8 str {before: str, after: ""}
 
   log "take"
   assert $ take (-1) str == ""

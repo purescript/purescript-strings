@@ -217,6 +217,17 @@ singletonFallback (CodePoint cp) =
 -- | Splits a string into two substrings, where `before` contains the code
 -- | points up to (but not including) the given index, and `after` contains the
 -- | rest of the string, from that index on.
+-- |
+-- | Thus the length of `(splitAt i s).before` will equal either `i` or
+-- | `length s`, if that is shorter. (Or if `i` is negative the length will be
+-- | 0.)
+-- |
+-- | In code:
+-- | ```purescript
+-- | length (splitAt i s).before == min (max i 0) (length s)
+-- | (splitAt i s).before <> (splitAt i s).after == s
+-- | splitAt i s == {before: take i s, after: drop i s}
+-- | ```
 splitAt :: Int -> String -> { before :: String, after :: String }
 splitAt i s =
   let before = take i s in

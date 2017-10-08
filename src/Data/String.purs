@@ -206,8 +206,11 @@ foreign import _lastIndexOf'
 -- | Returns the number of characters the string is composed of.
 foreign import length :: String -> Int
 
--- | Locale-aware sort order comparison.
+-- | Compare two strings in a locale-aware fashion. This is in contrast to
+-- | the `Ord` instance on `String` which treats strings as arrays of code
+-- | units:
 -- | - `"ä" `localeCompare` "b" == LT`
+-- | - `"ä" `compare` "b" == GT`
 localeCompare :: String -> String -> Ordering
 localeCompare = _localeCompare LT EQ GT
 
@@ -220,7 +223,7 @@ foreign import _localeCompare
   -> Ordering
 
 -- | Replaces the first occurence of the pattern with the replacement string.
--- | * `replace (Pattern "http") (Replacement "https") "http://purescript.org"`
+-- | * `replace (Pattern "http") (Replacement "https") "http://purescript.org" == "https://purescript.org"`
 foreign import replace :: Pattern -> Replacement -> String -> String
 
 -- | Replaces all occurences of the pattern with the replacement string.
@@ -232,8 +235,8 @@ foreign import take :: Int -> String -> String
 -- | Returns the string without the first `n` characters.
 foreign import drop :: Int -> String -> String
 
--- | Returns the number of contiguous characters *at the beginning
--- | of the string* for which the predicate holds.
+-- | Returns the number of contiguous characters at the beginning
+-- | of the string for which the predicate holds.
 foreign import count :: (Char -> Boolean) -> String -> Int
 
 -- | Returns the substrings of the second string separated along occurences
@@ -267,5 +270,5 @@ foreign import trim :: String -> String
 
 -- | Joins the strings in the array together, inserting the first argument
 -- | as separator between them.
--- | * `joinWith ", " ["apple", "banana", "orange"]`
+-- | * `joinWith ", " ["apple", "banana", "orange"] == "apple, banana, orange"`
 foreign import joinWith :: String -> Array String -> String

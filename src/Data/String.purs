@@ -78,6 +78,7 @@ foreign import singleton :: Char -> String
 
 -- | Returns the numeric Unicode value of the character at the given index,
 -- | if the index is within bounds.
+-- | - `charCodeAt 2 "5 €" == Just 0x20AC`
 charCodeAt :: Int -> String -> Maybe Int
 charCodeAt = _charCodeAt Just Nothing
 
@@ -88,6 +89,8 @@ foreign import _charCodeAt
   -> String
   -> Maybe Int
 
+-- | Converts the string to a character, if the length of the string is
+-- | exactly `1`.
 toChar :: String -> Maybe Char
 toChar = _toChar Just Nothing
 
@@ -109,6 +112,7 @@ uncons s  = Just { head: U.charAt zero s, tail: drop one s }
 
 -- | Returns the longest prefix (possibly empty) of characters that satisfy
 -- | the predicate.
+-- | * `takeWhile (_ /= ':') "http://purescript.org" == "http"`
 takeWhile :: (Char -> Boolean) -> String -> String
 takeWhile p s = take (count p s) s
 
@@ -127,7 +131,8 @@ stripPrefix prefix@(Pattern prefixS) str =
     _ -> Nothing
 
 -- | If the string ends with the given suffix, return the portion of the
--- | string left after removing it, as a Just value. Otherwise, return Nothing.
+-- | string left after removing it, as a `Just` value. Otherwise, return
+-- | `Nothing`.
 -- | * `stripSuffix (Pattern ".exe") "psc.exe" == Just "psc"`
 -- | * `stripSuffix (Pattern ".exe") "psc" == Nothing`
 stripSuffix :: Pattern -> String -> Maybe String
@@ -139,12 +144,15 @@ stripSuffix suffix@(Pattern suffixS) str =
 -- | Converts an array of characters into a string.
 foreign import fromCharArray :: Array Char -> String
 
--- | Checks whether the first string exists in the second string.
+-- | Checks whether the pattern appears in the given string.
+-- | * `contains (Pattern "needle") "haystack with needle" == true`
+-- | * `contains (Pattern "needle") "haystack" == false`
 contains :: Pattern -> String -> Boolean
 contains pat = isJust <<< indexOf pat
 
--- | Returns the index of the first occurrence of the first string in the
--- | second string. Returns `Nothing` if there is no match.
+-- | Returns the index of the first occurrence of the pattern in the
+-- | given string. Returns `Nothing` if there is no match.
+-- | * `indexOf (Pattern "c") "abcde" == Just 2`
 indexOf :: Pattern -> String -> Maybe Int
 indexOf = _indexOf Just Nothing
 
@@ -155,8 +163,8 @@ foreign import _indexOf
   -> String
   -> Maybe Int
 
--- | Returns the index of the first occurrence of the first string in the
--- | second string, starting at the given index. Returns `Nothing` if there is
+-- | Returns the index of the first occurrence of the pattern in the
+-- | given string, starting at the specified index. Returns `Nothing` if there is
 -- | no match.
 indexOf' :: Pattern -> Int -> String -> Maybe Int
 indexOf' = _indexOf' Just Nothing
@@ -169,8 +177,8 @@ foreign import _indexOf'
   -> String
   -> Maybe Int
 
--- | Returns the index of the last occurrence of the first string in the
--- | second string. Returns `Nothing` if there is no match.
+-- | Returns the index of the last occurrence of the pattern in the
+-- | given string. Returns `Nothing` if there is no match.
 lastIndexOf :: Pattern -> String -> Maybe Int
 lastIndexOf = _lastIndexOf Just Nothing
 
@@ -181,9 +189,9 @@ foreign import _lastIndexOf
   -> String
   -> Maybe Int
 
--- | Returns the index of the last occurrence of the first string in the
--- | second string, starting at the given index. Returns `Nothing` if there is
--- | no match.
+-- | Returns the index of the last occurrence of the pattern in the
+-- | given string, starting at the specified index. Returns `Nothing`
+-- | if there is no match.
 lastIndexOf' :: Pattern -> Int -> String -> Maybe Int
 lastIndexOf' = _lastIndexOf' Just Nothing
 
@@ -199,6 +207,7 @@ foreign import _lastIndexOf'
 foreign import length :: String -> Int
 
 -- | Locale-aware sort order comparison.
+-- | - `"ä" `localeCompare` "b" == LT`
 localeCompare :: String -> String -> Ordering
 localeCompare = _localeCompare LT EQ GT
 
@@ -210,10 +219,11 @@ foreign import _localeCompare
   -> String
   -> Ordering
 
--- | Replaces the first occurence of the first argument with the second argument.
+-- | Replaces the first occurence of the pattern with the replacement string.
+-- | * `replace (Pattern "http") (Replacement "https") "http://purescript.org"`
 foreign import replace :: Pattern -> Replacement -> String -> String
 
--- | Replaces all occurences of the first argument with the second argument.
+-- | Replaces all occurences of the pattern with the replacement string.
 foreign import replaceAll :: Pattern -> Replacement -> String -> String
 
 -- | Returns the first `n` characters of the string.
@@ -222,8 +232,8 @@ foreign import take :: Int -> String -> String
 -- | Returns the string without the first `n` characters.
 foreign import drop :: Int -> String -> String
 
--- | Returns the number of contiguous characters at the beginning
--- | of the string for which the predicate holds.
+-- | Returns the number of contiguous characters *at the beginning
+-- | of the string* for which the predicate holds.
 foreign import count :: (Char -> Boolean) -> String -> Int
 
 -- | Returns the substrings of the second string separated along occurences
@@ -231,7 +241,7 @@ foreign import count :: (Char -> Boolean) -> String -> Int
 -- | * `split (Pattern " ") "hello world" == ["hello", "world"]`
 foreign import split :: Pattern -> String -> Array String
 
--- | Returns the substrings of split at the given index, if the index is within bounds.
+-- | Returns the substrings of a split at the given index, if the index is within bounds.
 splitAt :: Int -> String -> Maybe { before :: String, after :: String }
 splitAt = _splitAt Just Nothing
 
@@ -257,4 +267,5 @@ foreign import trim :: String -> String
 
 -- | Joins the strings in the array together, inserting the first argument
 -- | as separator between them.
+-- | * `joinWith ", " ["apple", "banana", "orange"]`
 foreign import joinWith :: String -> Array String -> String

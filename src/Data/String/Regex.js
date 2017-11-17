@@ -49,11 +49,10 @@ exports._match = function (just) {
         if (m == null) {
           return nothing;
         } else {
-          var list = [];
           for (var i = 0; i < m.length; i++) {
-            list.push(m[i] == null ? nothing : just(m[i]));
+            m[i] = m[i] == null ? nothing : just(m[i]);
           }
-          return just(list);
+          return just(m);
         }
       };
     };

@@ -274,12 +274,14 @@ foreign import _lastIndexOf
   -> Maybe Int
 
 -- | Returns the index of the last occurrence of the pattern in the
--- | given string, starting at the specified index. Returns `Nothing`
+-- | given string, starting at the specified index 
+-- | and searching backwards towards the beginning of the string. Returns `Nothing`
 -- | if there is no match.
 -- |
 -- | ```purescript
--- | lastIndexOf' (Pattern "c") 2 "abcdc" == Just 2
--- | lastIndexOf' (Pattern "c") 3 "abcdc" == Just 2
+-- | lastIndexOf' (Pattern "a") 1 "ababa" == Just 0
+-- | lastIndexOf' (Pattern "a") 3 "ababa" == Just 2
+-- | lastIndexOf' (Pattern "a") 4 "ababa" == Just 4
 -- | ```
 -- |
 lastIndexOf' :: Pattern -> Int -> String -> Maybe Int

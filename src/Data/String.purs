@@ -240,8 +240,8 @@ foreign import _indexOf
 -- | no match.
 -- |
 -- | ```purescript
--- | indexOf' (Pattern "c") 2 "abcdc" == Just 2
--- | indexOf' (Pattern "c") 3 "abcdc" == Just 2
+-- | indexOf' (Pattern "a") 2 "ababa" == Just 2
+-- | indexOf' (Pattern "a") 3 "ababa" == Just 4
 -- | ```
 -- |
 indexOf' :: Pattern -> Int -> String -> Maybe Int

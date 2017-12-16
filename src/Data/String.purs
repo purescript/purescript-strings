@@ -275,8 +275,8 @@ foreign import _lastIndexOf
 
 -- | Returns the index of the last occurrence of the pattern in the
 -- | given string, starting at the specified index 
--- | and searching backwards towards the beginning of the string. Returns `Nothing`
--- | if there is no match.
+-- | and searching backwards towards the beginning of the string. 
+-- | Returns `Nothing` if there is no match.
 -- |
 -- | ```purescript
 -- | lastIndexOf' (Pattern "a") 1 "ababa" == Just 0

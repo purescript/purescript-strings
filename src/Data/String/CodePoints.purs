@@ -1,7 +1,8 @@
 -- | These functions allow PureScript strings to be treated as if they were
 -- | sequences of Unicode code points instead of their true underlying
 -- | implementation (sequences of UTF-16 code units). For nearly all uses of
--- | strings, these functions should be preferred over the ones in Data.String.
+-- | strings, **these functions should be preferred over the ones in `Data.String`.**
+-- | For an explanation of the difference see [this](https://mathiasbynens.be/notes/javascript-unicode)
 module Data.String.CodePoints
   ( module StringReExports
   , CodePoint()
@@ -53,10 +54,22 @@ derive instance ordCodePoint :: Ord CodePoint
 -- I would prefer that this smart constructor not need to exist and instead
 -- CodePoint just implements Enum, but the Enum module already depends on this
 -- one. To avoid the circular dependency, we just expose these two functions.
+-- |
+-- | ```purescript
+-- | codePointFromInt 0x1D400
+-- |    == Just "𝐀" -- U+1D400 MATHEMATICAL BOLD CAPITAL A
+-- | ```
+-- |
 codePointFromInt :: Int -> Maybe CodePoint
 codePointFromInt n | 0 <= n && n <= 0x10FFFF = Just (CodePoint n)
 codePointFromInt n = Nothing
 
+-- |
+-- | ```purescript
+-- | map codePointToInt $ codePointFromInt 0x1D400
+-- |    == Just 0x1D400
+-- | ```
+-- |
 codePointToInt :: CodePoint -> Int
 codePointToInt (CodePoint n) = n
 
@@ -93,6 +106,15 @@ unsafeCodePointAt0Fallback s =
 -- | Returns the first code point of the string after dropping the given number
 -- | of code points from the beginning, if there is such a code point. Operates
 -- | in constant space and in time linear to the given index.
+-- |
+-- | ```purescript
+-- | codePointAt 1 "𝐀𝐀𝐀𝐀"
+-- |    == Just "𝐀"
+-- | -- compare to Data.String:
+-- | charAt 1 "𝐀𝐀𝐀𝐀"
+-- |    == Just '�'
+-- | ```
+-- |
 codePointAt :: Int -> String -> Maybe CodePoint
 codePointAt n _ | n < 0 = Nothing
 codePointAt 0 "" = Nothing
@@ -117,6 +139,12 @@ codePointAtFallback n s = case uncons s of
 -- | Returns the number of code points in the leading sequence of code points
 -- | which all match the given predicate. Operates in constant space and in
 -- | time linear to the length of the string.
+-- |
+-- | ```purescript
+-- | count (\c -> (_ == 0x1D400) $ codePointToInt c) "𝐀𝐀 b c 𝐀"
+-- |    == 2
+-- | ```
+-- |
 count :: (CodePoint -> Boolean) -> String -> Int
 count = _count countFallback unsafeCodePointAt0
 
@@ -139,6 +167,15 @@ countTail p s accum = case uncons s of
 -- | Drops the given number of code points from the beginning of the string. If
 -- | the string does not have that many code points, returns the empty string.
 -- | Operates in constant space and in time linear to the given number.
+-- |
+-- | ```purescript
+-- | drop 5 "𝐀𝐀 b c"
+-- |    == "c"
+-- | -- compared to Data.String:
+-- | drop 5 "𝐀𝐀 b c"
+-- |    == "b c" -- because "𝐀" is 2 chars long
+-- | ```
+-- |  
 drop :: Int -> String -> String
 drop n s = String.drop (String.length (take n s)) s
 
@@ -146,12 +183,25 @@ drop n s = String.drop (String.length (take n s)) s
 -- | Drops the leading sequence of code points which all match the given
 -- | predicate from the string. Operates in constant space and in time linear
 -- | to the length of the string.
+-- |
+-- | ```purescript
+-- | dropWhile (\c -> (_ == 0x1D400) $ codePointToInt c) "𝐀𝐀 b c 𝐀"
+-- |    == " b c 𝐀" 
+-- | ```
+-- |
 dropWhile :: (CodePoint -> Boolean) -> String -> String
 dropWhile p s = drop (count p s) s
 
 
 -- | Creates a string from an array of code points. Operates in space and time
 -- | linear to the length of the array.
+-- |
+-- | ```purescript
+-- | codePointArray = toCodePointArray "b c 𝐀"
+-- | fromCodePointArray codePointArray 
+-- |    == "b c 𝐀"
+-- | ```
+-- |
 fromCodePointArray :: Array CodePoint -> String
 fromCodePointArray = _fromCodePointArray singletonFallback
 
@@ -162,6 +212,14 @@ foreign import _fromCodePointArray
 
 -- | Returns the number of code points preceding the first match of the given
 -- | pattern in the string. Returns Nothing when no matches are found.
+-- |
+-- | ```purescript
+-- | indexOf (Pattern "𝐀") "b 𝐀𝐀 c 𝐀"
+-- |    == Just 2
+-- | indexOf (Pattern "o") "b 𝐀𝐀 c 𝐀"
+-- |    == Nothing
+-- | ```
+-- |
 indexOf :: String.Pattern -> String -> Maybe Int
 indexOf p s = (\i -> length (String.take i s)) <$> String.indexOf p s
 
@@ -169,6 +227,14 @@ indexOf p s = (\i -> length (String.take i s)) <$> String.indexOf p s
 -- | Returns the number of code points preceding the first match of the given
 -- | pattern in the string. Pattern matches preceding the given index will be
 -- | ignored. Returns Nothing when no matches are found.
+-- |
+-- | ```purescript
+-- | indexOf' (Pattern "𝐀") 4 "b 𝐀𝐀 c 𝐀"
+-- |    == Just 7
+-- | indexOf' (Pattern "o") 4 "b 𝐀𝐀 c 𝐀"
+-- |    == Nothing
+-- | ```
+-- |
 indexOf' :: String.Pattern -> Int -> String -> Maybe Int
 indexOf' p i s =
   let s' = drop i s in
@@ -177,6 +243,14 @@ indexOf' p i s =
 
 -- | Returns the number of code points preceding the last match of the given
 -- | pattern in the string. Returns Nothing when no matches are found.
+-- |
+-- | ```purescript
+-- | lastIndexOf (Pattern "𝐀") "b 𝐀𝐀 c 𝐀"
+-- |    == Just 7
+-- | lastIndexOf (Pattern "o") "b 𝐀𝐀 c 𝐀"
+-- |    == Nothing
+-- | ```
+-- |
 lastIndexOf :: String.Pattern -> String -> Maybe Int
 lastIndexOf p s = (\i -> length (String.take i s)) <$> String.lastIndexOf p s
 
@@ -184,6 +258,14 @@ lastIndexOf p s = (\i -> length (String.take i s)) <$> String.lastIndexOf p s
 -- | Returns the number of code points preceding the first match of the given
 -- | pattern in the string. Pattern matches following the given index will be
 -- | ignored. Returns Nothing when no matches are found.
+-- |
+-- | ```purescript
+-- | lastIndexOf' (Pattern "𝐀") 5 "b 𝐀𝐀 c 𝐀"
+-- |    == Just 3
+-- | lastIndexOf' (Pattern "o") 5 "b 𝐀𝐀 c 𝐀"
+-- |    == Nothing
+-- | ```
+-- |
 lastIndexOf' :: String.Pattern -> Int -> String -> Maybe Int
 lastIndexOf' p i s =
   let i' = String.length (take i s) in
@@ -192,12 +274,27 @@ lastIndexOf' p i s =
 
 -- | Returns the number of code points in the string. Operates in constant
 -- | space and in time linear to the length of the string.
+-- |
+-- | ```purescript
+-- | length "b 𝐀𝐀 c 𝐀"
+-- |    == 8
+-- | -- compare to Data.String:
+-- | length "b 𝐀𝐀 c 𝐀"
+-- |    == 11
+-- | ```
+-- |
 length :: String -> Int
 length = Array.length <<< toCodePointArray
 
 
 -- | Creates a string containing just the given code point. Operates in
 -- | constant space and time.
+-- |
+-- | ```purescript
+-- | map singleton $ codePointFromInt 0x1D400
+-- |    == Just "𝐀"
+-- | ```
+-- |
 singleton :: CodePoint -> String
 singleton = _singleton singletonFallback
 
@@ -217,6 +314,12 @@ singletonFallback (CodePoint cp) =
 -- | Returns a record with strings created from the code points on either side
 -- | of the given index. If the index is not within the string, Nothing is
 -- | returned.
+-- |
+-- | ```purescript
+-- | splitAt 3 "b 𝐀𝐀 c 𝐀"
+-- |    == Just { before: "b 𝐀", after: "𝐀 c 𝐀" }
+-- | ```
+-- |  
 splitAt :: Int -> String -> Maybe { before :: String, after :: String }
 splitAt i s =
   let cps = toCodePointArray s in
@@ -232,6 +335,15 @@ splitAt i s =
 -- | beginning of the given string. If the string does not have that many code
 -- | points, returns the empty string. Operates in constant space and in time
 -- | linear to the given number.
+-- |
+-- | ```purescript
+-- | take 3 "b 𝐀𝐀 c 𝐀"
+-- |    == "b 𝐀"
+-- | -- compare to Data.String:
+-- | take 3 "b 𝐀𝐀 c 𝐀"
+-- |    == ""b �"
+-- | ```
+-- |  
 take :: Int -> String -> String
 take = _take takeFallback
 
@@ -247,12 +359,24 @@ takeFallback n s = case uncons s of
 -- | Returns a string containing the leading sequence of code points which all
 -- | match the given predicate from the string. Operates in constant space and
 -- | in time linear to the length of the string.
+-- |
+-- | ```purescript
+-- | takeWhile (\c -> (_ == 0x1D400) $ codePointToInt c) "𝐀𝐀 b c 𝐀"
+-- |    == "𝐀𝐀" 
+-- | ```
+-- |
 takeWhile :: (CodePoint -> Boolean) -> String -> String
 takeWhile p s = take (count p s) s
 
 
 -- | Creates an array of code points from a string. Operates in space and time
 -- | linear to the length of the string.
+-- |
+-- | ```purescript
+-- | toCodePointArray "b 𝐀𝐀 c 𝐀"
+-- |    == ["b", " ", "𝐀", "𝐀", " ", "c", " ", "𝐀"] 
+-- | ```
+-- |
 toCodePointArray :: String -> Array CodePoint
 toCodePointArray = _toCodePointArray toCodePointArrayFallback unsafeCodePointAt0
 
@@ -272,6 +396,14 @@ unconsButWithTuple s = (\{ head, tail } -> Tuple head tail) <$> uncons s
 -- | Returns a record with the first code point and the remaining code points
 -- | of the string. Returns Nothing if the string is empty. Operates in
 -- | constant space and time.
+-- |
+-- | ```purescript
+-- | uncons "𝐀𝐀 c 𝐀"
+-- |    == Just { head: "𝐀", tail: "𝐀 c 𝐀" }
+-- | uncons ""
+-- |    == Nothing
+-- | ```
+-- |
 uncons :: String -> Maybe { head :: CodePoint, tail :: String }
 uncons s = case String.length s of
   0 -> Nothing

@@ -50,6 +50,9 @@ newtype CodePoint = CodePoint Int
 derive instance eqCodePoint :: Eq CodePoint
 derive instance ordCodePoint :: Ord CodePoint
 
+instance showCodePoint :: Show CodePoint where
+  show cp = "(CodePoint " <> show (singleton cp) <> ")"
+
 -- I would prefer that this smart constructor not need to exist and instead
 -- CodePoint just implements Enum, but the Enum module already depends on this
 -- one. To avoid the circular dependency, we just expose these two functions.

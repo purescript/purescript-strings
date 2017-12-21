@@ -57,7 +57,7 @@ derive instance ordCodePoint :: Ord CodePoint
 -- |
 -- | ```purescript
 -- | codePointFromInt 0x1D400
--- |    == Just "𝐀" -- U+1D400 MATHEMATICAL BOLD CAPITAL A
+-- |    == Just (CodePoint "𝐀") -- U+1D400 MATHEMATICAL BOLD CAPITAL A
 -- | ```
 -- |
 codePointFromInt :: Int -> Maybe CodePoint
@@ -109,7 +109,7 @@ unsafeCodePointAt0Fallback s =
 -- |
 -- | ```purescript
 -- | codePointAt 1 "𝐀𝐀𝐀𝐀"
--- |    == Just "𝐀"
+-- |    == Just (CodePoint "𝐀")
 -- | -- compare to Data.String:
 -- | charAt 1 "𝐀𝐀𝐀𝐀"
 -- |    == Just '�'

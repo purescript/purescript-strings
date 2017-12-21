@@ -8,6 +8,7 @@ module Data.String.CodePoints
   , codePointAt
   , codePointFromInt
   , codePointToInt
+  , codePointFromChar
   , count
   , drop
   , dropWhile
@@ -28,6 +29,7 @@ module Data.String.CodePoints
 import Prelude
 
 import Data.Array as Array
+import Data.Char (toCharCode)
 import Data.Char as Char
 import Data.Maybe (Maybe(Just, Nothing))
 import Data.String as String
@@ -59,6 +61,16 @@ codePointFromInt n = Nothing
 
 codePointToInt :: CodePoint -> Int
 codePointToInt (CodePoint n) = n
+
+-- | Creates a CodePoint from a given Char.
+-- |
+-- | ```purescript
+-- | codePointFromChar 'B'
+-- |    == CodePoint "B"
+-- | ```
+-- |  
+codePointFromChar :: Char -> CodePoint
+codePointFromChar = toCharCode >>> CodePoint
 
 unsurrogate :: Int -> Int -> CodePoint
 unsurrogate lead trail = CodePoint ((lead - 0xD800) * 0x400 + (trail - 0xDC00) + 0x10000)

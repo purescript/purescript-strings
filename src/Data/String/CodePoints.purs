@@ -29,7 +29,9 @@ import Prelude
 
 import Data.Array as Array
 import Data.Char as Char
+import Data.Int (hexadecimal, toStringAs)
 import Data.Maybe (Maybe(Just, Nothing))
+import Data.String (Pattern(..), Replacement(..), charAt, charCodeAt, contains, fromCharArray, joinWith, localeCompare, null, replace, replaceAll, split, stripPrefix, stripSuffix, toChar, toCharArray, toLower, toUpper, trim) as StringReExports
 import Data.String as String
 import Data.String.Unsafe as Unsafe
 -- WARN: If a new function is added to Data.String, a version of that function
@@ -51,7 +53,7 @@ derive instance eqCodePoint :: Eq CodePoint
 derive instance ordCodePoint :: Ord CodePoint
 
 instance showCodePoint :: Show CodePoint where
-  show (CodePoint i) = "(CodePoint " <> show i <> ")"
+  show (CodePoint i) = "(CodePoint 0x" <> toStringAs hexadecimal i <> ")"
 
 -- I would prefer that this smart constructor not need to exist and instead
 -- CodePoint just implements Enum, but the Enum module already depends on this

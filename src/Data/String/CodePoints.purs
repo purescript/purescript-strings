@@ -51,7 +51,7 @@ derive instance eqCodePoint :: Eq CodePoint
 derive instance ordCodePoint :: Ord CodePoint
 
 instance showCodePoint :: Show CodePoint where
-  show cp = "(CodePoint " <> show (singleton cp) <> ")"
+  show (CodePoint i) = "(CodePoint " <> show i <> ")"
 
 -- I would prefer that this smart constructor not need to exist and instead
 -- CodePoint just implements Enum, but the Enum module already depends on this

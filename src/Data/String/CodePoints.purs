@@ -56,8 +56,13 @@ derive instance ordCodePoint :: Ord CodePoint
 -- one. To avoid the circular dependency, we just expose these two functions.
 -- |
 -- | ```purescript
--- | codePointFromInt 0x1D400
--- |    == Just (CodePoint "𝐀") -- U+1D400 MATHEMATICAL BOLD CAPITAL A
+-- | it = codePointFromInt 0x1D400 -- U+1D400 MATHEMATICAL BOLD CAPITAL A
+-- |    == Just (CodePoint 0x1D400) 
+-- | map singleton it
+-- |    == Just "𝐀"
+-- |
+-- | codePointFromInt 0x110000 -- does not correspond to a Unicode code point
+-- |    == Nothing
 -- | ```
 -- |
 codePointFromInt :: Int -> Maybe CodePoint
@@ -109,7 +114,7 @@ unsafeCodePointAt0Fallback s =
 -- |
 -- | ```purescript
 -- | codePointAt 1 "𝐀𝐀𝐀𝐀"
--- |    == Just (CodePoint "𝐀")
+-- |    == Just (CodePoint 0x1D400) -- represents "𝐀"
 -- | -- compare to Data.String:
 -- | charAt 1 "𝐀𝐀𝐀𝐀"
 -- |    == Just '�'

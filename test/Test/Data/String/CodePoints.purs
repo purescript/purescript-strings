@@ -15,6 +15,15 @@ str = "a\xDC00\xD800\xD800\x16805\x16A06\&z"
 
 testStringCodePoints :: forall eff. Eff (console :: CONSOLE, assert :: ASSERT | eff) Unit
 testStringCodePoints = do
+  log "show"
+  assert $ map show (codePointAt 0 str) == Just "(CodePoint 0x61)"
+  assert $ map show (codePointAt 1 str) == Just "(CodePoint 0xDC00)"
+  assert $ map show (codePointAt 2 str) == Just "(CodePoint 0xD800)"
+  assert $ map show (codePointAt 3 str) == Just "(CodePoint 0xD800)"
+  assert $ map show (codePointAt 4 str) == Just "(CodePoint 0x16805)"
+  assert $ map show (codePointAt 5 str) == Just "(CodePoint 0x16A06)"
+  assert $ map show (codePointAt 6 str) == Just "(CodePoint 0x7A)"
+
   log "codePointAt"
   assert $ codePointAt (-1) str == Nothing
   assert $ codePointAt 0 str == (codePointFromInt 0x61)

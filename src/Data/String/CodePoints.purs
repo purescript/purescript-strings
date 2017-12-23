@@ -31,7 +31,6 @@ import Data.Array as Array
 import Data.Char as Char
 import Data.Int (hexadecimal, toStringAs)
 import Data.Maybe (Maybe(Just, Nothing))
-import Data.String (Pattern(..), Replacement(..), charAt, charCodeAt, contains, fromCharArray, joinWith, localeCompare, null, replace, replaceAll, split, stripPrefix, stripSuffix, toChar, toCharArray, toLower, toUpper, trim) as StringReExports
 import Data.String as String
 import Data.String.Unsafe as Unsafe
 -- WARN: If a new function is added to Data.String, a version of that function

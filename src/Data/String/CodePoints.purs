@@ -66,7 +66,7 @@ codePointToInt (CodePoint n) = n
 -- |
 -- | ```purescript
 -- | codePointFromChar 'B'
--- |    == CodePoint "B"
+-- |    == CodePoint 0x42 -- represents 'B'
 -- | ```
 -- |  
 codePointFromChar :: Char -> CodePoint

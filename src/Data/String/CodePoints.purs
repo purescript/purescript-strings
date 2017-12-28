@@ -1,8 +1,7 @@
 -- | These functions allow PureScript strings to be treated as if they were
 -- | sequences of Unicode code points instead of their true underlying
 -- | implementation (sequences of UTF-16 code units). For nearly all uses of
--- | strings, **these functions should be preferred over the ones in `Data.String`.**
--- | For an explanation of the difference see [this](https://mathiasbynens.be/notes/javascript-unicode)
+-- | strings, these functions should be preferred over the ones in `Data.String`.
 module Data.String.CodePoints
   ( module StringReExports
   , CodePoint()
@@ -62,11 +61,12 @@ instance showCodePoint :: Show CodePoint where
 -- | ```purescript
 -- | >>> it = codePointFromInt 0x1D400 -- U+1D400 MATHEMATICAL BOLD CAPITAL A
 -- | Just (CodePoint 0x1D400) 
--- | map singleton it
--- |    == Just "𝐀"
 -- |
--- | codePointFromInt 0x110000 -- does not correspond to a Unicode code point
--- |    == Nothing
+-- | >>> map singleton it
+-- | Just "𝐀"
+-- |
+-- | >>> codePointFromInt 0x110000 -- does not correspond to a Unicode code point
+-- | Nothing
 -- | ```
 -- |
 codePointFromInt :: Int -> Maybe CodePoint
@@ -75,8 +75,13 @@ codePointFromInt n = Nothing
 
 -- |
 -- | ```purescript
--- | map codePointToInt $ codePointFromInt 0x1D400
--- |    == Just 0x1D400
+-- | >>> codePointToInt (codePointFromChar 'B')
+-- | 66
+-- | 
+-- | >>> boldA = codePointFromInt 0x1D400
+-- | >>> boldA
+-- | Just (CodePoint 0x1D400)
+-- | >>> map codePointToInt boldA
 -- | ```
 -- |
 codePointToInt :: CodePoint -> Int
@@ -150,8 +155,8 @@ codePointAtFallback n s = case uncons s of
 -- | time linear to the length of the string.
 -- |
 -- | ```purescript
--- | count (\c -> (_ == 0x1D400) $ codePointToInt c) "𝐀𝐀 b c 𝐀"
--- |    == 2
+-- | >>> count (\c -> (_ == 0x1D400) $ codePointToInt c) "𝐀𝐀 b c 𝐀"
+-- | 2
 -- | ```
 -- |
 count :: (CodePoint -> Boolean) -> String -> Int
@@ -178,11 +183,11 @@ countTail p s accum = case uncons s of
 -- | Operates in constant space and in time linear to the given number.
 -- |
 -- | ```purescript
--- | drop 5 "𝐀𝐀 b c"
--- |    == "c"
+-- | >>> drop 5 "𝐀𝐀 b c"
+-- | "c"
 -- | -- compared to Data.String:
--- | drop 5 "𝐀𝐀 b c"
--- |    == "b c" -- because "𝐀" is 2 chars long
+-- | >>> drop 5 "𝐀𝐀 b c"
+-- | "b c" -- because "𝐀" is 2 chars long
 -- | ```
 -- |  
 drop :: Int -> String -> String
@@ -194,8 +199,8 @@ drop n s = String.drop (String.length (take n s)) s
 -- | to the length of the string.
 -- |
 -- | ```purescript
--- | dropWhile (\c -> (_ == 0x1D400) $ codePointToInt c) "𝐀𝐀 b c 𝐀"
--- |    == " b c 𝐀" 
+-- | >>> dropWhile (\c -> codePointToInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
+-- | " b c 𝐀" 
 -- | ```
 -- |
 dropWhile :: (CodePoint -> Boolean) -> String -> String
@@ -206,9 +211,11 @@ dropWhile p s = drop (count p s) s
 -- | linear to the length of the array.
 -- |
 -- | ```purescript
--- | codePointArray = toCodePointArray "b c 𝐀"
--- | fromCodePointArray codePointArray 
--- |    == "b c 𝐀"
+-- | >>> codePointArray = toCodePointArray "c 𝐀"
+-- | >>> codePointArray
+-- | [CodePoint 0x63, CodePoint 0x20, CodePoint 0x1D400]
+-- | >>> fromCodePointArray codePointArray
+-- | "c 𝐀"
 -- | ```
 -- |
 fromCodePointArray :: Array CodePoint -> String
@@ -223,10 +230,10 @@ foreign import _fromCodePointArray
 -- | pattern in the string. Returns Nothing when no matches are found.
 -- |
 -- | ```purescript
--- | indexOf (Pattern "𝐀") "b 𝐀𝐀 c 𝐀"
--- |    == Just 2
--- | indexOf (Pattern "o") "b 𝐀𝐀 c 𝐀"
--- |    == Nothing
+-- | >>> indexOf (Pattern "𝐀") "b 𝐀𝐀 c 𝐀"
+-- | Just 2
+-- | >>> indexOf (Pattern "o") "b 𝐀𝐀 c 𝐀"
+-- | Nothing
 -- | ```
 -- |
 indexOf :: String.Pattern -> String -> Maybe Int
@@ -238,10 +245,10 @@ indexOf p s = (\i -> length (String.take i s)) <$> String.indexOf p s
 -- | ignored. Returns Nothing when no matches are found.
 -- |
 -- | ```purescript
--- | indexOf' (Pattern "𝐀") 4 "b 𝐀𝐀 c 𝐀"
--- |    == Just 7
--- | indexOf' (Pattern "o") 4 "b 𝐀𝐀 c 𝐀"
--- |    == Nothing
+-- | >>> indexOf' (Pattern "𝐀") 4 "b 𝐀𝐀 c 𝐀"
+-- | Just 7
+-- | >>> indexOf' (Pattern "o") 4 "b 𝐀𝐀 c 𝐀"
+-- | Nothing
 -- | ```
 -- |
 indexOf' :: String.Pattern -> Int -> String -> Maybe Int
@@ -254,10 +261,10 @@ indexOf' p i s =
 -- | pattern in the string. Returns Nothing when no matches are found.
 -- |
 -- | ```purescript
--- | lastIndexOf (Pattern "𝐀") "b 𝐀𝐀 c 𝐀"
--- |    == Just 7
--- | lastIndexOf (Pattern "o") "b 𝐀𝐀 c 𝐀"
--- |    == Nothing
+-- | >>> lastIndexOf (Pattern "𝐀") "b 𝐀𝐀 c 𝐀"
+-- | Just 7
+-- | >>> lastIndexOf (Pattern "o") "b 𝐀𝐀 c 𝐀"
+-- | Nothing
 -- | ```
 -- |
 lastIndexOf :: String.Pattern -> String -> Maybe Int
@@ -269,10 +276,10 @@ lastIndexOf p s = (\i -> length (String.take i s)) <$> String.lastIndexOf p s
 -- | ignored. Returns Nothing when no matches are found.
 -- |
 -- | ```purescript
--- | lastIndexOf' (Pattern "𝐀") 5 "b 𝐀𝐀 c 𝐀"
--- |    == Just 3
--- | lastIndexOf' (Pattern "o") 5 "b 𝐀𝐀 c 𝐀"
--- |    == Nothing
+-- | >>> lastIndexOf' (Pattern "𝐀") 5 "b 𝐀𝐀 c 𝐀"
+-- | Just 3
+-- | >>> lastIndexOf' (Pattern "o") 5 "b 𝐀𝐀 c 𝐀"
+-- | Nothing
 -- | ```
 -- |
 lastIndexOf' :: String.Pattern -> Int -> String -> Maybe Int
@@ -285,11 +292,11 @@ lastIndexOf' p i s =
 -- | space and in time linear to the length of the string.
 -- |
 -- | ```purescript
--- | length "b 𝐀𝐀 c 𝐀"
--- |    == 8
+-- | >>> length "b 𝐀𝐀 c 𝐀"
+-- | 8
 -- | -- compare to Data.String:
--- | length "b 𝐀𝐀 c 𝐀"
--- |    == 11
+-- | >>> length "b 𝐀𝐀 c 𝐀"
+-- | 11
 -- | ```
 -- |
 length :: String -> Int
@@ -300,8 +307,8 @@ length = Array.length <<< toCodePointArray
 -- | constant space and time.
 -- |
 -- | ```purescript
--- | map singleton $ codePointFromInt 0x1D400
--- |    == Just "𝐀"
+-- | >>> map singleton $ codePointFromInt 0x1D400
+-- | Just "𝐀"
 -- | ```
 -- |
 singleton :: CodePoint -> String
@@ -325,8 +332,8 @@ singletonFallback (CodePoint cp) =
 -- | returned.
 -- |
 -- | ```purescript
--- | splitAt 3 "b 𝐀𝐀 c 𝐀"
--- |    == Just { before: "b 𝐀", after: "𝐀 c 𝐀" }
+-- | >>> splitAt 3 "b 𝐀𝐀 c 𝐀"
+-- | Just { before: "b 𝐀", after: "𝐀 c 𝐀" }
 -- | ```
 -- |  
 splitAt :: Int -> String -> Maybe { before :: String, after :: String }
@@ -346,11 +353,11 @@ splitAt i s =
 -- | linear to the given number.
 -- |
 -- | ```purescript
--- | take 3 "b 𝐀𝐀 c 𝐀"
--- |    == "b 𝐀"
+-- | >>> take 3 "b 𝐀𝐀 c 𝐀"
+-- | "b 𝐀"
 -- | -- compare to Data.String:
--- | take 3 "b 𝐀𝐀 c 𝐀"
--- |    == ""b �"
+-- | >>> take 3 "b 𝐀𝐀 c 𝐀"
+-- | "b �"
 -- | ```
 -- |  
 take :: Int -> String -> String
@@ -370,8 +377,8 @@ takeFallback n s = case uncons s of
 -- | in time linear to the length of the string.
 -- |
 -- | ```purescript
--- | takeWhile (\c -> (_ == 0x1D400) $ codePointToInt c) "𝐀𝐀 b c 𝐀"
--- |    == "𝐀𝐀" 
+-- | >>> takeWhile (\c -> codePointToInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
+-- | "𝐀𝐀" 
 -- | ```
 -- |
 takeWhile :: (CodePoint -> Boolean) -> String -> String
@@ -382,8 +389,8 @@ takeWhile p s = take (count p s) s
 -- | linear to the length of the string.
 -- |
 -- | ```purescript
--- | toCodePointArray "b 𝐀𝐀 c 𝐀"
--- |    == ["b", " ", "𝐀", "𝐀", " ", "c", " ", "𝐀"] 
+-- | >>> map singleton (toCodePointArray "b 𝐀𝐀 c 𝐀")
+-- | ["b", " ", "𝐀", "𝐀", " ", "c", " ", "𝐀"] 
 -- | ```
 -- |
 toCodePointArray :: String -> Array CodePoint
@@ -409,8 +416,8 @@ unconsButWithTuple s = (\{ head, tail } -> Tuple head tail) <$> uncons s
 -- | ```purescript
 -- | >>> uncons "𝐀𝐀 c 𝐀"
 -- | Just { head: CodePoint 0x1D400, tail: "𝐀 c 𝐀" }
--- | uncons ""
--- |    == Nothing
+-- | >>> uncons ""
+-- | Nothing
 -- | ```
 -- |
 uncons :: String -> Maybe { head :: CodePoint, tail :: String }

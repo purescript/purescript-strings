@@ -62,7 +62,7 @@ instance showCodePoint :: Show CodePoint where
 -- |
 -- | ```purescript
 -- | >>> it = codePointFromInt 0x1D400 -- U+1D400 MATHEMATICAL BOLD CAPITAL A
--- | Just (CodePoint 0x1D400) 
+-- | Just (CodePoint 0x1D400)
 -- |
 -- | >>> map singleton it
 -- | Just "𝐀"
@@ -79,7 +79,7 @@ codePointFromInt n = Nothing
 -- | ```purescript
 -- | >>> codePointToInt (codePointFromChar 'B')
 -- | 66
--- | 
+-- |
 -- | >>> boldA = codePointFromInt 0x1D400
 -- | >>> boldA
 -- | Just (CodePoint 0x1D400)
@@ -96,7 +96,7 @@ codePointToInt (CodePoint n) = n
 -- | >>> codePointFromChar 'B'
 -- | CodePoint 0x42 -- represents 'B'
 -- | ```
--- |  
+-- |
 codePointFromChar :: Char -> CodePoint
 codePointFromChar = toCharCode >>> CodePoint
 
@@ -202,7 +202,7 @@ countTail p s accum = case uncons s of
 -- | >>> drop 5 "𝐀𝐀 b c"
 -- | "b c" -- because "𝐀" occupies 2 code units
 -- | ```
--- |  
+-- |
 drop :: Int -> String -> String
 drop n s = String.drop (String.length (take n s)) s
 
@@ -213,7 +213,7 @@ drop n s = String.drop (String.length (take n s)) s
 -- |
 -- | ```purescript
 -- | >>> dropWhile (\c -> codePointToInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
--- | " b c 𝐀" 
+-- | " b c 𝐀"
 -- | ```
 -- |
 dropWhile :: (CodePoint -> Boolean) -> String -> String
@@ -348,7 +348,7 @@ singletonFallback (CodePoint cp) =
 -- | >>> splitAt 3 "b 𝐀𝐀 c 𝐀"
 -- | Just { before: "b 𝐀", after: "𝐀 c 𝐀" }
 -- | ```
--- |  
+-- |
 splitAt :: Int -> String -> Maybe { before :: String, after :: String }
 splitAt i s =
   let cps = toCodePointArray s in
@@ -372,7 +372,7 @@ splitAt i s =
 -- | >>> take 3 "b 𝐀𝐀 c 𝐀"
 -- | "b �"
 -- | ```
--- |  
+-- |
 take :: Int -> String -> String
 take = _take takeFallback
 
@@ -391,7 +391,7 @@ takeFallback n s = case uncons s of
 -- |
 -- | ```purescript
 -- | >>> takeWhile (\c -> codePointToInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
--- | "𝐀𝐀" 
+-- | "𝐀𝐀"
 -- | ```
 -- |
 takeWhile :: (CodePoint -> Boolean) -> String -> String
@@ -406,7 +406,7 @@ takeWhile p s = take (count p s) s
 -- | >>> codePointArray
 -- | [CodePoint 0x62, CodePoint 0x20, CodePoint 0x1D400, CodePoint 0x1D400]
 -- | >>> map singleton codePointArray
--- | ["b", " ", "𝐀", "𝐀", " ", "c", " ", "𝐀"] 
+-- | ["b", " ", "𝐀", "𝐀"]
 -- | ```
 -- |
 toCodePointArray :: String -> Array CodePoint

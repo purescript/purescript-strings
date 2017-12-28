@@ -78,11 +78,11 @@ codePointFromInt n = Nothing
 -- | >>> codePointToInt (codePointFromChar 'B')
 -- | 66
 -- | 
--- | >>> boldA = codePointFromInt 119808
+-- | >>> boldA = codePointFromInt 0x1D400
 -- | >>> boldA
--- | Just (CodePoint 119808)
+-- | Just (CodePoint 0x1D400)
 -- | >>> map codePointToInt boldA
--- | Just 119808
+-- | Just 119808 -- is the same as 0x1D400
 -- | ```
 -- |
 codePointToInt :: CodePoint -> Int
@@ -390,7 +390,10 @@ takeWhile p s = take (count p s) s
 -- | linear to the length of the string.
 -- |
 -- | ```purescript
--- | >>> map singleton (toCodePointArray "b 𝐀𝐀 c 𝐀")
+-- | >>> codePointArray = toCodePointArray "b 𝐀𝐀"
+-- | >>> codePointArray
+-- | [CodePoint 0x62, CodePoint 0x20, CodePoint 0x1D400, CodePoint 0x1D400]
+-- | >>> map singleton codePointArray
 -- | ["b", " ", "𝐀", "𝐀", " ", "c", " ", "𝐀"] 
 -- | ```
 -- |

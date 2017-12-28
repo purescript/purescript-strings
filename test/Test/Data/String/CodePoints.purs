@@ -5,6 +5,7 @@ import Prelude
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
 
+import Data.Char (fromCharCode)
 import Data.Maybe (Maybe(..), isNothing, maybe)
 import Data.String.CodePoints
 
@@ -34,6 +35,11 @@ testStringCodePoints = do
   assert $ codePointAt 5 str == (codePointFromInt 0x16A06)
   assert $ codePointAt 6 str == (codePointFromInt 0x7A)
   assert $ codePointAt 7 str == Nothing
+
+  log "codePointFromChar"
+  assert $ Just (codePointFromChar 'A') == (codePointFromInt 65)
+  assert $ Just (codePointFromChar $ fromCharCode 0) == codePointFromInt 0
+  assert $ Just (codePointFromChar $ fromCharCode 0xFFFF) == codePointFromInt 0xFFFF
 
   log "count"
   assert $ count (\_ -> true) "" == 0

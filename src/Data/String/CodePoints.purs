@@ -65,8 +65,8 @@ codePointToInt (CodePoint n) = n
 -- | Creates a CodePoint from a given Char.
 -- |
 -- | ```purescript
--- | codePointFromChar 'B'
--- |    == CodePoint 0x42 -- represents 'B'
+-- | >>> codePointFromChar 'B'
+-- | CodePoint 0x42 -- represents 'B'
 -- | ```
 -- |  
 codePointFromChar :: Char -> CodePoint

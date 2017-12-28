@@ -60,8 +60,8 @@ instance showCodePoint :: Show CodePoint where
 -- one. To avoid the circular dependency, we just expose these two functions.
 -- |
 -- | ```purescript
--- | it = codePointFromInt 0x1D400 -- U+1D400 MATHEMATICAL BOLD CAPITAL A
--- |    == Just (CodePoint 0x1D400) 
+-- | >>> it = codePointFromInt 0x1D400 -- U+1D400 MATHEMATICAL BOLD CAPITAL A
+-- | Just (CodePoint 0x1D400) 
 -- | map singleton it
 -- |    == Just "𝐀"
 -- |
@@ -117,11 +117,11 @@ unsafeCodePointAt0Fallback s =
 -- | in constant space and in time linear to the given index.
 -- |
 -- | ```purescript
--- | codePointAt 1 "𝐀𝐀𝐀𝐀"
--- |    == Just (CodePoint 0x1D400) -- represents "𝐀"
+-- | >>> codePointAt 1 "𝐀𝐀𝐀𝐀"
+-- | Just (CodePoint 0x1D400) -- represents "𝐀"
 -- | -- compare to Data.String:
--- | charAt 1 "𝐀𝐀𝐀𝐀"
--- |    == Just '�'
+-- | >>> charAt 1 "𝐀𝐀𝐀𝐀"
+-- | Just '�'
 -- | ```
 -- |
 codePointAt :: Int -> String -> Maybe CodePoint
@@ -407,8 +407,8 @@ unconsButWithTuple s = (\{ head, tail } -> Tuple head tail) <$> uncons s
 -- | constant space and time.
 -- |
 -- | ```purescript
--- | uncons "𝐀𝐀 c 𝐀"
--- |    == Just { head: "𝐀", tail: "𝐀 c 𝐀" }
+-- | >>> uncons "𝐀𝐀 c 𝐀"
+-- | Just { head: CodePoint 0x1D400, tail: "𝐀 c 𝐀" }
 -- | uncons ""
 -- |    == Nothing
 -- | ```

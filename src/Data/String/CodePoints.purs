@@ -78,10 +78,11 @@ codePointFromInt n = Nothing
 -- | >>> codePointToInt (codePointFromChar 'B')
 -- | 66
 -- | 
--- | >>> boldA = codePointFromInt 0x1D400
+-- | >>> boldA = codePointFromInt 119808
 -- | >>> boldA
--- | Just (CodePoint 0x1D400)
+-- | Just (CodePoint 119808)
 -- | >>> map codePointToInt boldA
+-- | Just 119808
 -- | ```
 -- |
 codePointToInt :: CodePoint -> Int
@@ -155,7 +156,7 @@ codePointAtFallback n s = case uncons s of
 -- | time linear to the length of the string.
 -- |
 -- | ```purescript
--- | >>> count (\c -> (_ == 0x1D400) $ codePointToInt c) "𝐀𝐀 b c 𝐀"
+-- | >>> count (\c -> codePointToInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
 -- | 2
 -- | ```
 -- |
@@ -187,7 +188,7 @@ countTail p s accum = case uncons s of
 -- | "c"
 -- | -- compared to Data.String:
 -- | >>> drop 5 "𝐀𝐀 b c"
--- | "b c" -- because "𝐀" is 2 chars long
+-- | "b c" -- because "𝐀" occupies 2 code units
 -- | ```
 -- |  
 drop :: Int -> String -> String
@@ -307,7 +308,7 @@ length = Array.length <<< toCodePointArray
 -- | constant space and time.
 -- |
 -- | ```purescript
--- | >>> map singleton $ codePointFromInt 0x1D400
+-- | >>> map singleton (codePointFromInt 0x1D400)
 -- | Just "𝐀"
 -- | ```
 -- |

@@ -21,8 +21,10 @@ module Data.String
   , replace
   , replaceAll
   , take
+  , takeRight
   , takeWhile
   , drop
+  , dropRight
   , dropWhile
   , stripPrefix
   , stripSuffix
@@ -274,8 +276,8 @@ foreign import _lastIndexOf
   -> Maybe Int
 
 -- | Returns the index of the last occurrence of the pattern in the
--- | given string, starting at the specified index 
--- | and searching backwards towards the beginning of the string. 
+-- | given string, starting at the specified index
+-- | and searching backwards towards the beginning of the string.
 -- | Returns `Nothing` if there is no match.
 -- |
 -- | ```purescript
@@ -347,6 +349,15 @@ foreign import replaceAll :: Pattern -> Replacement -> String -> String
 -- |
 foreign import take :: Int -> String -> String
 
+-- | Returns the last `n` characters of the string.
+-- |
+-- | ```purescript
+-- | take 5 "Hello World" == "World"
+-- | ```
+-- |
+takeRight :: Int -> String -> String
+takeRight i s = drop (length s - i) s
+
 -- | Returns the string without the first `n` characters.
 -- |
 -- | ```purescript
@@ -354,6 +365,15 @@ foreign import take :: Int -> String -> String
 -- | ```
 -- |
 foreign import drop :: Int -> String -> String
+
+-- | Returns the string without the last `n` characters.
+-- |
+-- | ```purescript
+-- | dropRight 6 "Hello World" == "Hello"
+-- | ```
+-- |
+dropRight :: Int -> String -> String
+dropRight i s = take (length s - i) s
 
 -- | Returns the number of contiguous characters at the beginning
 -- | of the string for which the predicate holds.

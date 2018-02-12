@@ -8,6 +8,7 @@ module Data.String.NonEmpty
   ( NonEmptyString
   , NonEmptyReplacement(..)
   , fromString
+  , unsafeFromString
   , fromCharArray
   , singleton
   , cons
@@ -53,7 +54,7 @@ import Prelude
 
 import Data.Foldable (class Foldable)
 import Data.Foldable as F
-import Data.Maybe (Maybe(..))
+import Data.Maybe (Maybe(..), fromJust)
 import Data.Semigroup.Foldable (class Foldable1)
 import Data.Semigroup.Foldable as F1
 import Data.String (Pattern(..))
@@ -69,7 +70,7 @@ derive newtype instance ordNonEmptyString ∷ Ord NonEmptyString
 derive newtype instance semigroupNonEmptyString ∷ Semigroup NonEmptyString
 
 instance showNonEmptyString :: Show NonEmptyString where
-  show (NonEmptyString s) = "(NonEmptyString.fromString " <> show s <> ")"
+  show (NonEmptyString s) = "(NonEmptyString.unsafeFromString " <> show s <> ")"
 
 -- | A newtype used in cases to specify a non-empty replacement for a pattern.
 newtype NonEmptyReplacement = NonEmptyReplacement NonEmptyString
@@ -92,6 +93,10 @@ fromString :: String -> Maybe NonEmptyString
 fromString = case _ of
   "" -> Nothing
   s -> Just (NonEmptyString s)
+
+-- | A partial version of `fromString`.
+unsafeFromString :: Partial => String -> NonEmptyString
+unsafeFromString = fromJust <<< fromString
 
 -- | Creates a `NonEmptyString` from a character array `String`, returning
 -- | `Nothing` if the input is empty.

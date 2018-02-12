@@ -240,9 +240,8 @@ testNonEmptyString = do
   assert $ joinWith1 (nes ", ") (NEA ["apple", "banana"]) == nes "apple, banana"
   assert $ joinWith1 (nes "/") (NEA ["a", "b", "", "c", ""]) == nes "a/b//c/"
 
-
 nes :: String -> NonEmptyString
-nes s = unsafePartial (fromJust (fromString s))
+nes = unsafePartial unsafeFromString
 
 newtype NEA a = NEA (Array a)
 

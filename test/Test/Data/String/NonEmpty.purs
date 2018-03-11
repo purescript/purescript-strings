@@ -4,6 +4,7 @@ import Data.String.NonEmpty
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
+import Data.Array.NonEmpty as NEA
 import Data.Array.Partial as AP
 import Data.Foldable (class Foldable, foldl)
 import Data.Maybe (Maybe(..), fromJust, isNothing, maybe)
@@ -21,6 +22,9 @@ testNonEmptyString = do
   log "fromCharArray"
   assert $ fromCharArray [] == Nothing
   assert $ fromCharArray ['a', 'b'] == Just (nes "ab")
+
+  log "fromNonEmptyCharArray"
+  assert $ fromNonEmptyCharArray (NEA.singleton 'b') == singleton 'b'
 
   log "singleton"
   assert $ singleton 'a' == nes "a"
@@ -63,6 +67,10 @@ testNonEmptyString = do
   assert $ toCharArray (nes "a") == ['a']
   assert $ toCharArray (nes "ab") == ['a', 'b']
   assert $ toCharArray (nes "Hello☺\n") == ['H','e','l','l','o','☺','\n']
+
+  log "toNonEmptyCharArray"
+  assert $ toNonEmptyCharArray (nes "ab")
+           == unsafePartial fromJust (NEA.fromArray ['a', 'b'])
 
   log "appendString"
   assert $ appendString (nes "Hello") " world" == nes "Hello world"

@@ -352,7 +352,7 @@ foreign import take :: Int -> String -> String
 -- | Returns the last `n` characters of the string.
 -- |
 -- | ```purescript
--- | take 5 "Hello World" == "World"
+-- | takeRight 5 "Hello World" == "World"
 -- | ```
 -- |
 takeRight :: Int -> String -> String

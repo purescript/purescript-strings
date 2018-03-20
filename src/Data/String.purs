@@ -26,6 +26,7 @@ module Data.String
   , drop
   , dropRight
   , dropWhile
+  , slice
   , stripPrefix
   , stripSuffix
   , count
@@ -171,6 +172,17 @@ takeWhile p s = take (count p s) s
 -- |
 dropWhile :: (Char -> Boolean) -> String -> String
 dropWhile p s = drop (count p s) s
+
+-- | Returns the substring at indices [begin, end).
+-- | If either index is negative, it is normalized to `length s - index`,
+-- | where `s` is the input string. An empty string is returned if either
+-- | index is out of bounds or if `begin > end`.
+-- |
+-- | ```purescript
+-- | slice 0 1 "purescript" == "p"
+-- | slice 3 6 "purescript" == "ecr"
+-- | slice -4 -1 "purescript" == "rip"
+foreign import slice :: Int -> Int -> String -> String
 
 -- | If the string starts with the given prefix, return the portion of the
 -- | string left after removing it, as a Just value. Otherwise, return Nothing.

@@ -173,17 +173,24 @@ takeWhile p s = take (count p s) s
 dropWhile :: (Char -> Boolean) -> String -> String
 dropWhile p s = drop (count p s) s
 
--- | Returns the substring at indices [begin, end).
+-- | Returns the substring at indices `[begin, end)`.
 -- | If either index is negative, it is normalised to `length s - index`,
--- | where `s` is the input string. An empty string is returned if either
+-- | where `s` is the input string. `Nothing` is returned if either
 -- | index is out of bounds or if `begin > end` after normalisation.
 -- |
 -- | ```purescript
--- | slice 0 1 "purescript" == "p"
--- | slice 3 6 "purescript" == "ecr"
--- | slice -4 -1 "purescript" == "rip"
+-- | slice 0 1   "purescript" == Just "p"
+-- | slice 3 6   "purescript" == Just "ecr"
+-- | slice -4 -1 "purescript" == Just "rip"
+-- | slice -4 3  "purescript" == Nothing
 -- | ```
-foreign import slice :: Int -> Int -> String -> String
+slice :: Int -> Int -> String -> Maybe String
+slice = _slice Just Nothing
+
+foreign import _slice
+  :: (forall a. a -> Maybe a)
+  -> (forall a. Maybe a)
+  -> Int -> Int -> String -> Maybe String
 
 -- | If the string starts with the given prefix, return the portion of the
 -- | string left after removing it, as a Just value. Otherwise, return Nothing.

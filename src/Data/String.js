@@ -131,10 +131,15 @@ exports.drop = function (n) {
   };
 };
 
-exports.slice = function (b) {
-  return function (e) {
-    return function (s) {
-      return s.slice(b, e);
+exports._slice = function (just) {
+  return function (nothing) {
+    return function (b) {
+      return function (e) {
+        return function (s) {
+          var res = s.slice(b, e);
+          return (res.length == 0 ? nothing : just(res));
+        };
+      };
     };
   };
 };

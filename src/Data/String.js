@@ -137,7 +137,7 @@ exports._slice = function (just) {
       return function (e) {
         return function (s) {
           var res = s.slice(b, e);
-          return (res.length == 0 ? nothing : just(res));
+          return res.length === 0 ? nothing : just(res);
         };
       };
     };

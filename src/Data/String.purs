@@ -182,6 +182,7 @@ dropWhile p s = drop (count p s) s
 -- | slice 0 1 "purescript" == "p"
 -- | slice 3 6 "purescript" == "ecr"
 -- | slice -4 -1 "purescript" == "rip"
+-- | ```
 foreign import slice :: Int -> Int -> String -> String
 
 -- | If the string starts with the given prefix, return the portion of the

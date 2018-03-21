@@ -174,9 +174,9 @@ dropWhile :: (Char -> Boolean) -> String -> String
 dropWhile p s = drop (count p s) s
 
 -- | Returns the substring at indices [begin, end).
--- | If either index is negative, it is normalized to `length s - index`,
+-- | If either index is negative, it is normalised to `length s - index`,
 -- | where `s` is the input string. An empty string is returned if either
--- | index is out of bounds or if `begin > end`.
+-- | index is out of bounds or if `begin > end` after normalisation.
 -- |
 -- | ```purescript
 -- | slice 0 1 "purescript" == "p"

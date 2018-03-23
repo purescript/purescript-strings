@@ -136,8 +136,12 @@ exports._slice = function (just) {
     return function (b) {
       return function (e) {
         return function (s) {
-          var res = s.slice(b, e);
-          return res.length === 0 ? nothing : just(res);
+          var b1 = b < 0 ? s.length + b : b;
+          var e1 = e < 0 ? s.length + e : e;
+          if ( b1 < 0 || e1 >= s.length || b1 > e1 )
+            return nothing;
+          else
+            return just(s.slice(b,e));
         };
       };
     };

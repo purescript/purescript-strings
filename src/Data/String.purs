@@ -179,10 +179,11 @@ dropWhile p s = drop (count p s) s
 -- | index is out of bounds or if `begin > end` after normalisation.
 -- |
 -- | ```purescript
+-- | slice 0 0   "purescript" == Just ""
 -- | slice 0 1   "purescript" == Just "p"
--- | slice 3 6   "purescript" == Just "ecr"
--- | slice -4 -1 "purescript" == Just "rip"
--- | slice -4 3  "purescript" == Nothing
+-- | slice 3 6   "purescript" == Just "esc"
+-- | slice (-4) (-1) "purescript" == Just "rip"
+-- | slice (-4) 3  "purescript" == Nothing
 -- | ```
 slice :: Int -> Int -> String -> Maybe String
 slice = _slice Just Nothing

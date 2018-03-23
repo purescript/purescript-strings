@@ -186,12 +186,19 @@ dropWhile p s = drop (count p s) s
 -- | slice (-4) 3  "purescript" == Nothing
 -- | ```
 slice :: Int -> Int -> String -> Maybe String
-slice = _slice Just Nothing
+slice b e s = if b' < 0 || b' >= l ||
+                 e' < 0 || e' >= l ||
+                 b' > e'
+              then Nothing
+              else Just (_slice b e s)
+  where
+    l = length s
+    norm x | x < 0 = l + x
+           | otherwise = x
+    b' = norm b
+    e' = norm e
 
-foreign import _slice
-  :: (forall a. a -> Maybe a)
-  -> (forall a. Maybe a)
-  -> Int -> Int -> String -> Maybe String
+foreign import _slice :: Int -> Int -> String -> String
 
 -- | If the string starts with the given prefix, return the portion of the
 -- | string left after removing it, as a Just value. Otherwise, return Nothing.

@@ -131,6 +131,14 @@ exports.drop = function (n) {
   };
 };
 
+exports._slice = function (b) {
+  return function (e) {
+    return function (s) {
+      return s.slice(b,e);
+    };
+  };
+};
+
 exports.count = function (p) {
   return function (s) {
     var i = 0;

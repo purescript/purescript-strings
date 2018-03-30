@@ -206,3 +206,14 @@ testString = do
   assert $ joinWith "" [] == ""
   assert $ joinWith "" ["a", "b"] == "ab"
   assert $ joinWith "--" ["a", "b", "c"] == "a--b--c"
+
+  log "slice"
+  assert $ slice 0 0   "purescript" == Just ""
+  assert $ slice 0 1   "purescript" == Just "p"
+  assert $ slice 3 6   "purescript" == Just "esc"
+  assert $ slice (-4) (-1) "purescript" == Just "rip"
+  assert $ slice (-4) 3  "purescript" == Nothing -- b' > e'
+  assert $ slice 1000 3  "purescript" == Nothing -- b' > e' (subsumes b > l)
+  assert $ slice 2 (-15) "purescript" == Nothing -- e' < 0
+  assert $ slice (-15) 9 "purescript" == Nothing -- b' < 0
+  assert $ slice 3 1000 "purescript"  == Nothing -- e > l

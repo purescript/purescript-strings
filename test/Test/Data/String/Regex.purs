@@ -2,8 +2,8 @@ module Test.Data.String.Regex (testStringRegex) where
 
 import Prelude (Unit, ($), (<>), discard, (==), not)
 
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE, log)
+import Effect (Effect)
+import Effect.Console (log)
 
 import Data.Either (isLeft)
 import Data.Maybe (Maybe(..))
@@ -11,9 +11,9 @@ import Data.String.Regex
 import Data.String.Regex.Flags (global, ignoreCase, noFlags)
 import Data.String.Regex.Unsafe (unsafeRegex)
 
-import Test.Assert (ASSERT, assert)
+import Test.Assert (assert)
 
-testStringRegex :: forall eff. Eff (console :: CONSOLE, assert :: ASSERT | eff) Unit
+testStringRegex :: Effect Unit
 testStringRegex = do
   log "regex"
   assert $ test (unsafeRegex "^a" noFlags) "abc"

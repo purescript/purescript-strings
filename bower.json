@@ -17,16 +17,16 @@
     "package.json"
   ],
   "dependencies": {
-    "purescript-either": "^3.0.0",
-    "purescript-gen": "^1.1.0",
-    "purescript-maybe": "^3.0.0",
-    "purescript-partial": "^1.2.0",
-    "purescript-unfoldable": "^3.0.0",
-    "purescript-arrays": "^4.0.1",
-    "purescript-integers": "^3.2.0"
+    "purescript-either": "#compiler/0.12",
+    "purescript-gen": "#compiler/0.12",
+    "purescript-maybe": "#compiler/0.12",
+    "purescript-partial": "#compiler/0.12",
+    "purescript-unfoldable": "#compiler/0.12",
+    "purescript-arrays": "#compiler/0.12",
+    "purescript-integers": "#compiler/0.12"
   },
   "devDependencies": {
-    "purescript-assert": "^3.0.0",
-    "purescript-console": "^3.0.0"
+    "purescript-assert": "#compiler/0.12",
+    "purescript-console": "#compiler/0.12"
   }
 }

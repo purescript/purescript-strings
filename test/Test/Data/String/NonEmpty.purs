@@ -2,17 +2,17 @@ module Test.Data.String.NonEmpty (testNonEmptyString) where
 
 import Data.String.NonEmpty
 
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE, log)
+import Effect (Effect)
+import Effect.Console (log)
 import Data.Array.Partial as AP
 import Data.Foldable (class Foldable, foldl)
 import Data.Maybe (Maybe(..), fromJust, isNothing, maybe)
 import Data.Semigroup.Foldable (class Foldable1, foldMap1Default)
 import Partial.Unsafe (unsafePartial)
 import Prelude (class Functor, Ordering(..), Unit, append, discard, negate, not, ($), (&&), (/=), (==))
-import Test.Assert (ASSERT, assert)
+import Test.Assert (assert)
 
-testNonEmptyString :: forall eff. Eff (console :: CONSOLE, assert :: ASSERT | eff) Unit
+testNonEmptyString :: Effect Unit
 testNonEmptyString = do
   log "fromString"
   assert $ fromString "" == Nothing

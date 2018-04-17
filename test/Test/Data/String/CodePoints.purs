@@ -2,19 +2,19 @@ module Test.Data.String.CodePoints (testStringCodePoints) where
 
 import Prelude
 
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE, log)
+import Effect (Effect)
+import Effect.Console (log)
 
 import Data.Char (fromCharCode)
 import Data.Maybe (Maybe(..), isNothing, maybe)
 import Data.String.CodePoints
 
-import Test.Assert (ASSERT, assert)
+import Test.Assert (assert)
 
 str :: String
 str = "a\xDC00\xD800\xD800\x16805\x16A06\&z"
 
-testStringCodePoints :: forall eff. Eff (console :: CONSOLE, assert :: ASSERT | eff) Unit
+testStringCodePoints :: Effect Unit
 testStringCodePoints = do
   log "show"
   assert $ map show (codePointAt 0 str) == Just "(CodePoint 0x61)"

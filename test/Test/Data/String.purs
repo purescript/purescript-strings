@@ -2,15 +2,15 @@ module Test.Data.String (testString) where
 
 import Prelude (Unit, Ordering(..), (==), ($), discard, negate, not, (/=), (&&))
 
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE, log)
+import Effect (Effect)
+import Effect.Console (log)
 
 import Data.Maybe (Maybe(..), isNothing, maybe)
 import Data.String
 
-import Test.Assert (ASSERT, assert)
+import Test.Assert (assert)
 
-testString :: forall eff. Eff (console :: CONSOLE, assert :: ASSERT | eff) Unit
+testString :: Effect Unit
 testString = do
   log "charAt"
   assert $ charAt 0 "" == Nothing

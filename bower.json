@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "purescript-assert": "#compiler/0.12",
-    "purescript-console": "#compiler/0.12"
+    "purescript-console": "#compiler/0.12",
+    "purescript-minibench": "#compiler/0.12"
   }
 }

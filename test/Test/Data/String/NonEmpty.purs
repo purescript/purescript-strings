@@ -2,12 +2,13 @@ module Test.Data.String.NonEmpty (testNonEmptyString) where
 
 import Data.String.NonEmpty
 
-import Effect (Effect)
-import Effect.Console (log)
+import Data.Array.NonEmpty as NEA
 import Data.Array.Partial as AP
 import Data.Foldable (class Foldable, foldl)
 import Data.Maybe (Maybe(..), fromJust, isNothing, maybe)
 import Data.Semigroup.Foldable (class Foldable1, foldMap1Default)
+import Effect (Effect)
+import Effect.Console (log)
 import Partial.Unsafe (unsafePartial)
 import Prelude (class Functor, Ordering(..), Unit, append, discard, negate, not, ($), (&&), (/=), (==))
 import Test.Assert (assert)
@@ -21,6 +22,9 @@ testNonEmptyString = do
   log "fromCharArray"
   assert $ fromCharArray [] == Nothing
   assert $ fromCharArray ['a', 'b'] == Just (nes "ab")
+
+  log "fromNonEmptyCharArray"
+  assert $ fromNonEmptyCharArray (NEA.singleton 'b') == singleton 'b'
 
   log "singleton"
   assert $ singleton 'a' == nes "a"
@@ -63,6 +67,10 @@ testNonEmptyString = do
   assert $ toCharArray (nes "a") == ['a']
   assert $ toCharArray (nes "ab") == ['a', 'b']
   assert $ toCharArray (nes "Hello☺\n") == ['H','e','l','l','o','☺','\n']
+
+  log "toNonEmptyCharArray"
+  assert $ toNonEmptyCharArray (nes "ab")
+           == unsafePartial fromJust (NEA.fromArray ['a', 'b'])
 
   log "appendString"
   assert $ appendString (nes "Hello") " world" == nes "Hello world"

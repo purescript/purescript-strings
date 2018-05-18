@@ -10,12 +10,14 @@ module Data.String.NonEmpty
   , fromString
   , unsafeFromString
   , fromCharArray
+  , fromNonEmptyCharArray
   , singleton
   , cons
   , snoc
   , fromFoldable1
   , toString
   , toCharArray
+  , toNonEmptyCharArray
   , charAt
   , charCodeAt
   , toChar
@@ -52,6 +54,8 @@ module Data.String.NonEmpty
 
 import Prelude
 
+import Data.Array.NonEmpty (NonEmptyArray)
+import Data.Array.NonEmpty as NEA
 import Data.Foldable (class Foldable)
 import Data.Foldable as F
 import Data.Maybe (Maybe(..), fromJust)
@@ -60,6 +64,7 @@ import Data.Semigroup.Foldable as F1
 import Data.String (Pattern(..))
 import Data.String as String
 import Data.String.Unsafe as U
+import Partial.Unsafe (unsafePartial)
 import Unsafe.Coerce (unsafeCoerce)
 
 -- | A string that is known not to be empty.
@@ -109,6 +114,9 @@ fromCharArray :: Array Char -> Maybe NonEmptyString
 fromCharArray = case _ of
   [] -> Nothing
   cs -> Just (NonEmptyString (String.fromCharArray cs))
+
+fromNonEmptyCharArray :: NonEmptyArray Char -> NonEmptyString
+fromNonEmptyCharArray = unsafePartial fromJust <<< fromCharArray <<< NEA.toArray
 
 -- | Creates a `NonEmptyString` from a character.
 singleton :: Char -> NonEmptyString
@@ -180,6 +188,10 @@ toChar (NonEmptyString s) = String.toChar s
 -- | ```
 toCharArray :: NonEmptyString -> Array Char
 toCharArray (NonEmptyString s) = String.toCharArray s
+
+-- | Converts the `NonEmptyString` into a non-empty array of characters.
+toNonEmptyCharArray :: NonEmptyString -> NonEmptyArray Char
+toNonEmptyCharArray = unsafePartial fromJust <<< NEA.fromArray <<< toCharArray
 
 -- | Appends a string to this non-empty string. Since one of the strings is
 -- | non-empty we know the result will be too.

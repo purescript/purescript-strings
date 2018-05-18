@@ -2,19 +2,29 @@ module Test.Data.String.CodePoints (testStringCodePoints) where
 
 import Prelude
 
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE, log)
+import Effect (Effect)
+import Effect.Console (log)
 
+import Data.Char (fromCharCode)
 import Data.Maybe (Maybe(..), isNothing, maybe)
 import Data.String.CodePoints
 
-import Test.Assert (ASSERT, assert)
+import Test.Assert (assert)
 
 str :: String
 str = "a\xDC00\xD800\xD800\x16805\x16A06\&z"
 
-testStringCodePoints :: forall eff. Eff (console :: CONSOLE, assert :: ASSERT | eff) Unit
+testStringCodePoints :: Effect Unit
 testStringCodePoints = do
+  log "show"
+  assert $ map show (codePointAt 0 str) == Just "(CodePoint 0x61)"
+  assert $ map show (codePointAt 1 str) == Just "(CodePoint 0xDC00)"
+  assert $ map show (codePointAt 2 str) == Just "(CodePoint 0xD800)"
+  assert $ map show (codePointAt 3 str) == Just "(CodePoint 0xD800)"
+  assert $ map show (codePointAt 4 str) == Just "(CodePoint 0x16805)"
+  assert $ map show (codePointAt 5 str) == Just "(CodePoint 0x16A06)"
+  assert $ map show (codePointAt 6 str) == Just "(CodePoint 0x7A)"
+
   log "codePointAt"
   assert $ codePointAt (-1) str == Nothing
   assert $ codePointAt 0 str == (codePointFromInt 0x61)
@@ -25,6 +35,11 @@ testStringCodePoints = do
   assert $ codePointAt 5 str == (codePointFromInt 0x16A06)
   assert $ codePointAt 6 str == (codePointFromInt 0x7A)
   assert $ codePointAt 7 str == Nothing
+
+  log "codePointFromChar"
+  assert $ Just (codePointFromChar 'A') == (codePointFromInt 65)
+  assert $ Just (codePointFromChar $ fromCharCode 0) == codePointFromInt 0
+  assert $ Just (codePointFromChar $ fromCharCode 0xFFFF) == codePointFromInt 0xFFFF
 
   log "count"
   assert $ count (\_ -> true) "" == 0

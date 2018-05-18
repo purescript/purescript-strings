@@ -2,15 +2,15 @@ module Test.Data.String (testString) where
 
 import Prelude (Unit, Ordering(..), (==), ($), discard, negate, not, (/=), (&&))
 
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE, log)
+import Effect (Effect)
+import Effect.Console (log)
 
 import Data.Maybe (Maybe(..), isNothing)
 import Data.String
 
-import Test.Assert (ASSERT, assert)
+import Test.Assert (assert)
 
-testString :: forall eff. Eff (console :: CONSOLE, assert :: ASSERT | eff) Unit
+testString :: Effect Unit
 testString = do
   log "charAt"
   assert $ charAt 0 "" == Nothing
@@ -139,12 +139,26 @@ testString = do
   assert $ take 3 "ab" == "ab"
   assert $ take (-1) "ab" == ""
 
+  log "takeRight"
+  assert $ takeRight 0 "ab" == ""
+  assert $ takeRight 1 "ab" == "b"
+  assert $ takeRight 2 "ab" == "ab"
+  assert $ takeRight 3 "ab" == "ab"
+  assert $ takeRight (-1) "ab" == ""
+
   log "drop"
   assert $ drop 0 "ab" == "ab"
   assert $ drop 1 "ab" == "b"
   assert $ drop 2 "ab" == ""
   assert $ drop 3 "ab" == ""
   assert $ drop (-1) "ab" == "ab"
+
+  log "dropRight"
+  assert $ dropRight 0 "ab" == "ab"
+  assert $ dropRight 1 "ab" == "a"
+  assert $ dropRight 2 "ab" == ""
+  assert $ dropRight 3 "ab" == ""
+  assert $ dropRight (-1) "ab" == "ab"
 
   log "count"
   assert $ count (_ == 'a') "" == 0
@@ -171,6 +185,7 @@ testString = do
   testSplitAt 1 "ab" {before: "a", after: "b"}
   testSplitAt 3 "aabcc" {before: "aab", after: "cc"}
   testSplitAt (-1) "abc" {before: "", after: "abc"}
+  testSplitAt 10 "Hi" {before: "Hi", after: ""}
 
   log "toCharArray"
   assert $ toCharArray "" == []
@@ -190,3 +205,14 @@ testString = do
   assert $ joinWith "" [] == ""
   assert $ joinWith "" ["a", "b"] == "ab"
   assert $ joinWith "--" ["a", "b", "c"] == "a--b--c"
+
+  log "slice"
+  assert $ slice 0 0   "purescript" == Just ""
+  assert $ slice 0 1   "purescript" == Just "p"
+  assert $ slice 3 6   "purescript" == Just "esc"
+  assert $ slice (-4) (-1) "purescript" == Just "rip"
+  assert $ slice (-4) 3  "purescript" == Nothing -- b' > e'
+  assert $ slice 1000 3  "purescript" == Nothing -- b' > e' (subsumes b > l)
+  assert $ slice 2 (-15) "purescript" == Nothing -- e' < 0
+  assert $ slice (-15) 9 "purescript" == Nothing -- b' < 0
+  assert $ slice 3 1000 "purescript"  == Nothing -- e > l

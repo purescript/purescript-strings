@@ -2,14 +2,14 @@ module Test.Data.String.Unsafe (testStringUnsafe) where
 
 import Prelude (Unit, (==), ($), discard)
 
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE, log)
+import Effect (Effect)
+import Effect.Console (log)
 
 import Data.String.Unsafe
 
-import Test.Assert (ASSERT, assert)
+import Test.Assert (assert)
 
-testStringUnsafe :: forall eff. Eff (console :: CONSOLE, assert :: ASSERT | eff) Unit
+testStringUnsafe :: Effect Unit
 testStringUnsafe = do
   log "charCodeAt"
   assert $ charCodeAt 0 "ab" == 97

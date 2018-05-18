@@ -29,3 +29,16 @@ genAsciiString' = genString CG.genAsciiChar'
 -- | Generates a string made up of numeric digits.
 genDigitString :: forall m. MonadRec m => MonadGen m => m String
 genDigitString = genString CG.genDigitChar
+
+-- | Generates a string using characters from the basic Latin alphabet.
+genAlphaString :: forall m. MonadRec m => MonadGen m => m String
+genAlphaString = genString CG.genAlpha
+
+-- | Generates a string using lowercase characters from the basic Latin alphabet.
+genAlphaLowercaseString :: forall m. MonadRec m => MonadGen m => m String
+genAlphaLowercaseString = genString CG.genAlphaLowercase
+
+-- | Generates a string using uppercase characters from the basic Latin alphabet.
+genAlphaUppercaseString :: forall m. MonadRec m => MonadGen m => m String
+genAlphaUppercaseString = genString CG.genAlphaUppercase
+

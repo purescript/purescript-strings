@@ -3,8 +3,6 @@ module Data.String.Regex.Flags where
 import Prelude
 
 import Control.MonadPlus (guard)
-
-import Data.Monoid (class Monoid)
 import Data.String (joinWith)
 
 type RegexFlagsRec =

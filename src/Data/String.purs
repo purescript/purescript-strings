@@ -421,21 +421,26 @@ foreign import count :: (Char -> Boolean) -> String -> Int
 -- |
 foreign import split :: Pattern -> String -> Array String
 
--- | Returns the substrings of a split at the given index, if the index is within bounds.
+-- | Splits a string into two substrings, where `before` contains the
+-- | characters up to (but not including) the given index, and `after` contains
+-- | the rest of the string, from that index on.
 -- |
 -- | ```purescript
--- | splitAt 2 "Hello World" == Just { before: "He", after: "llo World"}
--- | splitAt 10 "Hi" == Nothing
+-- | splitAt 2 "Hello World" == { before: "He", after: "llo World"}
+-- | splitAt 10 "Hi" == { before: "Hi", after: ""}
 -- | ```
 -- |
-splitAt :: Int -> String -> Maybe { before :: String, after :: String }
-splitAt = _splitAt Just Nothing
-
-foreign import _splitAt :: (forall a. a -> Maybe a)
-                        -> (forall a. Maybe a)
-                        -> Int
-                        -> String
-                        -> Maybe { before :: String, after :: String }
+-- | Thus the length of `(splitAt i s).before` will equal either `i` or
+-- | `length s`, if that is shorter. (Or if `i` is negative the length will be
+-- | 0.)
+-- |
+-- | In code:
+-- | ```purescript
+-- | length (splitAt i s).before == min (max i 0) (length s)
+-- | (splitAt i s).before <> (splitAt i s).after == s
+-- | splitAt i s == {before: take i s, after: drop i s}
+-- | ```
+foreign import splitAt :: Int -> String -> { before :: String, after :: String }
 
 -- | Converts the string into an array of characters.
 -- |

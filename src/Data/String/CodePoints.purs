@@ -340,25 +340,32 @@ singletonFallback (CodePoint cp) =
   fromCharCode lead <> fromCharCode trail
 
 
--- | Returns a record with strings created from the code points on either side
--- | of the given index. If the index is not within the string, Nothing is
--- | returned.
+-- | Splits a string into two substrings, where `before` contains the code
+-- | points up to (but not including) the given index, and `after` contains the
+-- | rest of the string, from that index on.
 -- |
 -- | ```purescript
 -- | >>> splitAt 3 "b 𝐀𝐀 c 𝐀"
 -- | Just { before: "b 𝐀", after: "𝐀 c 𝐀" }
 -- | ```
 -- |
-splitAt :: Int -> String -> Maybe { before :: String, after :: String }
+-- | Thus the length of `(splitAt i s).before` will equal either `i` or
+-- | `length s`, if that is shorter. (Or if `i` is negative the length will be
+-- | 0.)
+-- |
+-- | In code:
+-- | ```purescript
+-- | length (splitAt i s).before == min (max i 0) (length s)
+-- | (splitAt i s).before <> (splitAt i s).after == s
+-- | splitAt i s == {before: take i s, after: drop i s}
+-- | ```
+splitAt :: Int -> String -> { before :: String, after :: String }
 splitAt i s =
-  let cps = toCodePointArray s in
-  if i < 0 || Array.length cps < i
-    then Nothing
-    else Just {
-        before: fromCodePointArray (Array.take i cps),
-        after: fromCodePointArray (Array.drop i cps)
-      }
-
+  let before = take i s in
+  { before
+  -- inline drop i s to reuse the result of take i s
+  , after: String.drop (String.length before) s
+  }
 
 -- | Returns a string containing the given number of code points from the
 -- | beginning of the given string. If the string does not have that many code

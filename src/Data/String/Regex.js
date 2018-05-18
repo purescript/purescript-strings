@@ -46,7 +46,7 @@ exports._match = function (just) {
     return function (r) {
       return function (s) {
         var m = s.match(r);
-        if (m == null) {
+        if (m == null || m.length === 0) {
           return nothing;
         } else {
           for (var i = 0; i < m.length; i++) {

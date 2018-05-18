@@ -1,16 +1,16 @@
 module Test.Data.String.Regex (testStringRegex) where
 
-import Prelude (Unit, ($), (<>), discard, (==), not)
-
-import Effect (Effect)
-import Effect.Console (log)
-
-import Data.Either (isLeft)
-import Data.Maybe (Maybe(..))
 import Data.String.Regex
+
+import Data.Array.NonEmpty (NonEmptyArray, fromArray)
+import Data.Either (isLeft)
+import Data.Maybe (Maybe(..), fromJust)
 import Data.String.Regex.Flags (global, ignoreCase, noFlags)
 import Data.String.Regex.Unsafe (unsafeRegex)
-
+import Effect (Effect)
+import Effect.Console (log)
+import Partial.Unsafe (unsafePartial)
+import Prelude (type (~>), Unit, discard, not, ($), (<<<), (<>), (==))
 import Test.Assert (assert)
 
 testStringRegex :: Effect Unit
@@ -26,7 +26,8 @@ testStringRegex = do
   assert $ "quxbarquxbaz" == replace (unsafeRegex "foo" (global <> ignoreCase)) "qux" "foobarFOObaz"
 
   log "match"
-  assert $ match (unsafeRegex "^abc$" noFlags) "abc" == Just [Just "abc"]
+  assert $ match (unsafeRegex "^abc$" noFlags) "abc" == Just (nea [Just "abc"])
+  assert $ match (unsafeRegex "^abc$" noFlags) "xyz" == Nothing
 
   log "replace"
   assert $ replace (unsafeRegex "-" noFlags) "!" "a-b-c" == "a!b-c"
@@ -50,3 +51,6 @@ testStringRegex = do
   let pattern = unsafeRegex "a" (parseFlags "g")
   assert $ test pattern "a"
   assert $ test pattern "a"
+
+nea :: Array ~> NonEmptyArray
+nea = unsafePartial fromJust <<< fromArray

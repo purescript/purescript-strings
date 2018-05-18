@@ -203,15 +203,11 @@ testNonEmptyString = do
   let
     testSplitAt i str res =
       assert $ case splitAt i str of
-        Nothing ->
-          isNothing res
-        Just { before, after } ->
-          maybe false (\r ->
-            r.before == before && r.after == after) res
-  testSplitAt 0 (nes "a") (Just { before: Nothing, after: Just (nes "a") })
-  testSplitAt 1 (nes "ab") (Just { before: Just (nes "a"), after: Just (nes "b") })
-  testSplitAt 3 (nes "aabcc") (Just { before: Just (nes "aab"), after: Just (nes "cc") })
-  testSplitAt (-1) (nes "abc") Nothing
+        { before, after } -> res.before == before && res.after == after
+  testSplitAt 0 (nes "a") { before: Nothing, after: Just (nes "a") }
+  testSplitAt 1 (nes "ab") { before: Just (nes "a"), after: Just (nes "b") }
+  testSplitAt 3 (nes "aabcc") { before: Just (nes "aab"), after: Just (nes "cc") }
+  testSplitAt (-1) (nes "abc") { before: Nothing, after: Just (nes "abc") }
 
   log "toLower"
   assert $ toLower (nes "bAtMaN") == nes "batman"

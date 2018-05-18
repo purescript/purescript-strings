@@ -412,12 +412,10 @@ count = liftS <<< String.count
 splitAt
   :: Int
   -> NonEmptyString
-  -> Maybe { before :: Maybe NonEmptyString, after :: Maybe NonEmptyString }
-splitAt i (NonEmptyString s) = case String.splitAt i s of
-  Just { before, after } ->
-    Just { before: fromString before, after: fromString after }
-  Nothing ->
-    Nothing
+  -> { before :: Maybe NonEmptyString, after :: Maybe NonEmptyString }
+splitAt i (NonEmptyString s) =
+  case String.splitAt i s of
+    { before, after } -> { before: fromString before, after: fromString after }
 
 -- | Returns the argument converted to lowercase.
 -- |

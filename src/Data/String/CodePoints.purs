@@ -9,7 +9,7 @@ module Data.String.CodePoints
   , codePointFromInt
   , codePointToInt
   , codePointFromChar
-  , count
+  , countPrefix
   , drop
   , dropWhile
   , fromCodePointArray
@@ -168,14 +168,14 @@ codePointAtFallback n s = case uncons s of
 -- | time linear to the length of the string.
 -- |
 -- | ```purescript
--- | >>> count (\c -> codePointToInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
+-- | >>> countPrefix (\c -> codePointToInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
 -- | 2
 -- | ```
 -- |
-count :: (CodePoint -> Boolean) -> String -> Int
-count = _count countFallback unsafeCodePointAt0
+countPrefix :: (CodePoint -> Boolean) -> String -> Int
+countPrefix = _countPrefix countFallback unsafeCodePointAt0
 
-foreign import _count
+foreign import _countPrefix
   :: ((CodePoint -> Boolean) -> String -> Int)
   -> (String -> CodePoint)
   -> (CodePoint -> Boolean)
@@ -217,7 +217,7 @@ drop n s = String.drop (String.length (take n s)) s
 -- | ```
 -- |
 dropWhile :: (CodePoint -> Boolean) -> String -> String
-dropWhile p s = drop (count p s) s
+dropWhile p s = drop (countPrefix p s) s
 
 
 -- | Creates a string from an array of code points. Operates in space and time
@@ -402,7 +402,7 @@ takeFallback n s = case uncons s of
 -- | ```
 -- |
 takeWhile :: (CodePoint -> Boolean) -> String -> String
-takeWhile p s = take (count p s) s
+takeWhile p s = take (countPrefix p s) s
 
 
 -- | Creates an array of code points from a string. Operates in space and time

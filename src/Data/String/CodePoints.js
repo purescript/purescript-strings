@@ -40,7 +40,7 @@ exports._codePointAt = function (fallback) {
   };
 };
 
-exports._count = function (fallback) {
+exports._countPrefix = function (fallback) {
   return function (unsafeCodePointAt0) {
     if (hasStringIterator) {
       return function (pred) {

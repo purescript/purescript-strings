@@ -139,7 +139,7 @@ exports._slice = function (b) {
   };
 };
 
-exports.count = function (p) {
+exports.countPrefix = function (p) {
   return function (s) {
     var i = 0;
     while (i < s.length && p(s.charAt(i))) i++;

@@ -41,7 +41,7 @@ module Data.String.NonEmpty
   , dropWhile
   , stripPrefix
   , stripSuffix
-  , count
+  , countPrefix
   , splitAt
   , toLower
   , toUpper
@@ -409,10 +409,10 @@ dropRight i (NonEmptyString s)
 -- | for which the predicate holds.
 -- |
 -- | ```purescript
--- | count (_ /= 'o') (NonEmptyString "Hello World") == 4
+-- | countPrefix (_ /= 'o') (NonEmptyString "Hello World") == 4
 -- | ```
-count :: (Char -> Boolean) -> NonEmptyString -> Int
-count = liftS <<< String.count
+countPrefix :: (Char -> Boolean) -> NonEmptyString -> Int
+countPrefix = liftS <<< String.countPrefix
 
 -- | Returns the substrings of a split at the given index, if the index is
 -- | within bounds.

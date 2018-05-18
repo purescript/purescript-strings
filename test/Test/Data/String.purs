@@ -160,11 +160,11 @@ testString = do
   assert $ dropRight 3 "ab" == ""
   assert $ dropRight (-1) "ab" == "ab"
 
-  log "count"
-  assert $ count (_ == 'a') "" == 0
-  assert $ count (_ == 'a') "ab" == 1
-  assert $ count (_ == 'a') "aaab" == 3
-  assert $ count (_ == 'a') "abaa" == 1
+  log "countPrefix"
+  assert $ countPrefix (_ == 'a') "" == 0
+  assert $ countPrefix (_ == 'a') "ab" == 1
+  assert $ countPrefix (_ == 'a') "aaab" == 3
+  assert $ countPrefix (_ == 'a') "abaa" == 1
 
   log "split"
   assert $ split (Pattern "") "" == []

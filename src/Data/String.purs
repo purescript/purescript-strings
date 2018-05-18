@@ -29,7 +29,7 @@ module Data.String
   , slice
   , stripPrefix
   , stripSuffix
-  , count
+  , countPrefix
   , split
   , splitAt
   , toCharArray
@@ -162,7 +162,7 @@ uncons s  = Just { head: U.charAt zero s, tail: drop one s }
 -- | ```
 -- |
 takeWhile :: (Char -> Boolean) -> String -> String
-takeWhile p s = take (count p s) s
+takeWhile p s = take (countPrefix p s) s
 
 -- | Returns the suffix remaining after `takeWhile`.
 -- |
@@ -171,7 +171,7 @@ takeWhile p s = take (count p s) s
 -- | ```
 -- |
 dropWhile :: (Char -> Boolean) -> String -> String
-dropWhile p s = drop (count p s) s
+dropWhile p s = drop (countPrefix p s) s
 
 -- | Returns the substring at indices `[begin, end)`.
 -- | If either index is negative, it is normalised to `length s - index`,
@@ -407,10 +407,10 @@ dropRight i s = take (length s - i) s
 -- | of the string for which the predicate holds.
 -- |
 -- | ```purescript
--- | count (_ /= ' ') "Hello World" == 5 -- since length "Hello" == 5
+-- | countPrefix (_ /= ' ') "Hello World" == 5 -- since length "Hello" == 5
 -- | ```
 -- |
-foreign import count :: (Char -> Boolean) -> String -> Int
+foreign import countPrefix :: (Char -> Boolean) -> String -> Int
 
 -- | Returns the substrings of the second string separated along occurences
 -- | of the first string.

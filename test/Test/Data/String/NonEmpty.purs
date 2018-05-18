@@ -201,11 +201,11 @@ testNonEmptyString = do
   assert $ dropRight 3 (nes "ab") == Nothing
   assert $ dropRight (-1) (nes "ab") == Just (nes "ab")
 
-  log "count"
-  assert $ count (_ == 'a') (nes "ab") == 1
-  assert $ count (_ == 'a') (nes "aaab") == 3
-  assert $ count (_ == 'a') (nes "abaa") == 1
-  assert $ count (_ == 'c') (nes "abaa") == 0
+  log "countPrefix"
+  assert $ countPrefix (_ == 'a') (nes "ab") == 1
+  assert $ countPrefix (_ == 'a') (nes "aaab") == 3
+  assert $ countPrefix (_ == 'a') (nes "abaa") == 1
+  assert $ countPrefix (_ == 'c') (nes "abaa") == 0
 
   log "splitAt"
   let

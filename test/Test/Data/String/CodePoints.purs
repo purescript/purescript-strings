@@ -41,12 +41,12 @@ testStringCodePoints = do
   assert $ Just (codePointFromChar $ fromCharCode 0) == codePointFromInt 0
   assert $ Just (codePointFromChar $ fromCharCode 0xFFFF) == codePointFromInt 0xFFFF
 
-  log "count"
-  assert $ count (\_ -> true) "" == 0
-  assert $ count (\_ -> false) str == 0
-  assert $ count (\_ -> true) str == 7
-  assert $ count (\x -> codePointToInt x < 0xFFFF) str == 4
-  assert $ count (\x -> codePointToInt x < 0xDC00) str == 1
+  log "countPrefix"
+  assert $ countPrefix (\_ -> true) "" == 0
+  assert $ countPrefix (\_ -> false) str == 0
+  assert $ countPrefix (\_ -> true) str == 7
+  assert $ countPrefix (\x -> codePointToInt x < 0xFFFF) str == 4
+  assert $ countPrefix (\x -> codePointToInt x < 0xDC00) str == 1
 
   log "drop"
   assert $ drop (-1) str == str

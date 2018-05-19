@@ -2,37 +2,15 @@
 -- | A String represents a sequence of characters.
 -- | For details of the underlying implementation, see [String Reference at MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String).
 module Data.String
-  ( Pattern(..)
-  , Replacement(..)
-  , charAt
-  , charCodeAt
-  , fromCharArray
-  , toChar
+  ( module Data.String.Pattern
   , contains
-  , indexOf
-  , indexOf'
-  , lastIndexOf
-  , lastIndexOf'
   , null
-  , uncons
-  , length
-  , singleton
   , localeCompare
   , replace
   , replaceAll
-  , take
-  , takeRight
-  , takeWhile
-  , drop
-  , dropRight
-  , dropWhile
-  , slice
   , stripPrefix
   , stripSuffix
-  , countPrefix
   , split
-  , splitAt
-  , toCharArray
   , toLower
   , toUpper
   , trim
@@ -42,95 +20,8 @@ module Data.String
 import Prelude
 
 import Data.Maybe (Maybe(..), isJust)
-import Data.Newtype (class Newtype)
-import Data.String.Unsafe as U
-
--- | A newtype used in cases where there is a string to be matched.
--- |
--- | ```purescript
--- | pursPattern = Pattern ".purs"
--- | --can be used like this:
--- | contains pursPattern "Test.purs"
--- |    == true
--- | ```
--- |
-newtype Pattern = Pattern String
-
-derive instance eqPattern :: Eq Pattern
-derive instance ordPattern :: Ord Pattern
-derive instance newtypePattern :: Newtype Pattern _
-
-instance showPattern :: Show Pattern where
-  show (Pattern s) = "(Pattern " <> show s <> ")"
-
--- | A newtype used in cases to specify a replacement for a pattern.
-newtype Replacement = Replacement String
-
-derive instance eqReplacement :: Eq Replacement
-derive instance ordReplacement :: Ord Replacement
-derive instance newtypeReplacement :: Newtype Replacement _
-
-instance showReplacement :: Show Replacement where
-  show (Replacement s) = "(Replacement " <> show s <> ")"
-
--- | Returns the character at the given index, if the index is within bounds.
--- |
--- | ```purescript
--- | charAt 2 "Hello" == Just 'l'
--- | charAt 10 "Hello" == Nothing
--- | ```
--- |
-charAt :: Int -> String -> Maybe Char
-charAt = _charAt Just Nothing
-
-foreign import _charAt
-  :: (forall a. a -> Maybe a)
-  -> (forall a. Maybe a)
-  -> Int
-  -> String
-  -> Maybe Char
-
--- | Returns a string of length `1` containing the given character.
--- |
--- | ```purescript
--- | singleton 'l' == "l"
--- | ```
--- |
-foreign import singleton :: Char -> String
-
--- | Returns the numeric Unicode value of the character at the given index,
--- | if the index is within bounds.
--- | ```purescript
--- | charCodeAt 2 "5 €" == Just 0x20AC
--- | charCodeAt 10 "5 €" == Nothing
--- | ```
--- |
-charCodeAt :: Int -> String -> Maybe Int
-charCodeAt = _charCodeAt Just Nothing
-
-foreign import _charCodeAt
-  :: (forall a. a -> Maybe a)
-  -> (forall a. Maybe a)
-  -> Int
-  -> String
-  -> Maybe Int
-
--- | Converts the string to a character, if the length of the string is
--- | exactly `1`.
--- |
--- | ```purescript
--- | toChar "l" == Just 'l'
--- | toChar "Hi" == Nothing -- since length is not 1
--- | ```
--- |
-toChar :: String -> Maybe Char
-toChar = _toChar Just Nothing
-
-foreign import _toChar
-  :: (forall a. a -> Maybe a)
-  -> (forall a. Maybe a)
-  -> String
-  -> Maybe Char
+import Data.String.CodeUnits as SCU
+import Data.String.Pattern (Pattern(..), Replacement(..))
 
 -- | Returns `true` if the given string is empty.
 -- |
@@ -138,67 +29,8 @@ foreign import _toChar
 -- | null "" == true
 -- | null "Hi" == false
 -- | ```
--- |
 null :: String -> Boolean
 null s = s == ""
-
--- | Returns the first character and the rest of the string,
--- | if the string is not empty.
--- |
--- | ```purescript
--- | uncons "" == Nothing
--- | uncons "Hello World" == Just { head: 'H', tail: "ello World" }
--- | ```
--- |
-uncons :: String -> Maybe { head :: Char, tail :: String }
-uncons "" = Nothing
-uncons s  = Just { head: U.charAt zero s, tail: drop one s }
-
--- | Returns the longest prefix (possibly empty) of characters that satisfy
--- | the predicate.
--- |
--- | ```purescript
--- | takeWhile (_ /= ':') "http://purescript.org" == "http"
--- | ```
--- |
-takeWhile :: (Char -> Boolean) -> String -> String
-takeWhile p s = take (countPrefix p s) s
-
--- | Returns the suffix remaining after `takeWhile`.
--- |
--- | ```purescript
--- | dropWhile (_ /= '.') "Test.purs" == ".purs"
--- | ```
--- |
-dropWhile :: (Char -> Boolean) -> String -> String
-dropWhile p s = drop (countPrefix p s) s
-
--- | Returns the substring at indices `[begin, end)`.
--- | If either index is negative, it is normalised to `length s - index`,
--- | where `s` is the input string. `Nothing` is returned if either
--- | index is out of bounds or if `begin > end` after normalisation.
--- |
--- | ```purescript
--- | slice 0 0   "purescript" == Just ""
--- | slice 0 1   "purescript" == Just "p"
--- | slice 3 6   "purescript" == Just "esc"
--- | slice (-4) (-1) "purescript" == Just "rip"
--- | slice (-4) 3  "purescript" == Nothing
--- | ```
-slice :: Int -> Int -> String -> Maybe String
-slice b e s = if b' < 0 || b' >= l ||
-                 e' < 0 || e' >= l ||
-                 b' > e'
-              then Nothing
-              else Just (_slice b e s)
-  where
-    l = length s
-    norm x | x < 0 = l + x
-           | otherwise = x
-    b' = norm b
-    e' = norm e
-
-foreign import _slice :: Int -> Int -> String -> String
 
 -- | If the string starts with the given prefix, return the portion of the
 -- | string left after removing it, as a Just value. Otherwise, return Nothing.
@@ -207,11 +39,10 @@ foreign import _slice :: Int -> Int -> String -> String
 -- | stripPrefix (Pattern "http:") "http://purescript.org" == Just "//purescript.org"
 -- | stripPrefix (Pattern "http:") "https://purescript.org" == Nothing
 -- | ```
--- |
 stripPrefix :: Pattern -> String -> Maybe String
 stripPrefix prefix@(Pattern prefixS) str =
-  case indexOf prefix str of
-    Just 0 -> Just $ drop (length prefixS) str
+  case SCU.indexOf prefix str of
+    Just 0 -> Just $ SCU.drop (SCU.length prefixS) str
     _ -> Nothing
 
 -- | If the string ends with the given suffix, return the portion of the
@@ -222,20 +53,11 @@ stripPrefix prefix@(Pattern prefixS) str =
 -- | stripSuffix (Pattern ".exe") "psc.exe" == Just "psc"
 -- | stripSuffix (Pattern ".exe") "psc" == Nothing
 -- | ```
--- |
 stripSuffix :: Pattern -> String -> Maybe String
 stripSuffix suffix@(Pattern suffixS) str =
-  case lastIndexOf suffix str of
-    Just x | x == length str - length suffixS -> Just $ take x str
+  case SCU.lastIndexOf suffix str of
+    Just x | x == SCU.length str - SCU.length suffixS -> Just $ SCU.take x str
     _ -> Nothing
-
--- | Converts an array of characters into a string.
--- |
--- | ```purescript
--- | fromCharArray ['H', 'e', 'l', 'l', 'o'] == "Hello"
--- | ```
--- |
-foreign import fromCharArray :: Array Char -> String
 
 -- | Checks whether the pattern appears in the given string.
 -- |
@@ -243,95 +65,8 @@ foreign import fromCharArray :: Array Char -> String
 -- | contains (Pattern "needle") "haystack with needle" == true
 -- | contains (Pattern "needle") "haystack" == false
 -- | ```
--- |
 contains :: Pattern -> String -> Boolean
-contains pat = isJust <<< indexOf pat
-
--- | Returns the index of the first occurrence of the pattern in the
--- | given string. Returns `Nothing` if there is no match.
--- |
--- | ```purescript
--- | indexOf (Pattern "c") "abcdc" == Just 2
--- | indexOf (Pattern "c") "aaa" == Nothing
--- | ```
--- |
-indexOf :: Pattern -> String -> Maybe Int
-indexOf = _indexOf Just Nothing
-
-foreign import _indexOf
-  :: (forall a. a -> Maybe a)
-  -> (forall a. Maybe a)
-  -> Pattern
-  -> String
-  -> Maybe Int
-
--- | Returns the index of the first occurrence of the pattern in the
--- | given string, starting at the specified index. Returns `Nothing` if there is
--- | no match.
--- |
--- | ```purescript
--- | indexOf' (Pattern "a") 2 "ababa" == Just 2
--- | indexOf' (Pattern "a") 3 "ababa" == Just 4
--- | ```
--- |
-indexOf' :: Pattern -> Int -> String -> Maybe Int
-indexOf' = _indexOf' Just Nothing
-
-foreign import _indexOf'
-  :: (forall a. a -> Maybe a)
-  -> (forall a. Maybe a)
-  -> Pattern
-  -> Int
-  -> String
-  -> Maybe Int
-
--- | Returns the index of the last occurrence of the pattern in the
--- | given string. Returns `Nothing` if there is no match.
--- |
--- | ```purescript
--- | lastIndexOf (Pattern "c") "abcdc" == Just 4
--- | lastIndexOf (Pattern "c") "aaa" == Nothing
--- | ```
--- |
-lastIndexOf :: Pattern -> String -> Maybe Int
-lastIndexOf = _lastIndexOf Just Nothing
-
-foreign import _lastIndexOf
-  :: (forall a. a -> Maybe a)
-  -> (forall a. Maybe a)
-  -> Pattern
-  -> String
-  -> Maybe Int
-
--- | Returns the index of the last occurrence of the pattern in the
--- | given string, starting at the specified index
--- | and searching backwards towards the beginning of the string.
--- | Returns `Nothing` if there is no match.
--- |
--- | ```purescript
--- | lastIndexOf' (Pattern "a") 1 "ababa" == Just 0
--- | lastIndexOf' (Pattern "a") 3 "ababa" == Just 2
--- | lastIndexOf' (Pattern "a") 4 "ababa" == Just 4
--- | ```
--- |
-lastIndexOf' :: Pattern -> Int -> String -> Maybe Int
-lastIndexOf' = _lastIndexOf' Just Nothing
-
-foreign import _lastIndexOf'
-  :: (forall a. a -> Maybe a)
-  -> (forall a. Maybe a)
-  -> Pattern
-  -> Int
-  -> String
-  -> Maybe Int
-
--- | Returns the number of characters the string is composed of.
--- |
--- | ```purescript
--- | length "Hello World" == 11
--- | ```
--- |
-foreign import length :: String -> Int
+contains pat = isJust <<< SCU.indexOf pat
 
 -- | Compare two strings in a locale-aware fashion. This is in contrast to
 -- | the `Ord` instance on `String` which treats strings as arrays of code
@@ -341,7 +76,6 @@ foreign import length :: String -> Int
 -- | "ä" `localeCompare` "b" == LT
 -- | "ä" `compare` "b" == GT
 -- | ```
--- |
 localeCompare :: String -> String -> Ordering
 localeCompare = _localeCompare LT EQ GT
 
@@ -358,7 +92,6 @@ foreign import _localeCompare
 -- | ```purescript
 -- | replace (Pattern "<=") (Replacement "≤") "a <= b <= c" == "a ≤ b <= c"
 -- | ```
--- |
 foreign import replace :: Pattern -> Replacement -> String -> String
 
 -- | Replaces all occurences of the pattern with the replacement string.
@@ -366,51 +99,7 @@ foreign import replace :: Pattern -> Replacement -> String -> String
 -- | ```purescript
 -- | replaceAll (Pattern "<=") (Replacement "≤") "a <= b <= c" == "a ≤ b ≤ c"
 -- | ```
--- |
 foreign import replaceAll :: Pattern -> Replacement -> String -> String
-
--- | Returns the first `n` characters of the string.
--- |
--- | ```purescript
--- | take 5 "Hello World" == "Hello"
--- | ```
--- |
-foreign import take :: Int -> String -> String
-
--- | Returns the last `n` characters of the string.
--- |
--- | ```purescript
--- | takeRight 5 "Hello World" == "World"
--- | ```
--- |
-takeRight :: Int -> String -> String
-takeRight i s = drop (length s - i) s
-
--- | Returns the string without the first `n` characters.
--- |
--- | ```purescript
--- | drop 6 "Hello World" == "World"
--- | ```
--- |
-foreign import drop :: Int -> String -> String
-
--- | Returns the string without the last `n` characters.
--- |
--- | ```purescript
--- | dropRight 6 "Hello World" == "Hello"
--- | ```
--- |
-dropRight :: Int -> String -> String
-dropRight i s = take (length s - i) s
-
--- | Returns the number of contiguous characters at the beginning
--- | of the string for which the predicate holds.
--- |
--- | ```purescript
--- | countPrefix (_ /= ' ') "Hello World" == 5 -- since length "Hello" == 5
--- | ```
--- |
-foreign import countPrefix :: (Char -> Boolean) -> String -> Int
 
 -- | Returns the substrings of the second string separated along occurences
 -- | of the first string.
@@ -418,44 +107,13 @@ foreign import countPrefix :: (Char -> Boolean) -> String -> Int
 -- | ```purescript
 -- | split (Pattern " ") "hello world" == ["hello", "world"]
 -- | ```
--- |
 foreign import split :: Pattern -> String -> Array String
-
--- | Splits a string into two substrings, where `before` contains the
--- | characters up to (but not including) the given index, and `after` contains
--- | the rest of the string, from that index on.
--- |
--- | ```purescript
--- | splitAt 2 "Hello World" == { before: "He", after: "llo World"}
--- | splitAt 10 "Hi" == { before: "Hi", after: ""}
--- | ```
--- |
--- | Thus the length of `(splitAt i s).before` will equal either `i` or
--- | `length s`, if that is shorter. (Or if `i` is negative the length will be
--- | 0.)
--- |
--- | In code:
--- | ```purescript
--- | length (splitAt i s).before == min (max i 0) (length s)
--- | (splitAt i s).before <> (splitAt i s).after == s
--- | splitAt i s == {before: take i s, after: drop i s}
--- | ```
-foreign import splitAt :: Int -> String -> { before :: String, after :: String }
-
--- | Converts the string into an array of characters.
--- |
--- | ```purescript
--- | toCharArray "Hello☺\n" == ['H','e','l','l','o','☺','\n']
--- | ```
--- |
-foreign import toCharArray :: String -> Array Char
 
 -- | Returns the argument converted to lowercase.
 -- |
 -- | ```purescript
 -- | toLower "hElLo" == "hello"
 -- | ```
--- |
 foreign import toLower :: String -> String
 
 -- | Returns the argument converted to uppercase.
@@ -463,7 +121,6 @@ foreign import toLower :: String -> String
 -- | ```purescript
 -- | toUpper "Hello" == "HELLO"
 -- | ```
--- |
 foreign import toUpper :: String -> String
 
 -- | Removes whitespace from the beginning and end of a string, including
@@ -473,7 +130,6 @@ foreign import toUpper :: String -> String
 -- | ```purescript
 -- | trim "   Hello  \n World\n\t    " == "Hello  \n World"
 -- | ```
--- |
 foreign import trim :: String -> String
 
 -- | Joins the strings in the array together, inserting the first argument
@@ -482,5 +138,4 @@ foreign import trim :: String -> String
 -- | ```purescript
 -- | joinWith ", " ["apple", "banana", "orange"] == "apple, banana, orange"
 -- | ```
--- |
 foreign import joinWith :: String -> Array String -> String

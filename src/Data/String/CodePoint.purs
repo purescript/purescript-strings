@@ -5,9 +5,9 @@
 module Data.String.CodePoints
   ( CodePoint
   , codePointAt
-  , codePointFromInt
-  , codePointToInt
-  , codePointFromChar
+  , fromInt
+  , toInt
+  , fromChar
   , toCodePointArray
   , fromCodePointArray
   , countPrefix
@@ -52,44 +52,44 @@ instance showCodePoint :: Show CodePoint where
 -- one. To avoid the circular dependency, we just expose these two functions.
 -- |
 -- | ```purescript
--- | >>> it = codePointFromInt 0x1D400 -- U+1D400 MATHEMATICAL BOLD CAPITAL A
+-- | >>> it = fromInt 0x1D400 -- U+1D400 MATHEMATICAL BOLD CAPITAL A
 -- | Just (CodePoint 0x1D400)
 -- |
 -- | >>> map singleton it
 -- | Just "𝐀"
 -- |
--- | >>> codePointFromInt 0x110000 -- does not correspond to a Unicode code point
+-- | >>> fromInt 0x110000 -- does not correspond to a Unicode code point
 -- | Nothing
 -- | ```
 -- |
-codePointFromInt :: Int -> Maybe CodePoint
-codePointFromInt n | 0 <= n && n <= 0x10FFFF = Just (CodePoint n)
-codePointFromInt n = Nothing
+fromInt :: Int -> Maybe CodePoint
+fromInt n | 0 <= n && n <= 0x10FFFF = Just (CodePoint n)
+fromInt n = Nothing
 
 -- |
 -- | ```purescript
--- | >>> codePointToInt (codePointFromChar 'B')
+-- | >>> toInt (fromChar 'B')
 -- | 66
 -- |
--- | >>> boldA = codePointFromInt 0x1D400
+-- | >>> boldA = fromInt 0x1D400
 -- | >>> boldA
 -- | Just (CodePoint 0x1D400)
--- | >>> map codePointToInt boldA
+-- | >>> map toInt boldA
 -- | Just 119808 -- is the same as 0x1D400
 -- | ```
 -- |
-codePointToInt :: CodePoint -> Int
-codePointToInt (CodePoint n) = n
+toInt :: CodePoint -> Int
+toInt (CodePoint n) = n
 
 -- | Creates a CodePoint from a given Char.
 -- |
 -- | ```purescript
--- | >>> codePointFromChar 'B'
+-- | >>> fromChar 'B'
 -- | CodePoint 0x42 -- represents 'B'
 -- | ```
 -- |
-codePointFromChar :: Char -> CodePoint
-codePointFromChar = toCharCode >>> CodePoint
+fromChar :: Char -> CodePoint
+fromChar = toCharCode >>> CodePoint
 
 unsurrogate :: Int -> Int -> CodePoint
 unsurrogate lead trail = CodePoint ((lead - 0xD800) * 0x400 + (trail - 0xDC00) + 0x10000)
@@ -159,7 +159,7 @@ codePointAtFallback n s = case uncons s of
 -- | time linear to the length of the string.
 -- |
 -- | ```purescript
--- | >>> countPrefix (\c -> codePointToInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
+-- | >>> countPrefix (\c -> toInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
 -- | 2
 -- | ```
 -- |
@@ -203,7 +203,7 @@ drop n s = String.drop (String.length (take n s)) s
 -- | to the length of the string.
 -- |
 -- | ```purescript
--- | >>> dropWhile (\c -> codePointToInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
+-- | >>> dropWhile (\c -> toInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
 -- | " b c 𝐀"
 -- | ```
 -- |
@@ -311,7 +311,7 @@ length = Array.length <<< toCodePointArray
 -- | constant space and time.
 -- |
 -- | ```purescript
--- | >>> map singleton (codePointFromInt 0x1D400)
+-- | >>> map singleton (fromInt 0x1D400)
 -- | Just "𝐀"
 -- | ```
 -- |
@@ -388,7 +388,7 @@ takeFallback n s = case uncons s of
 -- | in time linear to the length of the string.
 -- |
 -- | ```purescript
--- | >>> takeWhile (\c -> codePointToInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
+-- | >>> takeWhile (\c -> toInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
 -- | "𝐀𝐀"
 -- | ```
 -- |

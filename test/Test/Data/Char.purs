@@ -1,28 +1,31 @@
 module Test.Data.Char (testChar) where
 
-import Prelude (Unit, (==), ($), discard)
+import Prelude
 
+import Data.Char as C
 import Effect (Effect)
 import Effect.Console (log)
-
-import Data.Char
-
-import Test.Assert (assert)
+import Test.Assert (assertEqual)
 
 testChar :: Effect Unit
 testChar = do
-  log "toCharCode"
-  assert $ toCharCode 'a' == 97
-  assert $ toCharCode '\n' == 10
-
-  log "fromCharCode"
-  assert $ fromCharCode 97 == 'a'
-  assert $ fromCharCode 10 == '\n'
 
   log "toLower"
-  assert $ toLower 'A' == 'a'
-  assert $ toLower 'a' == 'a'
+  assertEqual
+    { actual: C.toLower 'A'
+    , expected: 'a'
+    }
+  assertEqual
+    { actual: C.toLower 'a'
+    , expected: 'a'
+    }
 
   log "toUpper"
-  assert $ toUpper 'a' == 'A'
-  assert $ toUpper 'A' == 'A'
+  assertEqual
+    { actual: C.toUpper 'a'
+    , expected: 'A'
+    }
+  assertEqual
+    { actual: C.toUpper 'A'
+    , expected: 'A'
+    }

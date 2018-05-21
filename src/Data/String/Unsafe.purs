@@ -2,13 +2,7 @@
 module Data.String.Unsafe
   ( char
   , charAt
-  , charCodeAt
   ) where
-
--- | Returns the numeric Unicode value of the character at the given index.
--- |
--- | **Unsafe:** throws runtime exception if the index is out of bounds.
-foreign import charCodeAt :: Int -> String -> Int
 
 -- | Returns the character at the given index.
 -- |

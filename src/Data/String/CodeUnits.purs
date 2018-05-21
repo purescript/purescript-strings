@@ -1,12 +1,14 @@
--- | Wraps the functions of Javascript's `String` object.
--- | A String represents a sequence of characters.
--- | For details of the underlying implementation, see [String Reference at MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String).
 module Data.String.CodeUnits
-  ( singleton
+  ( module Data.String.Pattern
+  , module Data.String.Common
+  , stripPrefix
+  , stripSuffix
+  , contains
+  , singleton
   , fromCharArray
+  , toCharArray
   , charAt
   , toChar
-  , toCharArray
   , uncons
   , length
   , countPrefix
@@ -26,9 +28,56 @@ module Data.String.CodeUnits
 
 import Prelude
 
-import Data.Maybe (Maybe(..))
-import Data.String.Pattern (Pattern)
+import Data.Maybe (Maybe(..), isJust)
+import Data.String.Common (joinWith, localeCompare, null, replace, replaceAll, split, toLower, toUpper, trim)
+import Data.String.Pattern (Pattern(..), Replacement(..))
 import Data.String.Unsafe as U
+
+-------------------------------------------------------------------------------
+-- `stripPrefix`, `stripSuffix`, and `contains` are CodeUnit/CodePoint agnostic
+-- as they are based on patterns rather than lengths/indices, but they need to
+-- be defined in here to avoid a circular module dependency
+-------------------------------------------------------------------------------
+
+-- | If the string starts with the given prefix, return the portion of the
+-- | string left after removing it, as a Just value. Otherwise, return Nothing.
+-- |
+-- | ```purescript
+-- | stripPrefix (Pattern "http:") "http://purescript.org" == Just "//purescript.org"
+-- | stripPrefix (Pattern "http:") "https://purescript.org" == Nothing
+-- | ```
+stripPrefix :: Pattern -> String -> Maybe String
+stripPrefix prefix@(Pattern prefixS) str =
+  case indexOf prefix str of
+    Just 0 -> Just $ drop (length prefixS) str
+    _ -> Nothing
+
+-- | If the string ends with the given suffix, return the portion of the
+-- | string left after removing it, as a `Just` value. Otherwise, return
+-- | `Nothing`.
+-- |
+-- | ```purescript
+-- | stripSuffix (Pattern ".exe") "psc.exe" == Just "psc"
+-- | stripSuffix (Pattern ".exe") "psc" == Nothing
+-- | ```
+stripSuffix :: Pattern -> String -> Maybe String
+stripSuffix suffix@(Pattern suffixS) str =
+  case lastIndexOf suffix str of
+    Just x | x == length str - length suffixS -> Just $ take x str
+    _ -> Nothing
+
+-- | Checks whether the pattern appears in the given string.
+-- |
+-- | ```purescript
+-- | contains (Pattern "needle") "haystack with needle" == true
+-- | contains (Pattern "needle") "haystack" == false
+-- | ```
+contains :: Pattern -> String -> Boolean
+contains pat = isJust <<< indexOf pat
+
+-------------------------------------------------------------------------------
+-- all functions past this point are CodeUnit specific
+-------------------------------------------------------------------------------
 
 -- | Returns a string of length `1` containing the given character.
 -- |
@@ -44,6 +93,13 @@ foreign import singleton :: Char -> String
 -- | fromCharArray ['H', 'e', 'l', 'l', 'o'] == "Hello"
 -- | ```
 foreign import fromCharArray :: Array Char -> String
+
+-- | Converts the string into an array of characters.
+-- |
+-- | ```purescript
+-- | toCharArray "Hello☺\n" == ['H','e','l','l','o','☺','\n']
+-- | ```
+foreign import toCharArray :: String -> Array Char
 
 -- | Returns the character at the given index, if the index is within bounds.
 -- |
@@ -77,13 +133,6 @@ foreign import _toChar
   -> (forall a. Maybe a)
   -> String
   -> Maybe Char
-
--- | Converts the string into an array of characters.
--- |
--- | ```purescript
--- | toCharArray "Hello☺\n" == ['H','e','l','l','o','☺','\n']
--- | ```
-foreign import toCharArray :: String -> Array Char
 
 -- | Returns the first character and the rest of the string,
 -- | if the string is not empty.

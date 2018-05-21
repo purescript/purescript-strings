@@ -4,6 +4,10 @@ exports.fromCharArray = function (a) {
   return a.join("");
 };
 
+exports.toCharArray = function (s) {
+  return s.split("");
+};
+
 exports.singleton = function (c) {
   return c;
 };
@@ -24,10 +28,6 @@ exports._toChar = function (just) {
       return s.length === 1 ? just(s) : nothing;
     };
   };
-};
-
-exports.toCharArray = function (s) {
-  return s.split("");
 };
 
 exports.length = function (s) {

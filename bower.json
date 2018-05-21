@@ -17,13 +17,14 @@
     "package.json"
   ],
   "dependencies": {
+    "purescript-arrays": "#compiler/0.12",
     "purescript-either": "#compiler/0.12",
+    "purescript-enums": "#compiler/0.12",
     "purescript-gen": "#compiler/0.12",
+    "purescript-integers": "#compiler/0.12",
     "purescript-maybe": "#compiler/0.12",
     "purescript-partial": "#compiler/0.12",
-    "purescript-unfoldable": "#compiler/0.12",
-    "purescript-arrays": "#compiler/0.12",
-    "purescript-integers": "#compiler/0.12"
+    "purescript-unfoldable": "#compiler/0.12"
   },
   "devDependencies": {
     "purescript-assert": "#compiler/0.12",

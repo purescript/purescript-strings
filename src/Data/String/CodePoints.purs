@@ -1,38 +1,42 @@
 -- | These functions allow PureScript strings to be treated as if they were
 -- | sequences of Unicode code points instead of their true underlying
 -- | implementation (sequences of UTF-16 code units). For nearly all uses of
--- | strings, these functions should be preferred over the ones in `Data.String`.
+-- | strings, these functions should be preferred over the ones in
+-- | `Data.String.CodeUnits`.
 module Data.String.CodePoints
-  ( CodePoint
-  , codePointAt
-  , codePointFromInt
-  , codePointToInt
+  ( module Data.String
+  , CodePoint
   , codePointFromChar
-  , toCodePointArray
+  , singleton
   , fromCodePointArray
+  , toCodePointArray
+  , codePointAt
+  , uncons
+  , length
   , countPrefix
-  , drop
-  , dropWhile
   , indexOf
   , indexOf'
   , lastIndexOf
   , lastIndexOf'
-  , length
-  , singleton
-  , splitAt
   , take
+  -- , takeRight
   , takeWhile
-  , uncons
+  , drop
+  -- , dropRight
+  , dropWhile
+  -- , slice
+  , splitAt
   ) where
 
 import Prelude
 
 import Data.Array as Array
-import Data.Char (toCharCode)
-import Data.Char as Char
+import Data.Enum (class BoundedEnum, class Enum, Cardinality(..), defaultPred, defaultSucc, fromEnum, toEnum, toEnumWithDefaults)
 import Data.Int (hexadecimal, toStringAs)
 import Data.Maybe (Maybe(..))
 import Data.String as String
+import Data.String.CodeUnits as CU
+import Data.String (Pattern(..), Replacement(..), contains, joinWith, localeCompare, null, replace, replaceAll, split, stripPrefix, stripSuffix, toLower, toUpper, trim)
 import Data.String.Unsafe as Unsafe
 import Data.Tuple (Tuple(..))
 import Data.Unfoldable (unfoldr)
@@ -47,39 +51,20 @@ derive instance ordCodePoint :: Ord CodePoint
 instance showCodePoint :: Show CodePoint where
   show (CodePoint i) = "(CodePoint 0x" <> String.toUpper (toStringAs hexadecimal i) <> ")"
 
--- I would prefer that this smart constructor not need to exist and instead
--- CodePoint just implements Enum, but the Enum module already depends on this
--- one. To avoid the circular dependency, we just expose these two functions.
--- |
--- | ```purescript
--- | >>> it = codePointFromInt 0x1D400 -- U+1D400 MATHEMATICAL BOLD CAPITAL A
--- | Just (CodePoint 0x1D400)
--- |
--- | >>> map singleton it
--- | Just "𝐀"
--- |
--- | >>> codePointFromInt 0x110000 -- does not correspond to a Unicode code point
--- | Nothing
--- | ```
--- |
-codePointFromInt :: Int -> Maybe CodePoint
-codePointFromInt n | 0 <= n && n <= 0x10FFFF = Just (CodePoint n)
-codePointFromInt n = Nothing
+instance boundedCodePoint :: Bounded CodePoint where
+  bottom = CodePoint 0
+  top = CodePoint 0x10FFFF
 
--- |
--- | ```purescript
--- | >>> codePointToInt (codePointFromChar 'B')
--- | 66
--- |
--- | >>> boldA = codePointFromInt 0x1D400
--- | >>> boldA
--- | Just (CodePoint 0x1D400)
--- | >>> map codePointToInt boldA
--- | Just 119808 -- is the same as 0x1D400
--- | ```
--- |
-codePointToInt :: CodePoint -> Int
-codePointToInt (CodePoint n) = n
+instance enumCodePoint :: Enum CodePoint where
+  succ = defaultSucc toEnum fromEnum
+  pred = defaultPred toEnum fromEnum
+
+instance boundedEnumCodePoint :: BoundedEnum CodePoint where
+  cardinality = Cardinality (0x10FFFF + 1)
+  fromEnum (CodePoint n) = n
+  toEnum n
+    | n >= 0 && n <= 0x10FFFF = Just (CodePoint n)
+    | otherwise = Nothing
 
 -- | Creates a CodePoint from a given Char.
 -- |
@@ -89,37 +74,75 @@ codePointToInt (CodePoint n) = n
 -- | ```
 -- |
 codePointFromChar :: Char -> CodePoint
-codePointFromChar = toCharCode >>> CodePoint
+codePointFromChar = fromEnum >>> CodePoint
 
-unsurrogate :: Int -> Int -> CodePoint
-unsurrogate lead trail = CodePoint ((lead - 0xD800) * 0x400 + (trail - 0xDC00) + 0x10000)
+-- | Creates a string containing just the given code point. Operates in
+-- | constant space and time.
+-- |
+-- | ```purescript
+-- | >>> map singleton (codePointFromInt 0x1D400)
+-- | Just "𝐀"
+-- | ```
+-- |
+singleton :: CodePoint -> String
+singleton = _singleton singletonFallback
 
-isLead :: Int -> Boolean
-isLead cu = 0xD800 <= cu && cu <= 0xDBFF
-
-isTrail :: Int -> Boolean
-isTrail cu = 0xDC00 <= cu && cu <= 0xDFFF
-
-fromCharCode :: Int -> String
-fromCharCode = String.singleton <<< Char.fromCharCode
-
--- WARN: this function expects the String parameter to be non-empty
-unsafeCodePointAt0 :: String -> CodePoint
-unsafeCodePointAt0 = _unsafeCodePointAt0 unsafeCodePointAt0Fallback
-
-foreign import _unsafeCodePointAt0
-  :: (String -> CodePoint)
-  -> String
+foreign import _singleton
+  :: (CodePoint -> String)
   -> CodePoint
+  -> String
 
-unsafeCodePointAt0Fallback :: String -> CodePoint
-unsafeCodePointAt0Fallback s =
-  let cu0 = Unsafe.charCodeAt 0 s in
-  let cu1 = Unsafe.charCodeAt 1 s in
-  if isLead cu0 && isTrail cu1
-     then unsurrogate cu0 cu1
-     else CodePoint cu0
+singletonFallback :: CodePoint -> String
+singletonFallback (CodePoint cp) | cp <= 0xFFFF = fromCharCode cp
+singletonFallback (CodePoint cp) =
+  let lead = ((cp - 0x10000) / 0x400) + 0xD800 in
+  let trail = (cp - 0x10000) `mod` 0x400 + 0xDC00 in
+  fromCharCode lead <> fromCharCode trail
 
+-- | Creates a string from an array of code points. Operates in space and time
+-- | linear to the length of the array.
+-- |
+-- | ```purescript
+-- | >>> codePointArray = toCodePointArray "c 𝐀"
+-- | >>> codePointArray
+-- | [CodePoint 0x63, CodePoint 0x20, CodePoint 0x1D400]
+-- | >>> fromCodePointArray codePointArray
+-- | "c 𝐀"
+-- | ```
+-- |
+fromCodePointArray :: Array CodePoint -> String
+fromCodePointArray = _fromCodePointArray singletonFallback
+
+foreign import _fromCodePointArray
+  :: (CodePoint -> String)
+  -> Array CodePoint
+  -> String
+
+-- | Creates an array of code points from a string. Operates in space and time
+-- | linear to the length of the string.
+-- |
+-- | ```purescript
+-- | >>> codePointArray = toCodePointArray "b 𝐀𝐀"
+-- | >>> codePointArray
+-- | [CodePoint 0x62, CodePoint 0x20, CodePoint 0x1D400, CodePoint 0x1D400]
+-- | >>> map singleton codePointArray
+-- | ["b", " ", "𝐀", "𝐀"]
+-- | ```
+-- |
+toCodePointArray :: String -> Array CodePoint
+toCodePointArray = _toCodePointArray toCodePointArrayFallback unsafeCodePointAt0
+
+foreign import _toCodePointArray
+  :: (String -> Array CodePoint)
+  -> (String -> CodePoint)
+  -> String
+  -> Array CodePoint
+
+toCodePointArrayFallback :: String -> Array CodePoint
+toCodePointArrayFallback s = unfoldr unconsButWithTuple s
+
+unconsButWithTuple :: String -> Maybe (Tuple CodePoint String)
+unconsButWithTuple s = (\{ head, tail } -> Tuple head tail) <$> uncons s
 
 -- | Returns the first code point of the string after dropping the given number
 -- | of code points from the beginning, if there is such a code point. Operates
@@ -153,6 +176,43 @@ codePointAtFallback n s = case uncons s of
   Just { head, tail } -> if n == 0 then Just head else codePointAtFallback (n - 1) tail
   _ -> Nothing
 
+-- | Returns a record with the first code point and the remaining code points
+-- | of the string. Returns Nothing if the string is empty. Operates in
+-- | constant space and time.
+-- |
+-- | ```purescript
+-- | >>> uncons "𝐀𝐀 c 𝐀"
+-- | Just { head: CodePoint 0x1D400, tail: "𝐀 c 𝐀" }
+-- | >>> uncons ""
+-- | Nothing
+-- | ```
+-- |
+uncons :: String -> Maybe { head :: CodePoint, tail :: String }
+uncons s = case CU.length s of
+  0 -> Nothing
+  1 -> Just { head: CodePoint (fromEnum (Unsafe.charAt 0 s)), tail: "" }
+  _ ->
+    let
+      cu0 = fromEnum (Unsafe.charAt 0 s)
+      cu1 = fromEnum (Unsafe.charAt 1 s)
+    in
+      if isLead cu0 && isTrail cu1
+        then Just { head: unsurrogate cu0 cu1, tail: CU.drop 2 s }
+        else Just { head: CodePoint cu0, tail: CU.drop 1 s }
+
+-- | Returns the number of code points in the string. Operates in constant
+-- | space and in time linear to the length of the string.
+-- |
+-- | ```purescript
+-- | >>> length "b 𝐀𝐀 c 𝐀"
+-- | 8
+-- | -- compare to Data.String:
+-- | >>> length "b 𝐀𝐀 c 𝐀"
+-- | 11
+-- | ```
+-- |
+length :: String -> Int
+length = Array.length <<< toCodePointArray
 
 -- | Returns the number of code points in the leading sequence of code points
 -- | which all match the given predicate. Operates in constant space and in
@@ -181,55 +241,6 @@ countTail p s accum = case uncons s of
   Just { head, tail } -> if p head then countTail p tail (accum + 1) else accum
   _ -> accum
 
-
--- | Drops the given number of code points from the beginning of the string. If
--- | the string does not have that many code points, returns the empty string.
--- | Operates in constant space and in time linear to the given number.
--- |
--- | ```purescript
--- | >>> drop 5 "𝐀𝐀 b c"
--- | "c"
--- | -- compared to Data.String:
--- | >>> drop 5 "𝐀𝐀 b c"
--- | "b c" -- because "𝐀" occupies 2 code units
--- | ```
--- |
-drop :: Int -> String -> String
-drop n s = String.drop (String.length (take n s)) s
-
-
--- | Drops the leading sequence of code points which all match the given
--- | predicate from the string. Operates in constant space and in time linear
--- | to the length of the string.
--- |
--- | ```purescript
--- | >>> dropWhile (\c -> codePointToInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
--- | " b c 𝐀"
--- | ```
--- |
-dropWhile :: (CodePoint -> Boolean) -> String -> String
-dropWhile p s = drop (countPrefix p s) s
-
-
--- | Creates a string from an array of code points. Operates in space and time
--- | linear to the length of the array.
--- |
--- | ```purescript
--- | >>> codePointArray = toCodePointArray "c 𝐀"
--- | >>> codePointArray
--- | [CodePoint 0x63, CodePoint 0x20, CodePoint 0x1D400]
--- | >>> fromCodePointArray codePointArray
--- | "c 𝐀"
--- | ```
--- |
-fromCodePointArray :: Array CodePoint -> String
-fromCodePointArray = _fromCodePointArray singletonFallback
-
-foreign import _fromCodePointArray
-  :: (CodePoint -> String)
-  -> Array CodePoint
-  -> String
-
 -- | Returns the number of code points preceding the first match of the given
 -- | pattern in the string. Returns Nothing when no matches are found.
 -- |
@@ -240,9 +251,8 @@ foreign import _fromCodePointArray
 -- | Nothing
 -- | ```
 -- |
-indexOf :: String.Pattern -> String -> Maybe Int
-indexOf p s = (\i -> length (String.take i s)) <$> String.indexOf p s
-
+indexOf :: Pattern -> String -> Maybe Int
+indexOf p s = (\i -> length (CU.take i s)) <$> CU.indexOf p s
 
 -- | Returns the number of code points preceding the first match of the given
 -- | pattern in the string. Pattern matches preceding the given index will be
@@ -255,11 +265,10 @@ indexOf p s = (\i -> length (String.take i s)) <$> String.indexOf p s
 -- | Nothing
 -- | ```
 -- |
-indexOf' :: String.Pattern -> Int -> String -> Maybe Int
+indexOf' :: Pattern -> Int -> String -> Maybe Int
 indexOf' p i s =
   let s' = drop i s in
-  (\k -> i + length (String.take k s')) <$> String.indexOf p s'
-
+  (\k -> i + length (CU.take k s')) <$> CU.indexOf p s'
 
 -- | Returns the number of code points preceding the last match of the given
 -- | pattern in the string. Returns Nothing when no matches are found.
@@ -271,9 +280,8 @@ indexOf' p i s =
 -- | Nothing
 -- | ```
 -- |
-lastIndexOf :: String.Pattern -> String -> Maybe Int
-lastIndexOf p s = (\i -> length (String.take i s)) <$> String.lastIndexOf p s
-
+lastIndexOf :: Pattern -> String -> Maybe Int
+lastIndexOf p s = (\i -> length (CU.take i s)) <$> CU.lastIndexOf p s
 
 -- | Returns the number of code points preceding the first match of the given
 -- | pattern in the string. Pattern matches following the given index will be
@@ -286,77 +294,10 @@ lastIndexOf p s = (\i -> length (String.take i s)) <$> String.lastIndexOf p s
 -- | Nothing
 -- | ```
 -- |
-lastIndexOf' :: String.Pattern -> Int -> String -> Maybe Int
+lastIndexOf' :: Pattern -> Int -> String -> Maybe Int
 lastIndexOf' p i s =
-  let i' = String.length (take i s) in
-  (\k -> length (String.take k s)) <$> String.lastIndexOf' p i' s
-
-
--- | Returns the number of code points in the string. Operates in constant
--- | space and in time linear to the length of the string.
--- |
--- | ```purescript
--- | >>> length "b 𝐀𝐀 c 𝐀"
--- | 8
--- | -- compare to Data.String:
--- | >>> length "b 𝐀𝐀 c 𝐀"
--- | 11
--- | ```
--- |
-length :: String -> Int
-length = Array.length <<< toCodePointArray
-
-
--- | Creates a string containing just the given code point. Operates in
--- | constant space and time.
--- |
--- | ```purescript
--- | >>> map singleton (codePointFromInt 0x1D400)
--- | Just "𝐀"
--- | ```
--- |
-singleton :: CodePoint -> String
-singleton = _singleton singletonFallback
-
-foreign import _singleton
-  :: (CodePoint -> String)
-  -> CodePoint
-  -> String
-
-singletonFallback :: CodePoint -> String
-singletonFallback (CodePoint cp) | cp <= 0xFFFF = fromCharCode cp
-singletonFallback (CodePoint cp) =
-  let lead = ((cp - 0x10000) / 0x400) + 0xD800 in
-  let trail = (cp - 0x10000) `mod` 0x400 + 0xDC00 in
-  fromCharCode lead <> fromCharCode trail
-
-
--- | Splits a string into two substrings, where `before` contains the code
--- | points up to (but not including) the given index, and `after` contains the
--- | rest of the string, from that index on.
--- |
--- | ```purescript
--- | >>> splitAt 3 "b 𝐀𝐀 c 𝐀"
--- | Just { before: "b 𝐀", after: "𝐀 c 𝐀" }
--- | ```
--- |
--- | Thus the length of `(splitAt i s).before` will equal either `i` or
--- | `length s`, if that is shorter. (Or if `i` is negative the length will be
--- | 0.)
--- |
--- | In code:
--- | ```purescript
--- | length (splitAt i s).before == min (max i 0) (length s)
--- | (splitAt i s).before <> (splitAt i s).after == s
--- | splitAt i s == {before: take i s, after: drop i s}
--- | ```
-splitAt :: Int -> String -> { before :: String, after :: String }
-splitAt i s =
-  let before = take i s in
-  { before
-  -- inline drop i s to reuse the result of take i s
-  , after: String.drop (String.length before) s
-  }
+  let i' = CU.length (take i s) in
+  (\k -> length (CU.take k s)) <$> CU.lastIndexOf' p i' s
 
 -- | Returns a string containing the given number of code points from the
 -- | beginning of the given string. If the string does not have that many code
@@ -382,7 +323,6 @@ takeFallback n s = case uncons s of
   Just { head, tail } -> singleton head <> takeFallback (n - 1) tail
   _ -> s
 
-
 -- | Returns a string containing the leading sequence of code points which all
 -- | match the given predicate from the string. Operates in constant space and
 -- | in time linear to the length of the string.
@@ -395,52 +335,87 @@ takeFallback n s = case uncons s of
 takeWhile :: (CodePoint -> Boolean) -> String -> String
 takeWhile p s = take (countPrefix p s) s
 
-
--- | Creates an array of code points from a string. Operates in space and time
--- | linear to the length of the string.
+-- | Drops the given number of code points from the beginning of the string. If
+-- | the string does not have that many code points, returns the empty string.
+-- | Operates in constant space and in time linear to the given number.
 -- |
 -- | ```purescript
--- | >>> codePointArray = toCodePointArray "b 𝐀𝐀"
--- | >>> codePointArray
--- | [CodePoint 0x62, CodePoint 0x20, CodePoint 0x1D400, CodePoint 0x1D400]
--- | >>> map singleton codePointArray
--- | ["b", " ", "𝐀", "𝐀"]
+-- | >>> drop 5 "𝐀𝐀 b c"
+-- | "c"
+-- | -- compared to Data.String:
+-- | >>> drop 5 "𝐀𝐀 b c"
+-- | "b c" -- because "𝐀" occupies 2 code units
 -- | ```
 -- |
-toCodePointArray :: String -> Array CodePoint
-toCodePointArray = _toCodePointArray toCodePointArrayFallback unsafeCodePointAt0
+drop :: Int -> String -> String
+drop n s = CU.drop (CU.length (take n s)) s
 
-foreign import _toCodePointArray
-  :: (String -> Array CodePoint)
-  -> (String -> CodePoint)
+-- | Drops the leading sequence of code points which all match the given
+-- | predicate from the string. Operates in constant space and in time linear
+-- | to the length of the string.
+-- |
+-- | ```purescript
+-- | >>> dropWhile (\c -> codePointToInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
+-- | " b c 𝐀"
+-- | ```
+-- |
+dropWhile :: (CodePoint -> Boolean) -> String -> String
+dropWhile p s = drop (countPrefix p s) s
+
+-- | Splits a string into two substrings, where `before` contains the code
+-- | points up to (but not including) the given index, and `after` contains the
+-- | rest of the string, from that index on.
+-- |
+-- | ```purescript
+-- | >>> splitAt 3 "b 𝐀𝐀 c 𝐀"
+-- | Just { before: "b 𝐀", after: "𝐀 c 𝐀" }
+-- | ```
+-- |
+-- | Thus the length of `(splitAt i s).before` will equal either `i` or
+-- | `length s`, if that is shorter. (Or if `i` is negative the length will be
+-- | 0.)
+-- |
+-- | In code:
+-- | ```purescript
+-- | length (splitAt i s).before == min (max i 0) (length s)
+-- | (splitAt i s).before <> (splitAt i s).after == s
+-- | splitAt i s == {before: take i s, after: drop i s}
+-- | ```
+splitAt :: Int -> String -> { before :: String, after :: String }
+splitAt i s =
+  let before = take i s in
+  { before
+  -- inline drop i s to reuse the result of take i s
+  , after: CU.drop (CU.length before) s
+  }
+
+unsurrogate :: Int -> Int -> CodePoint
+unsurrogate lead trail = CodePoint ((lead - 0xD800) * 0x400 + (trail - 0xDC00) + 0x10000)
+
+isLead :: Int -> Boolean
+isLead cu = 0xD800 <= cu && cu <= 0xDBFF
+
+isTrail :: Int -> Boolean
+isTrail cu = 0xDC00 <= cu && cu <= 0xDFFF
+
+fromCharCode :: Int -> String
+fromCharCode = CU.singleton <<< toEnumWithDefaults bottom top
+
+-- WARN: this function expects the String parameter to be non-empty
+unsafeCodePointAt0 :: String -> CodePoint
+unsafeCodePointAt0 = _unsafeCodePointAt0 unsafeCodePointAt0Fallback
+
+foreign import _unsafeCodePointAt0
+  :: (String -> CodePoint)
   -> String
-  -> Array CodePoint
+  -> CodePoint
 
-toCodePointArrayFallback :: String -> Array CodePoint
-toCodePointArrayFallback s = unfoldr unconsButWithTuple s
-
-unconsButWithTuple :: String -> Maybe (Tuple CodePoint String)
-unconsButWithTuple s = (\{ head, tail } -> Tuple head tail) <$> uncons s
-
-
--- | Returns a record with the first code point and the remaining code points
--- | of the string. Returns Nothing if the string is empty. Operates in
--- | constant space and time.
--- |
--- | ```purescript
--- | >>> uncons "𝐀𝐀 c 𝐀"
--- | Just { head: CodePoint 0x1D400, tail: "𝐀 c 𝐀" }
--- | >>> uncons ""
--- | Nothing
--- | ```
--- |
-uncons :: String -> Maybe { head :: CodePoint, tail :: String }
-uncons s = case String.length s of
-  0 -> Nothing
-  1 -> Just { head: CodePoint (Unsafe.charCodeAt 0 s), tail: "" }
-  _ ->
-    let cu0 = Unsafe.charCodeAt 0 s in
-    let cu1 = Unsafe.charCodeAt 1 s in
+unsafeCodePointAt0Fallback :: String -> CodePoint
+unsafeCodePointAt0Fallback s =
+  let
+    cu0 = fromEnum (Unsafe.charAt 0 s)
+    cu1 = fromEnum (Unsafe.charAt 1 s)
+  in
     if isLead cu0 && isTrail cu1
-      then Just { head: unsurrogate cu0 cu1, tail: String.drop 2 s }
-      else Just { head: CodePoint cu0, tail: String.drop 1 s }
+       then unsurrogate cu0 cu1
+       else CodePoint cu0

@@ -1,7 +1,5 @@
 module Data.String.CodeUnits
-  ( module Data.String.Pattern
-  , module Data.String.Common
-  , stripPrefix
+  ( stripPrefix
   , stripSuffix
   , contains
   , singleton
@@ -29,8 +27,7 @@ module Data.String.CodeUnits
 import Prelude
 
 import Data.Maybe (Maybe(..), isJust)
-import Data.String.Common (joinWith, localeCompare, null, replace, replaceAll, split, toLower, toUpper, trim)
-import Data.String.Pattern (Pattern(..), Replacement(..))
+import Data.String.Pattern (Pattern(..))
 import Data.String.Unsafe as U
 
 -------------------------------------------------------------------------------

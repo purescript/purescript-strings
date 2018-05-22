@@ -21,7 +21,8 @@ import Prelude
 import Data.Array.NonEmpty (NonEmptyArray)
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
-import Data.String (Pattern(..), contains)
+import Data.String (contains)
+import Data.String.Pattern (Pattern(..))
 import Data.String.Regex.Flags (RegexFlags(..), RegexFlagsRec)
 
 -- | Wraps Javascript `RegExp` objects.

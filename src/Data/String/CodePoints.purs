@@ -4,7 +4,7 @@
 -- | strings, these functions should be preferred over the ones in
 -- | `Data.String.CodeUnits`.
 module Data.String.CodePoints
-  ( module Data.String
+  ( module Exports
   , CodePoint
   , codePointFromChar
   , singleton
@@ -34,9 +34,10 @@ import Data.Array as Array
 import Data.Enum (class BoundedEnum, class Enum, Cardinality(..), defaultPred, defaultSucc, fromEnum, toEnum, toEnumWithDefaults)
 import Data.Int (hexadecimal, toStringAs)
 import Data.Maybe (Maybe(..))
-import Data.String as String
+import Data.String.CodeUnits (contains, stripPrefix, stripSuffix) as Exports
 import Data.String.CodeUnits as CU
-import Data.String (Pattern(..), Replacement(..), contains, joinWith, localeCompare, null, replace, replaceAll, split, stripPrefix, stripSuffix, toLower, toUpper, trim)
+import Data.String.Common (toUpper)
+import Data.String.Pattern (Pattern)
 import Data.String.Unsafe as Unsafe
 import Data.Tuple (Tuple(..))
 import Data.Unfoldable (unfoldr)
@@ -49,7 +50,7 @@ derive instance eqCodePoint :: Eq CodePoint
 derive instance ordCodePoint :: Ord CodePoint
 
 instance showCodePoint :: Show CodePoint where
-  show (CodePoint i) = "(CodePoint 0x" <> String.toUpper (toStringAs hexadecimal i) <> ")"
+  show (CodePoint i) = "(CodePoint 0x" <> toUpper (toStringAs hexadecimal i) <> ")"
 
 instance boundedCodePoint :: Bounded CodePoint where
   bottom = CodePoint 0

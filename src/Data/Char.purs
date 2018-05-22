@@ -4,6 +4,9 @@ module Data.Char
   , fromCharCode
   ) where
 
+import Data.Enum (fromEnum, toEnum)
+import Data.Maybe (Maybe)
+
 -- | Returns the numeric Unicode value of the character.
 toCharCode :: Char -> Int
 toCharCode = fromEnum

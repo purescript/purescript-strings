@@ -1,6 +1,5 @@
 module Data.String.NonEmpty.CodeUnits
-  ( module Data.String.NonEmpty
-  , fromCharArray
+  ( fromCharArray
   , fromNonEmptyCharArray
   , singleton
   , cons
@@ -34,8 +33,9 @@ import Data.Maybe (Maybe(..), fromJust)
 import Data.Semigroup.Foldable (class Foldable1)
 import Data.Semigroup.Foldable as F1
 import Data.String.CodeUnits as CU
+import Data.String.NonEmpty.Internal (NonEmptyString, fromString)
+import Data.String.Pattern (Pattern)
 import Data.String.Unsafe as U
-import Data.String.NonEmpty (class MakeNonEmpty, NonEmptyReplacement(..), NonEmptyString, Pattern(..), appendString, contains, fromString, join1With, joinWith, joinWith1, localeCompare, nes, prependString, replace, replaceAll, stripPrefix, stripSuffix, toLower, toString, toUpper, trim, unsafeFromString)
 import Partial.Unsafe (unsafePartial)
 import Unsafe.Coerce (unsafeCoerce)
 

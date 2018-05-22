@@ -1,6 +1,5 @@
 module Data.String.NonEmpty.CodePoints
-  ( module Data.String.NonEmpty
-  , fromCodePointArray
+  ( fromCodePointArray
   , fromNonEmptyCodePointArray
   , singleton
   , cons
@@ -34,7 +33,8 @@ import Data.Semigroup.Foldable (class Foldable1)
 import Data.Semigroup.Foldable as F1
 import Data.String.CodePoints (CodePoint)
 import Data.String.CodePoints as CP
-import Data.String.NonEmpty (class MakeNonEmpty, NonEmptyReplacement(..), NonEmptyString, Pattern(..), appendString, contains, fromString, join1With, joinWith, joinWith1, localeCompare, nes, prependString, replace, replaceAll, stripPrefix, stripSuffix, toLower, toString, toUpper, trim, unsafeFromString)
+import Data.String.NonEmpty.Internal (NonEmptyString, fromString)
+import Data.String.Pattern (Pattern)
 import Partial.Unsafe (unsafePartial)
 import Unsafe.Coerce (unsafeCoerce)
 

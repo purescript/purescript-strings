@@ -1,219 +1,141 @@
 module Test.Data.String (testString) where
 
-import Prelude (Unit, Ordering(..), (==), ($), discard, negate, not, (/=), (&&))
+import Prelude
 
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE, log)
+import Data.Maybe (Maybe(..))
+import Data.String as S
+import Data.String.Pattern (Pattern(..), Replacement(..))
+import Effect (Effect)
+import Effect.Console (log)
+import Test.Assert (assert, assertEqual)
 
-import Data.Maybe (Maybe(..), isNothing, maybe)
-import Data.String
-
-import Test.Assert (ASSERT, assert)
-
-testString :: forall eff. Eff (console :: CONSOLE, assert :: ASSERT | eff) Unit
+testString :: Effect Unit
 testString = do
-  log "charAt"
-  assert $ charAt 0 "" == Nothing
-  assert $ charAt 0 "a" == Just 'a'
-  assert $ charAt 1 "a" == Nothing
-  assert $ charAt 0 "ab" == Just 'a'
-  assert $ charAt 1 "ab" == Just 'b'
-  assert $ charAt 2 "ab" == Nothing
-
-  log "singleton"
-  assert $ singleton 'a' == "a"
-
-  log "charCodeAt"
-  assert $ charCodeAt 0 "" == Nothing
-  assert $ charCodeAt 0 "a" == Just 97
-  assert $ charCodeAt 1 "a" == Nothing
-  assert $ charCodeAt 0 "ab" == Just 97
-  assert $ charCodeAt 1 "ab" == Just 98
-  assert $ charCodeAt 2 "ab" == Nothing
-
-  log "toChar"
-  assert $ toChar "" == Nothing
-  assert $ toChar "a" == Just 'a'
-  assert $ toChar "ab" == Nothing
 
   log "null"
-  assert $ null ""
-  assert $ not (null "a")
-
-  log "uncons"
-  assert $ isNothing (uncons "")
-  assert $ case uncons "a" of
-                Nothing -> false
-                Just m -> m.head == 'a' && m.tail == ""
-  assert $ case uncons "ab" of
-                Nothing -> false
-                Just m -> m.head == 'a' && m.tail == "b"
-
-  log "takeWhile"
-  assert $ takeWhile (\c -> true) "abc" == "abc"
-  assert $ takeWhile (\c -> false) "abc" == ""
-  assert $ takeWhile (\c -> c /= 'b') "aabbcc" == "aa"
-
-  log "dropWhile"
-  assert $ dropWhile (\c -> true) "abc" == ""
-  assert $ dropWhile (\c -> false) "abc" == "abc"
-  assert $ dropWhile (\c -> c /= 'b') "aabbcc" == "bbcc"
+  assert $ S.null ""
+  assert $ not (S.null "a")
 
   log "stripPrefix"
-  assert $ stripPrefix (Pattern "") "" == Just ""
-  assert $ stripPrefix (Pattern "") "abc" == Just "abc"
-  assert $ stripPrefix (Pattern "a") "abc" == Just "bc"
-  assert $ stripPrefix (Pattern "!") "abc" == Nothing
-  assert $ stripPrefix (Pattern "!") "" == Nothing
-
-  log "fromCharArray"
-  assert $ fromCharArray [] == ""
-  assert $ fromCharArray ['a', 'b'] == "ab"
+  assertEqual
+    { actual: S.stripPrefix (Pattern "") ""
+    , expected: Just ""
+    }
+  assertEqual
+    { actual: S.stripPrefix (Pattern "") "abc"
+    , expected: Just "abc"
+    }
+  assertEqual
+    { actual: S.stripPrefix (Pattern "a") "abc"
+    , expected: Just "bc"
+    }
+  assertEqual
+    { actual: S.stripPrefix (Pattern "!") "abc"
+    , expected: Nothing
+    }
+  assertEqual
+    { actual: S.stripPrefix (Pattern "!") ""
+    , expected: Nothing
+    }
 
   log "contains"
-  assert $ contains (Pattern "") ""
-  assert $ contains (Pattern "") "abcd"
-  assert $ contains (Pattern "bc") "abcd"
-  assert $ not (contains (Pattern "cb") "abcd")
-
-  log "indexOf"
-  assert $ indexOf (Pattern "") "" == Just 0
-  assert $ indexOf (Pattern "") "abcd" == Just 0
-  assert $ indexOf (Pattern "bc") "abcd" == Just 1
-  assert $ indexOf (Pattern "cb") "abcd" == Nothing
-
-  log "indexOf'"
-  assert $ indexOf' (Pattern "") 0 "" == Just 0
-  assert $ indexOf' (Pattern "") (-1) "ab" == Nothing
-  assert $ indexOf' (Pattern "") 0 "ab" == Just 0
-  assert $ indexOf' (Pattern "") 1 "ab" == Just 1
-  assert $ indexOf' (Pattern "") 2 "ab" == Just 2
-  assert $ indexOf' (Pattern "") 3 "ab" == Nothing
-  assert $ indexOf' (Pattern "bc") 0 "abcd" == Just 1
-  assert $ indexOf' (Pattern "bc") 1 "abcd" == Just 1
-  assert $ indexOf' (Pattern "bc") 2 "abcd" == Nothing
-  assert $ indexOf' (Pattern "cb") 0 "abcd" == Nothing
-
-  log "lastIndexOf"
-  assert $ lastIndexOf (Pattern "") "" == Just 0
-  assert $ lastIndexOf (Pattern "") "abcd" == Just 4
-  assert $ lastIndexOf (Pattern "bc") "abcd" == Just 1
-  assert $ lastIndexOf (Pattern "cb") "abcd" == Nothing
-
-  log "lastIndexOf'"
-  assert $ lastIndexOf' (Pattern "") 0 "" == Just 0
-  assert $ lastIndexOf' (Pattern "") (-1) "ab" == Nothing
-  assert $ lastIndexOf' (Pattern "") 0 "ab" == Just 0
-  assert $ lastIndexOf' (Pattern "") 1 "ab" == Just 1
-  assert $ lastIndexOf' (Pattern "") 2 "ab" == Just 2
-  assert $ lastIndexOf' (Pattern "") 3 "ab" == Nothing
-  assert $ lastIndexOf' (Pattern "bc") 0 "abcd" == Nothing
-  assert $ lastIndexOf' (Pattern "bc") 1 "abcd" == Just 1
-  assert $ lastIndexOf' (Pattern "bc") 2 "abcd" == Just 1
-  assert $ lastIndexOf' (Pattern "cb") 0 "abcd" == Nothing
-
-  log "length"
-  assert $ length "" == 0
-  assert $ length "a" == 1
-  assert $ length "ab" == 2
+  assert $ S.contains (Pattern "") ""
+  assert $ S.contains (Pattern "") "abcd"
+  assert $ S.contains (Pattern "bc") "abcd"
+  assert $ not S.contains (Pattern "cb") "abcd"
 
   log "localeCompare"
-  assert $ localeCompare "" "" == EQ
-  assert $ localeCompare "a" "a" == EQ
-  assert $ localeCompare "a" "b" == LT
-  assert $ localeCompare "b" "a" == GT
+  assertEqual
+    { actual: S.localeCompare "" ""
+    , expected: EQ
+    }
+  assertEqual
+    { actual: S.localeCompare "a" "a"
+    , expected: EQ
+    }
+  assertEqual
+    { actual: S.localeCompare "a" "b"
+    , expected: LT
+    }
+  assertEqual
+    { actual: S.localeCompare "b" "a"
+    , expected: GT
+    }
 
   log "replace"
-  assert $ replace (Pattern "b") (Replacement "") "abc" == "ac"
-  assert $ replace (Pattern "b") (Replacement "!") "abc" == "a!c"
-  assert $ replace (Pattern "d") (Replacement "!") "abc" == "abc"
+  assertEqual
+    { actual: S.replace (Pattern "b") (Replacement "") "abc"
+    , expected: "ac"
+    }
+  assertEqual
+    { actual: S.replace (Pattern "b") (Replacement "!") "abc"
+    , expected: "a!c"
+    }
+  assertEqual
+    { actual: S.replace (Pattern "d") (Replacement "!") "abc"
+    , expected: "abc"
+    }
 
   log "replaceAll"
-  assert $ replaceAll (Pattern "b") (Replacement "") "abbbbbc" == "ac"
-  assert $ replaceAll (Pattern "[b]") (Replacement "!") "a[b]c" == "a!c"
-
-  log "take"
-  assert $ take 0 "ab" == ""
-  assert $ take 1 "ab" == "a"
-  assert $ take 2 "ab" == "ab"
-  assert $ take 3 "ab" == "ab"
-  assert $ take (-1) "ab" == ""
-
-  log "takeRight"
-  assert $ takeRight 0 "ab" == ""
-  assert $ takeRight 1 "ab" == "b"
-  assert $ takeRight 2 "ab" == "ab"
-  assert $ takeRight 3 "ab" == "ab"
-  assert $ takeRight (-1) "ab" == ""
-
-  log "drop"
-  assert $ drop 0 "ab" == "ab"
-  assert $ drop 1 "ab" == "b"
-  assert $ drop 2 "ab" == ""
-  assert $ drop 3 "ab" == ""
-  assert $ drop (-1) "ab" == "ab"
-
-  log "dropRight"
-  assert $ dropRight 0 "ab" == "ab"
-  assert $ dropRight 1 "ab" == "a"
-  assert $ dropRight 2 "ab" == ""
-  assert $ dropRight 3 "ab" == ""
-  assert $ dropRight (-1) "ab" == "ab"
-
-  log "count"
-  assert $ count (_ == 'a') "" == 0
-  assert $ count (_ == 'a') "ab" == 1
-  assert $ count (_ == 'a') "aaab" == 3
-  assert $ count (_ == 'a') "abaa" == 1
+  assertEqual
+    { actual: S.replaceAll (Pattern "b") (Replacement "") "abbbbbc"
+    , expected: "ac"
+    }
+  assertEqual
+    { actual: S.replaceAll (Pattern "[b]") (Replacement "!") "a[b]c"
+    , expected: "a!c"
+    }
 
   log "split"
-  assert $ split (Pattern "") "" == []
-  assert $ split (Pattern "") "a" == ["a"]
-  assert $ split (Pattern "") "ab" == ["a", "b"]
-  assert $ split (Pattern "b") "aabcc" == ["aa", "cc"]
-  assert $ split (Pattern "d") "abc" == ["abc"]
-
-  log "splitAt"
-  let testSplitAt i str res =
-        assert $ case splitAt i str of
-          Nothing ->
-            isNothing res
-          Just { before, after } ->
-            maybe false (\r ->
-              r.before == before && r.after == after) res
-
-  testSplitAt 1 "" Nothing
-  testSplitAt 0 "a" $ Just {before: "", after: "a"}
-  testSplitAt 1 "ab" $ Just {before: "a", after: "b"}
-  testSplitAt 3 "aabcc" $ Just {before: "aab", after: "cc"}
-  testSplitAt (-1) "abc" $ Nothing
-
-  log "toCharArray"
-  assert $ toCharArray "" == []
-  assert $ toCharArray "a" == ['a']
-  assert $ toCharArray "ab" == ['a', 'b']
+  assertEqual
+    { actual: S.split (Pattern "") ""
+    , expected: []
+    }
+  assertEqual
+    { actual: S.split (Pattern "") "a"
+    , expected: ["a"]
+    }
+  assertEqual
+    { actual: S.split (Pattern "") "ab"
+    , expected: ["a", "b"]
+    }
+  assertEqual
+    { actual: S.split (Pattern "b") "aabcc"
+    , expected: ["aa", "cc"]
+    }
+  assertEqual
+    { actual: S.split (Pattern "d") "abc"
+    , expected: ["abc"]
+    }
 
   log "toLower"
-  assert $ toLower "bAtMaN" == "batman"
+  assertEqual
+    { actual: S.toLower "bAtMaN"
+    , expected: "batman"
+    }
 
   log "toUpper"
-  assert $ toUpper "bAtMaN" == "BATMAN"
+  assertEqual
+    { actual: S.toUpper "bAtMaN"
+    , expected: "BATMAN"
+    }
 
   log "trim"
-  assert $ trim "  abc  " == "abc"
+  assertEqual
+    { actual: S.trim "  abc  "
+    , expected: "abc"
+    }
 
   log "joinWith"
-  assert $ joinWith "" [] == ""
-  assert $ joinWith "" ["a", "b"] == "ab"
-  assert $ joinWith "--" ["a", "b", "c"] == "a--b--c"
-
-  log "slice"
-  assert $ slice 0 0   "purescript" == Just ""
-  assert $ slice 0 1   "purescript" == Just "p"
-  assert $ slice 3 6   "purescript" == Just "esc"
-  assert $ slice (-4) (-1) "purescript" == Just "rip"
-  assert $ slice (-4) 3  "purescript" == Nothing -- b' > e'
-  assert $ slice 1000 3  "purescript" == Nothing -- b' > e' (subsumes b > l)
-  assert $ slice 2 (-15) "purescript" == Nothing -- e' < 0
-  assert $ slice (-15) 9 "purescript" == Nothing -- b' < 0
-  assert $ slice 3 1000 "purescript"  == Nothing -- e > l
+  assertEqual
+    { actual: S.joinWith "" []
+    , expected: ""
+    }
+  assertEqual
+    { actual: S.joinWith "" ["a", "b"]
+    , expected: "ab"
+    }
+  assertEqual
+    { actual: S.joinWith "--" ["a", "b", "c"]
+    , expected: "a--b--c"
+    }

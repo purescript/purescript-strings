@@ -1,18 +1,22 @@
 module Test.Data.String.CaseInsensitive (testCaseInsensitiveString) where
 
-import Prelude (Unit, (==), ($), discard, compare, Ordering(..))
+import Prelude
 
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE, log)
+import Data.String.CaseInsensitive (CaseInsensitiveString(..))
+import Effect (Effect)
+import Effect.Console (log)
+import Test.Assert (assertEqual)
 
-import Data.String.CaseInsensitive
-
-import Test.Assert (ASSERT, assert)
-
-testCaseInsensitiveString :: forall eff. Eff (console :: CONSOLE, assert :: ASSERT | eff) Unit
+testCaseInsensitiveString :: Effect Unit
 testCaseInsensitiveString = do
   log "equality"
-  assert $ CaseInsensitiveString "aB" == CaseInsensitiveString "AB"
+  assertEqual
+    { actual: CaseInsensitiveString "aB"
+    , expected: CaseInsensitiveString "AB"
+    }
 
   log "comparison"
-  assert $ compare (CaseInsensitiveString "qwerty") (CaseInsensitiveString "QWERTY") == EQ
+  assertEqual
+    { actual: compare (CaseInsensitiveString "qwerty") (CaseInsensitiveString "QWERTY")
+    , expected: EQ
+    }

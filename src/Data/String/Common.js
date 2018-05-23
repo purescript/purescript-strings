@@ -24,7 +24,7 @@ exports.replace = function (s1) {
 exports.replaceAll = function (s1) {
   return function (s2) {
     return function (s3) {
-      return s3.replace(new RegExp(s1.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"), "g"), s2);
+      return s3.replace(new RegExp(s1.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"), "g"), s2); // eslint-disable-line no-useless-escape
     };
   };
 };

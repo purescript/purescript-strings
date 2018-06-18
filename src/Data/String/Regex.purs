@@ -18,9 +18,11 @@ module Data.String.Regex
 
 import Prelude
 
+import Data.Array.NonEmpty (NonEmptyArray)
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
-import Data.String (Pattern(..), contains)
+import Data.String (contains)
+import Data.String.Pattern (Pattern(..))
 import Data.String.Regex.Flags (RegexFlags(..), RegexFlagsRec)
 
 -- | Wraps Javascript `RegExp` objects.
@@ -82,13 +84,13 @@ foreign import _match
   -> (forall r. Maybe r)
   -> Regex
   -> String
-  -> Maybe (Array (Maybe String))
+  -> Maybe (NonEmptyArray (Maybe String))
 
 -- | Matches the string against the `Regex` and returns an array of matches
 -- | if there were any. Each match has type `Maybe String`, where `Nothing`
 -- | represents an unmatched optional capturing group.
 -- | See [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match).
-match :: Regex -> String -> Maybe (Array (Maybe String))
+match :: Regex -> String -> Maybe (NonEmptyArray (Maybe String))
 match = _match Just Nothing
 
 -- | Replaces occurences of the `Regex` with the first string. The replacement

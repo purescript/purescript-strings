@@ -1,5 +1,5 @@
 -module(data_string_codeUnits@foreign).
--export([fromCharArray/1, toCharArray/1, singleton/1, '_charAt'/4,  '_toChar'/3,length/1, '_indexOf'/4, '_indexOf\''/5,'_lastIndexOf'/4,'_lastIndexOf\''/5,take/2, drop/2,'_splitAt'/4]).
+-export([fromCharArray/1, toCharArray/1, singleton/1, '_charAt'/4,  '_toChar'/3,length/1, '_indexOf'/4, '_indexOf\''/5,'_lastIndexOf'/4,'_lastIndexOf\''/5,take/2, drop/2,'_splitAt'/4, countPrefix/2, '_slice'/3, splitAt/2]).
 
 fromCharArray(A) -> case unicode:characters_to_binary(array:to_list(A)) of
   {error, S, _} -> S; % In case of hitting bad character, return initial portion!
@@ -61,7 +61,18 @@ drop(N,S) ->
 '_splitAt'(_,Nothing,_,_) -> Nothing.
 
 
+countPrefixImpl(_, S, I) when I > byte_size(S) -> I;
+countPrefixImpl(P, S, I) -> 
+    case P(binary:at(S, I)) of
+        true -> countPrefixImpl(P, S, I+1);
+        false -> I
+    end.
 
-% countPrefix
-% _slice
-% splitAt
+countPrefix(P, S) -> countPrefixImpl(P, S, 0).
+
+'_slice'(B, E, S) -> binary:part(S, B, E).
+
+splitAt(I, S) ->
+    Start = binary:part(S, 0, I),
+    End = binary:part(S, I, (binary:size(S)-1)),
+    #{before => Start, 'after' => End}.

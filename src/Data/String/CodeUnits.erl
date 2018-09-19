@@ -1,5 +1,5 @@
 -module(data_string_codeUnits@foreign).
--export([fromCharArray/1, toCharArray/1, singleton/1, '_charAt'/4,  '_toChar'/3,length/1, '_indexOf'/4, '_indexOf\''/5,'_lastIndexOf'/4,'_lastIndexOf\''/5,take/2, drop/2,'_splitAt'/4, countPrefix/2, '_slice'/3, splitAt/2]).
+-export([fromCharArray/1, toCharArray/1, singleton/1, '_charAt'/4,  '_toChar'/3,length/1, '_indexOf'/4, '_indexOf\''/5,'_lastIndexOf'/4,'_lastIndexOf\''/5,take/2, drop/2, countPrefix/2, '_slice'/3, splitAt/2]).
 
 fromCharArray(A) -> case unicode:characters_to_binary(array:to_list(A)) of
   {error, S, _} -> S; % In case of hitting bad character, return initial portion!
@@ -56,11 +56,6 @@ drop(N,S) ->
   M = max(0, min(N, byte_size(S))),
   binary:part(S, {M, byte_size(S)-M}).
 
-'_splitAt'(Just,_,I,S) when I >= 0, I =< byte_size(S) ->
-  Just(array:from_list([binary:part(S, {0, I}), binary:part(S, {I, byte_size(S)-I})]));
-'_splitAt'(_,Nothing,_,_) -> Nothing.
-
-
 countPrefixImpl(_, S, I) when I > byte_size(S) -> I;
 countPrefixImpl(P, S, I) -> 
     case P(binary:at(S, I)) of
@@ -72,7 +67,8 @@ countPrefix(P, S) -> countPrefixImpl(P, S, 0).
 
 '_slice'(B, E, S) -> binary:part(S, B, E).
 
-splitAt(I, S) ->
+splitAt(I0, S) ->
+    I = min(max(0, I0), erlang:byte_size(S)),
     Start = binary:part(S, 0, I),
-    End = binary:part(S, I, (binary:size(S)-1)),
+    End = binary:part(S, I, erlang:byte_size(S)-I),
     #{before => Start, 'after' => End}.

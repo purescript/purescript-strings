@@ -369,7 +369,7 @@ dropWhile p s = drop (countPrefix p s) s
 -- |
 -- | ```purescript
 -- | >>> splitAt 3 "b 𝐀𝐀 c 𝐀"
--- | Just { before: "b 𝐀", after: "𝐀 c 𝐀" }
+-- | { before: "b 𝐀", after: "𝐀 c 𝐀" }
 -- | ```
 -- |
 -- | Thus the length of `(splitAt i s).before` will equal either `i` or

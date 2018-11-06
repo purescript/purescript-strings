@@ -415,8 +415,10 @@ unsafeCodePointAt0Fallback :: String -> CodePoint
 unsafeCodePointAt0Fallback s =
   let
     cu0 = fromEnum (Unsafe.charAt 0 s)
-    cu1 = fromEnum (Unsafe.charAt 1 s)
   in
-    if isLead cu0 && isTrail cu1
-       then unsurrogate cu0 cu1
-       else CodePoint cu0
+    if isLead cu0 && CU.length s > 1
+       then
+         let cu1 = fromEnum (Unsafe.charAt 1 s) in
+         if isTrail cu1 then unsurrogate cu0 cu1 else CodePoint cu0
+       else
+         CodePoint cu0

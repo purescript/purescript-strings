@@ -305,7 +305,7 @@ dropWhile p s = drop (countPrefix p s) s
 -- | ```
 slice :: Int -> Int -> String -> Maybe String
 slice b e s = if b' < 0 || b' >= l ||
-                 e' < 0 || e' >= l ||
+                 e' < 0 || e' >  l ||
                  b' > e'
               then Nothing
               else Just (_slice b e s)

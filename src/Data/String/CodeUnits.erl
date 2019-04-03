@@ -14,8 +14,7 @@ singleton(C) -> <<C>>.
   case byte_size(S) of
     N when I >= 0, I < N -> Just(binary:at(S, I));
     _ -> Nothing
-  end;
-'_charAt'(_,Nothing,_,_) -> Nothing.
+  end.
 
 '_toChar'(Just,_,<<C>>) -> Just(C);
 '_toChar'(_,Nothing,_) -> Nothing.

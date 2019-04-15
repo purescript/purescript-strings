@@ -4,6 +4,7 @@ module Data.String.Common
   , replace
   , replaceAll
   , split
+  , substr
   , toLower
   , toUpper
   , trim
@@ -63,6 +64,14 @@ foreign import replaceAll :: Pattern -> Replacement -> String -> String
 -- | split (Pattern " ") "hello world" == ["hello", "world"]
 -- | ```
 foreign import split :: Pattern -> String -> Array String
+
+-- | Extracts parts of a string, beginning at the character at the
+-- | specified position and returns the specified number of characters.
+-- |
+-- | ```purescript
+-- | substr "helloWorld" 1 4 == "ello"
+-- | ```
+foreign import substr :: String -> Int -> Int -> String
 
 -- | Returns the argument converted to lowercase.
 -- |

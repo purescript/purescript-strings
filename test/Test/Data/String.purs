@@ -108,6 +108,24 @@ testString = do
     , expected: ["abc"]
     }
 
+  log "substr"
+  assertEqual
+    { actual: S.substr "helloWorld" 1 4
+    , expected: "ello"
+    }
+  assertEqual
+    { actual: S.substr "helloWorld" 0 0
+    , expected: ""
+    }
+  assertEqual
+    { actual: S.substr "helloWorld" 0 10
+    , expected: "helloWorld"
+    }
+  assertEqual
+    { actual: S.substr "helloWorld" 0 11
+    , expected: "helloWorld"
+    }
+
   log "toLower"
   assertEqual
     { actual: S.toLower "bAtMaN"

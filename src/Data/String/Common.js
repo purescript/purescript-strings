@@ -35,6 +35,14 @@ exports.split = function (sep) {
   };
 };
 
+exports.substr = function (str) {
+  return function (s) {
+    return function (len) {
+      return str.substr(s,len);
+    };
+  };
+};
+
 exports.toLower = function (s) {
   return s.toLowerCase();
 };

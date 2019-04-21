@@ -81,7 +81,7 @@ codePointFromChar = fromEnum >>> CodePoint
 -- | constant space and time.
 -- |
 -- | ```purescript
--- | >>> map singleton (codePointFromInt 0x1D400)
+-- | >>> map singleton (toEnum 0x1D400)
 -- | Just "𝐀"
 -- | ```
 -- |

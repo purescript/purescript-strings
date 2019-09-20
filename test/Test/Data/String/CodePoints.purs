@@ -12,7 +12,7 @@ import Partial.Unsafe (unsafePartial)
 import Test.Assert (assertEqual)
 
 str :: String
-str = "a\xDC00\xD800\xD800\x16805\x16A06\&z"
+str = "a\xDC00\xD800\xD800\x16805\x16A06\nz"
 
 testStringCodePoints :: Effect Unit
 testStringCodePoints = do
@@ -44,6 +44,10 @@ testStringCodePoints = do
     }
   assertEqual
     { actual: map show (SCP.codePointAt 6 str)
+    , expected: Just "(CodePoint 0xA)"
+    }
+  assertEqual
+    { actual: map show (SCP.codePointAt 7 str)
     , expected: Just "(CodePoint 0x7A)"
     }
 
@@ -102,40 +106,48 @@ testStringCodePoints = do
     }
   assertEqual
     { actual: SCP.codePointAt 6 str
-    , expected: (toEnum 0x7A)
+    , expected: (toEnum 0xA)
     }
   assertEqual
     { actual: SCP.codePointAt 7 str
+    , expected: (toEnum 0x7A)
+    }
+  assertEqual
+    { actual: SCP.codePointAt 8 str
     , expected: Nothing
     }
 
   log "uncons"
   assertEqual
     { actual: SCP.uncons str
-    , expected: Just {head: cp 0x61, tail:  "\xDC00\xD800\xD800\x16805\x16A06\&z"}
+    , expected: Just {head: cp 0x61, tail:  "\xDC00\xD800\xD800\x16805\x16A06\nz"}
     }
   assertEqual
     { actual: SCP.uncons (SCP.drop 1 str)
-    , expected: Just {head: cp 0xDC00, tail: "\xD800\xD800\x16805\x16A06\&z"}
+    , expected: Just {head: cp 0xDC00, tail: "\xD800\xD800\x16805\x16A06\nz"}
     }
   assertEqual
     { actual: SCP.uncons (SCP.drop 2 str)
-    , expected: Just {head: cp 0xD800, tail: "\xD800\x16805\x16A06\&z"}
+    , expected: Just {head: cp 0xD800, tail: "\xD800\x16805\x16A06\nz"}
     }
   assertEqual
     { actual: SCP.uncons (SCP.drop 3 str)
-    , expected: Just {head: cp 0xD800, tail: "\x16805\x16A06\&z"}
+    , expected: Just {head: cp 0xD800, tail: "\x16805\x16A06\nz"}
     }
   assertEqual
     { actual: SCP.uncons (SCP.drop 4 str)
-    , expected: Just {head: cp 0x16805, tail: "\x16A06\&z"}
+    , expected: Just {head: cp 0x16805, tail: "\x16A06\nz"}
     }
   assertEqual
     { actual: SCP.uncons (SCP.drop 5 str)
-    , expected: Just {head: cp 0x16A06, tail: "z"}
+    , expected: Just {head: cp 0x16A06, tail: "\nz"}
     }
   assertEqual
     { actual: SCP.uncons (SCP.drop 6 str)
+    , expected: Just {head: cp 0xA, tail: "z"}
+    }
+  assertEqual
+    { actual: SCP.uncons (SCP.drop 7 str)
     , expected: Just {head: cp 0x7A, tail: ""}
     }
   assertEqual
@@ -158,7 +170,7 @@ testStringCodePoints = do
     }
   assertEqual
     { actual: SCP.length str
-    , expected: 7
+    , expected: 8
     }
 
   log "countPrefix"
@@ -172,7 +184,7 @@ testStringCodePoints = do
     }
   assertEqual
     { actual: SCP.countPrefix (\_ -> true) str
-    , expected: 7
+    , expected: 8
     }
   assertEqual
     { actual: SCP.countPrefix (\x -> fromEnum x < 0xFFFF) str
@@ -229,11 +241,15 @@ testStringCodePoints = do
     , expected: Just 5
     }
   assertEqual
-    { actual: SCP.indexOf (Pattern "z") str
+    { actual: SCP.indexOf (Pattern "\xA") str
     , expected: Just 6
     }
   assertEqual
-    { actual: SCP.indexOf (Pattern "\0") str
+    { actual: SCP.indexOf (Pattern "z") str
+    , expected: Just 7
+    }
+  assertEqual
+    { actual: SCP.indexOf (Pattern "\r") str
     , expected: Nothing
     }
   assertEqual
@@ -264,34 +280,38 @@ testStringCodePoints = do
     }
   assertEqual
     { actual: SCP.indexOf' (Pattern "z") 0 str
-    , expected: Just 6
+    , expected: Just 7
     }
   assertEqual
     { actual: SCP.indexOf' (Pattern "z") 1 str
-    , expected: Just 6
+    , expected: Just 7
     }
   assertEqual
     { actual: SCP.indexOf' (Pattern "z") 2 str
-    , expected: Just 6
+    , expected: Just 7
     }
   assertEqual
     { actual: SCP.indexOf' (Pattern "z") 3 str
-    , expected: Just 6
+    , expected: Just 7
     }
   assertEqual
     { actual: SCP.indexOf' (Pattern "z") 4 str
-    , expected: Just 6
+    , expected: Just 7
     }
   assertEqual
     { actual: SCP.indexOf' (Pattern "z") 5 str
-    , expected: Just 6
+    , expected: Just 7
     }
   assertEqual
     { actual: SCP.indexOf' (Pattern "z") 6 str
-    , expected: Just 6
+    , expected: Just 7
     }
   assertEqual
     { actual: SCP.indexOf' (Pattern "z") 7 str
+    , expected: Just 7
+    }
+  assertEqual
+    { actual: SCP.indexOf' (Pattern "z") 8 str
     , expected: Nothing
     }
 
@@ -302,7 +322,7 @@ testStringCodePoints = do
     }
   assertEqual
     { actual: SCP.lastIndexOf (Pattern "") str
-    , expected: Just 7
+    , expected: Just 8
     }
   assertEqual
     { actual: SCP.lastIndexOf (Pattern str) str
@@ -341,11 +361,15 @@ testStringCodePoints = do
     , expected: Just 5
     }
   assertEqual
-    { actual: SCP.lastIndexOf (Pattern "z") str
+    { actual: SCP.lastIndexOf (Pattern "\n") str
     , expected: Just 6
     }
   assertEqual
-    { actual: SCP.lastIndexOf (Pattern "\0") str
+    { actual: SCP.lastIndexOf (Pattern "z") str
+    , expected: Just 7
+    }
+  assertEqual
+    { actual: SCP.lastIndexOf (Pattern "\r") str
     , expected: Nothing
     }
   assertEqual
@@ -400,11 +424,19 @@ testStringCodePoints = do
     }
   assertEqual
     { actual: SCP.lastIndexOf' (Pattern "z") 6 str
-    , expected: Just 6
+    , expected: Nothing
     }
   assertEqual
     { actual: SCP.lastIndexOf' (Pattern "z") 7 str
-    , expected: Just 6
+    , expected: Just 7
+    }
+  assertEqual
+    { actual: SCP.lastIndexOf' (Pattern "z") 8 str
+    , expected: Just 7
+    }
+  assertEqual
+    { actual: SCP.lastIndexOf' (Pattern "\xD800") 8 str
+    , expected: Just 3
     }
   assertEqual
     { actual: SCP.lastIndexOf' (Pattern "\xD800") 7 str
@@ -437,6 +469,10 @@ testStringCodePoints = do
   assertEqual
     { actual: SCP.lastIndexOf' (Pattern "\xD800") 0 str
     , expected: Nothing
+    }
+  assertEqual
+    { actual: SCP.lastIndexOf' (Pattern "\x16A06") 8 str
+    , expected: Just 5
     }
   assertEqual
     { actual: SCP.lastIndexOf' (Pattern "\x16A06") 7 str
@@ -494,10 +530,14 @@ testStringCodePoints = do
     }
   assertEqual
     { actual: SCP.take 7 str
-    , expected: str
+    , expected: "a\xDC00\xD800\xD800\x16805\x16A06\n"
     }
   assertEqual
     { actual: SCP.take 8 str
+    , expected: str
+    }
+  assertEqual
+    { actual: SCP.take 9 str
     , expected: str
     }
 
@@ -530,34 +570,38 @@ testStringCodePoints = do
     }
   assertEqual
     { actual: SCP.drop 1 str
-    , expected: "\xDC00\xD800\xD800\x16805\x16A06\&z"
+    , expected: "\xDC00\xD800\xD800\x16805\x16A06\nz"
     }
   assertEqual
     { actual: SCP.drop 2 str
-    , expected: "\xD800\xD800\x16805\x16A06\&z"
+    , expected: "\xD800\xD800\x16805\x16A06\nz"
     }
   assertEqual
     { actual: SCP.drop 3 str
-    , expected: "\xD800\x16805\x16A06\&z"
+    , expected: "\xD800\x16805\x16A06\nz"
     }
   assertEqual
     { actual: SCP.drop 4 str
-    , expected: "\x16805\x16A06\&z"
+    , expected: "\x16805\x16A06\nz"
     }
   assertEqual
     { actual: SCP.drop 5 str
-    , expected: "\x16A06\&z"
+    , expected: "\x16A06\nz"
     }
   assertEqual
     { actual: SCP.drop 6 str
-    , expected: "z"
+    , expected: "\nz"
     }
   assertEqual
     { actual: SCP.drop 7 str
-    , expected: ""
+    , expected: "z"
     }
   assertEqual
     { actual: SCP.drop 8 str
+    , expected: ""
+    }
+  assertEqual
+    { actual: SCP.drop 9 str
     , expected: ""
     }
 
@@ -572,11 +616,11 @@ testStringCodePoints = do
     }
   assertEqual
     { actual: SCP.dropWhile (\c -> fromEnum c < 0xFFFF) str
-    , expected: "\x16805\x16A06\&z"
+    , expected: "\x16805\x16A06\nz"
     }
   assertEqual
     { actual: SCP.dropWhile (\c -> fromEnum c < 0xDC00) str
-    , expected: "\xDC00\xD800\xD800\x16805\x16A06\&z"
+    , expected: "\xDC00\xD800\xD800\x16805\x16A06\nz"
     }
 
   log "splitAt"
@@ -610,34 +654,38 @@ testStringCodePoints = do
     }
   assertEqual
     { actual: SCP.splitAt 1 str
-    , expected: {before: "a", after: "\xDC00\xD800\xD800\x16805\x16A06\&z"}
+    , expected: {before: "a", after: "\xDC00\xD800\xD800\x16805\x16A06\nz"}
     }
   assertEqual
     { actual: SCP.splitAt 2 str
-    , expected: {before: "a\xDC00", after: "\xD800\xD800\x16805\x16A06\&z"}
+    , expected: {before: "a\xDC00", after: "\xD800\xD800\x16805\x16A06\nz"}
     }
   assertEqual
     { actual: SCP.splitAt 3 str
-    , expected: {before: "a\xDC00\xD800", after: "\xD800\x16805\x16A06\&z"}
+    , expected: {before: "a\xDC00\xD800", after: "\xD800\x16805\x16A06\nz"}
     }
   assertEqual
     { actual: SCP.splitAt 4 str
-    , expected: {before: "a\xDC00\xD800\xD800", after: "\x16805\x16A06\&z"}
+    , expected: {before: "a\xDC00\xD800\xD800", after: "\x16805\x16A06\nz"}
     }
   assertEqual
     { actual: SCP.splitAt 5 str
-    , expected: {before: "a\xDC00\xD800\xD800\x16805", after: "\x16A06\&z"}
+    , expected: {before: "a\xDC00\xD800\xD800\x16805", after: "\x16A06\nz"}
     }
   assertEqual
     { actual: SCP.splitAt 6 str
-    , expected: {before: "a\xDC00\xD800\xD800\x16805\x16A06", after: "z"}
+    , expected: {before: "a\xDC00\xD800\xD800\x16805\x16A06", after: "\nz"}
     }
   assertEqual
     { actual: SCP.splitAt 7 str
-    , expected: {before: str, after: ""}
+    , expected: {before: "a\xDC00\xD800\xD800\x16805\x16A06\n", after: "z"}
     }
   assertEqual
     { actual: SCP.splitAt 8 str
+    , expected: {before: str, after: ""}
+    }
+  assertEqual
+    { actual: SCP.splitAt 9 str
     , expected: {before: str, after: ""}
     }
 

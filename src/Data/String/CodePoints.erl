@@ -12,7 +12,7 @@ end.
     Cps = unicode:characters_to_list(Str, utf8),
     case length(Cps) of
         Length when Index < 0, Index >= Length -> Nothing;
-        _ -> Just(lists:nth(Index, Cps))
+        _ -> Just(lists:nth(Index+1, Cps))
     end
 .
 

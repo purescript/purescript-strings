@@ -431,6 +431,10 @@ testStringCodeUnits = do
     , expected: Just "esc"
     }
   assertEqual
+    { actual: SCU.slice 3 10  "purescript"
+    , expected: Just "escript"
+    }
+  assertEqual
     { actual: SCU.slice (-4) (-1) "purescript"
     , expected: Just "rip"
     }

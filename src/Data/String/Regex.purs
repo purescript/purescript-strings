@@ -28,12 +28,12 @@ import Data.String.Regex.Flags (RegexFlags(..), RegexFlagsRec)
 -- | Wraps Javascript `RegExp` objects.
 foreign import data Regex :: Type
 
-foreign import showRegex' :: Regex -> String
+foreign import showRegexImpl :: Regex -> String
 
 instance showRegex :: Show Regex where
-  show = showRegex'
+  show = showRegexImpl
 
-foreign import regex'
+foreign import regexImpl
   :: (String -> Either String Regex)
   -> (Regex -> Either String Regex)
   -> String
@@ -43,17 +43,17 @@ foreign import regex'
 -- | Constructs a `Regex` from a pattern string and flags. Fails with
 -- | `Left error` if the pattern contains a syntax error.
 regex :: String -> RegexFlags -> Either String Regex
-regex s f = regex' Left Right s $ renderFlags f
+regex s f = regexImpl Left Right s $ renderFlags f
 
 -- | Returns the pattern string used to construct the given `Regex`.
 foreign import source :: Regex -> String
 
 -- | Returns the `RegexFlags` used to construct the given `Regex`.
 flags :: Regex -> RegexFlags
-flags = RegexFlags <<< flags'
+flags = RegexFlags <<< flagsImpl
 
 -- | Returns the `RegexFlags` inner record used to construct the given `Regex`.
-foreign import flags' :: Regex -> RegexFlagsRec
+foreign import flagsImpl :: Regex -> RegexFlagsRec
 
 -- | Returns the string representation of the given `RegexFlags`.
 renderFlags :: RegexFlags -> String
@@ -101,7 +101,10 @@ foreign import replace :: Regex -> String -> String -> String
 -- | Transforms occurences of the `Regex` using a function of the matched
 -- | substring and a list of submatch strings.
 -- | See the [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_function_as_a_parameter).
-foreign import replace' :: Regex -> (String -> Array String -> String) -> String -> String
+replace' :: Regex -> (String -> Array String -> String) -> String -> String
+replace' = replaceBy
+
+foreign import replaceBy :: Regex -> (String -> Array String -> String) -> String -> String
 
 foreign import _search
   :: (forall r. r -> Maybe r)

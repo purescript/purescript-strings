@@ -188,9 +188,9 @@ foreign import _indexOf
 -- | ```
 -- |
 indexOf' :: Pattern -> Int -> String -> Maybe Int
-indexOf' = _indexOf' Just Nothing
+indexOf' = _indexOfStartingAt Just Nothing
 
-foreign import _indexOf'
+foreign import _indexOfStartingAt
   :: (forall a. a -> Maybe a)
   -> (forall a. Maybe a)
   -> Pattern
@@ -228,9 +228,9 @@ foreign import _lastIndexOf
 -- | ```
 -- |
 lastIndexOf' :: Pattern -> Int -> String -> Maybe Int
-lastIndexOf' = _lastIndexOf' Just Nothing
+lastIndexOf' = _lastIndexOfStartingAt Just Nothing
 
-foreign import _lastIndexOf'
+foreign import _lastIndexOfStartingAt
   :: (forall a. a -> Maybe a)
   -> (forall a. Maybe a)
   -> Pattern

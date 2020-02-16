@@ -1,10 +1,10 @@
 "use strict";
 
-exports["showRegex'"] = function (r) {
+exports.showRegexImpl = function (r) {
   return "" + r;
 };
 
-exports["regex'"] = function (left) {
+exports.regexImpl = function (left) {
   return function (right) {
     return function (s1) {
       return function (s2) {
@@ -22,7 +22,7 @@ exports.source = function (r) {
   return r.source;
 };
 
-exports["flags'"] = function (r) {
+exports.flagsImpl = function (r) {
   return {
     multiline: r.multiline,
     ignoreCase: r.ignoreCase,
@@ -67,7 +67,7 @@ exports.replace = function (r) {
   };
 };
 
-exports["replace'"] = function (r) {
+exports.replaceBy = function (r) {
   return function (f) {
     return function (s2) {
       return s2.replace(r, function (match) {

@@ -1,11 +1,10 @@
 module Data.String.Regex.Unsafe
-( unsafeRegex
-) where
+  ( unsafeRegex
+  ) where
 
 import Data.Either (fromRight)
 import Data.String.Regex (Regex, regex)
 import Data.String.Regex.Flags (RegexFlags)
-
 import Partial.Unsafe (unsafePartial)
 
 -- | Constructs a `Regex` from a pattern string and flags. Fails with

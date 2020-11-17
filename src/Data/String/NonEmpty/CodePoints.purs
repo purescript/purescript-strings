@@ -36,7 +36,6 @@ import Data.String.CodePoints as CP
 import Data.String.NonEmpty.Internal (NonEmptyString(..), fromString)
 import Data.String.Pattern (Pattern)
 import Partial.Unsafe (unsafePartial)
-import Unsafe.Coerce (unsafeCoerce)
 
 toNonEmptyString :: String -> NonEmptyString
 toNonEmptyString = NonEmptyString

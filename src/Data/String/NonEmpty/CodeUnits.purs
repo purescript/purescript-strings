@@ -33,20 +33,20 @@ import Data.Maybe (Maybe(..), fromJust)
 import Data.Semigroup.Foldable (class Foldable1)
 import Data.Semigroup.Foldable as F1
 import Data.String.CodeUnits as CU
-import Data.String.NonEmpty.Internal (NonEmptyString, fromString)
+import Data.String.NonEmpty.Internal (NonEmptyString(..), fromString)
 import Data.String.Pattern (Pattern)
 import Data.String.Unsafe as U
 import Partial.Unsafe (unsafePartial)
 import Unsafe.Coerce (unsafeCoerce)
 
 toNonEmptyString :: String -> NonEmptyString
-toNonEmptyString = unsafeCoerce
+toNonEmptyString = NonEmptyString
 
 fromNonEmptyString :: NonEmptyString -> String
-fromNonEmptyString = unsafeCoerce
+fromNonEmptyString (NonEmptyString s) = s
 
 liftS :: forall r. (String -> r) -> NonEmptyString -> r
-liftS = unsafeCoerce
+liftS f (NonEmptyString s) = f s
 
 -- | Creates a `NonEmptyString` from a character array `String`, returning
 -- | `Nothing` if the input is empty.

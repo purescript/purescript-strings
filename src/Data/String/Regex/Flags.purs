@@ -9,6 +9,7 @@ type RegexFlagsRec =
   { global :: Boolean
   , ignoreCase :: Boolean
   , multiline :: Boolean
+  , dotAll :: Boolean
   , sticky :: Boolean
   , unicode :: Boolean
   }
@@ -22,6 +23,7 @@ noFlags = RegexFlags
   { global: false
   , ignoreCase: false
   , multiline: false
+  , dotAll : false
   , sticky: false
   , unicode: false
   }
@@ -32,6 +34,7 @@ global = RegexFlags
   { global: true
   , ignoreCase: false
   , multiline: false
+  , dotAll : false
   , sticky: false
   , unicode: false
   }
@@ -42,6 +45,7 @@ ignoreCase = RegexFlags
   { global: false
   , ignoreCase: true
   , multiline: false
+  , dotAll : false
   , sticky: false
   , unicode: false
   }
@@ -52,6 +56,7 @@ multiline = RegexFlags
   { global: false
   , ignoreCase: false
   , multiline: true
+  , dotAll : false
   , sticky: false
   , unicode: false
   }
@@ -62,6 +67,7 @@ sticky = RegexFlags
   { global: false
   , ignoreCase: false
   , multiline: false
+  , dotAll : false
   , sticky: true
   , unicode: false
   }
@@ -72,8 +78,20 @@ unicode = RegexFlags
   { global: false
   , ignoreCase: false
   , multiline: false
+  , dotAll : false
   , sticky: false
   , unicode: true
+  }
+
+-- | Only dotAll flag set to true
+dotAll :: RegexFlags
+dotAll = RegexFlags
+  { global: false
+  , ignoreCase: false
+  , multiline: false
+  , dotAll : true
+  , sticky: false
+  , unicode: false
   }
 
 instance semigroupRegexFlags :: Semigroup RegexFlags where
@@ -81,6 +99,7 @@ instance semigroupRegexFlags :: Semigroup RegexFlags where
     { global: x.global || y.global
     , ignoreCase: x.ignoreCase || y.ignoreCase
     , multiline: x.multiline || y.multiline
+    , dotAll: x.dotAll || y.dotAll
     , sticky: x.sticky || y.sticky
     , unicode: x.unicode || y.unicode
     }
@@ -93,6 +112,7 @@ instance eqRegexFlags :: Eq RegexFlags where
     = x.global == y.global
     && x.ignoreCase == y.ignoreCase
     && x.multiline == y.multiline
+    && x.dotAll == y.dotAll
     && x.sticky == y.sticky
     && x.unicode == y.unicode
 
@@ -104,6 +124,7 @@ instance showRegexFlags :: Show RegexFlags where
         <> (guard flags.global $> "global")
         <> (guard flags.ignoreCase $> "ignoreCase")
         <> (guard flags.multiline $> "multiline")
+        <> (guard flags.dotAll $> "dotAll")
         <> (guard flags.sticky $> "sticky")
         <> (guard flags.unicode $> "unicode")
     in

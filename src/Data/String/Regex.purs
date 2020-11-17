@@ -61,6 +61,7 @@ renderFlags (RegexFlags f) =
   (if f.global then "g" else "") <>
   (if f.ignoreCase then "i" else "") <>
   (if f.multiline then "m" else "") <>
+  (if f.dotAll then "s" else "") <>
   (if f.sticky then "y" else "") <>
   (if f.unicode then "u" else "")
 
@@ -70,6 +71,7 @@ parseFlags s = RegexFlags
   { global: contains (Pattern "g") s
   , ignoreCase: contains (Pattern "i") s
   , multiline: contains (Pattern "m") s
+  , dotAll: contains (Pattern "s") s
   , sticky: contains (Pattern "y") s
   , unicode: contains (Pattern "u") s
   }

@@ -27,6 +27,7 @@ exports.flagsImpl = function (r) {
     multiline: r.multiline,
     ignoreCase: r.ignoreCase,
     global: r.global,
+    dotAll: r.dotAll,
     sticky: !!r.sticky,
     unicode: !!r.unicode
   };

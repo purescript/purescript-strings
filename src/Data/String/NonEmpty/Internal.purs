@@ -8,7 +8,7 @@ import Data.Maybe (Maybe(..), fromJust)
 import Data.Semigroup.Foldable (class Foldable1)
 import Data.String as String
 import Data.String.Pattern (Pattern)
-import Data.Symbol (class IsSymbol, SProxy, reflectSymbol)
+import Data.Symbol (class IsSymbol, reflectSymbol)
 import Prim.TypeError as TE
 import Unsafe.Coerce (unsafeCoerce)
 
@@ -26,10 +26,10 @@ instance showNonEmptyString :: Show NonEmptyString where
 -- |
 -- | ``` purescript
 -- | something :: NonEmptyString
--- | something = nes (SProxy :: SProxy "something")
+-- | something = nes (Proxy :: Proxy "something")
 -- | ```
 class MakeNonEmpty (s :: Symbol) where
-  nes :: SProxy s -> NonEmptyString
+  nes :: forall proxy. proxy s -> NonEmptyString
 
 instance makeNonEmptyBad :: TE.Fail (TE.Text "Cannot create an NonEmptyString from an empty Symbol") => MakeNonEmpty "" where
   nes _ = NonEmptyString ""

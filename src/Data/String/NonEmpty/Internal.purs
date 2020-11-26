@@ -19,13 +19,13 @@ import Prim.TypeError as TE
 import Unsafe.Coerce (unsafeCoerce)
 
 -- | A string that is known not to be empty.
-newtype NonEmptyString =
-  -- | You can use this constructor to create a NonEmptyString that isn't
-  -- | non-empty, breaking the guarantee behind this newtype. It is
-  -- | provided as an escape hatch mainly for the `Data.NonEmpty.CodeUnits`
-  -- | and `Data.NonEmpty.CodePoints` modules. Use this at your own risk
-  -- | when you know what you are doing.
-  NonEmptyString String
+-- |
+-- | You can use this constructor to create a NonEmptyString that isn't
+-- | non-empty, breaking the guarantee behind this newtype. It is
+-- | provided as an escape hatch mainly for the `Data.NonEmpty.CodeUnits`
+-- | and `Data.NonEmpty.CodePoints` modules. Use this at your own risk
+-- | when you know what you are doing.
+newtype NonEmptyString = NonEmptyString String
 
 derive newtype instance eqNonEmptyString ∷ Eq NonEmptyString
 derive newtype instance ordNonEmptyString ∷ Ord NonEmptyString

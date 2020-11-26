@@ -6,11 +6,11 @@ import Data.Array.NonEmpty as NEA
 import Data.Maybe (Maybe(..), fromJust)
 import Data.String.NonEmpty (Pattern(..), nes)
 import Data.String.NonEmpty as NES
-import Data.Symbol (SProxy(..))
 import Effect (Effect)
 import Effect.Console (log)
 import Partial.Unsafe (unsafePartial)
 import Test.Assert (assert, assertEqual)
+import Type.Proxy (Proxy(..))
 
 testNonEmptyString :: Effect Unit
 testNonEmptyString = do
@@ -22,7 +22,7 @@ testNonEmptyString = do
     }
   assertEqual
     { actual: NES.fromString "hello"
-    , expected: Just (nes (SProxy :: SProxy "hello"))
+    , expected: Just (nes (Proxy :: Proxy "hello"))
     }
 
   log "toString"
@@ -33,136 +33,136 @@ testNonEmptyString = do
 
   log "appendString"
   assertEqual
-    { actual: NES.appendString (nes (SProxy :: SProxy "Hello")) " world"
-    , expected: nes (SProxy :: SProxy "Hello world")
+    { actual: NES.appendString (nes (Proxy :: Proxy "Hello")) " world"
+    , expected: nes (Proxy :: Proxy "Hello world")
     }
   assertEqual
-    { actual: NES.appendString (nes (SProxy :: SProxy "Hello")) ""
-    , expected: nes (SProxy :: SProxy "Hello")
+    { actual: NES.appendString (nes (Proxy :: Proxy "Hello")) ""
+    , expected: nes (Proxy :: Proxy "Hello")
     }
 
   log "prependString"
   assertEqual
-    { actual: NES.prependString "be" (nes (SProxy :: SProxy "fore"))
-    , expected: nes (SProxy :: SProxy "before")
+    { actual: NES.prependString "be" (nes (Proxy :: Proxy "fore"))
+    , expected: nes (Proxy :: Proxy "before")
     }
   assertEqual
-    { actual: NES.prependString "" (nes (SProxy :: SProxy "fore"))
-    , expected: nes (SProxy :: SProxy "fore")
+    { actual: NES.prependString "" (nes (Proxy :: Proxy "fore"))
+    , expected: nes (Proxy :: Proxy "fore")
     }
 
   log "contains"
-  assert $ NES.contains (Pattern "") (nes (SProxy :: SProxy "abcd"))
-  assert $ NES.contains (Pattern "bc") (nes (SProxy :: SProxy "abcd"))
-  assert $ not NES.contains (Pattern "cb") (nes (SProxy :: SProxy "abcd"))
-  assert $ NES.contains (Pattern "needle") (nes (SProxy :: SProxy "haystack with needle"))
-  assert $ not NES.contains (Pattern "needle") (nes (SProxy :: SProxy "haystack"))
+  assert $ NES.contains (Pattern "") (nes (Proxy :: Proxy "abcd"))
+  assert $ NES.contains (Pattern "bc") (nes (Proxy :: Proxy "abcd"))
+  assert $ not NES.contains (Pattern "cb") (nes (Proxy :: Proxy "abcd"))
+  assert $ NES.contains (Pattern "needle") (nes (Proxy :: Proxy "haystack with needle"))
+  assert $ not NES.contains (Pattern "needle") (nes (Proxy :: Proxy "haystack"))
 
   log "localeCompare"
   assertEqual
-    { actual: NES.localeCompare (nes (SProxy :: SProxy "a")) (nes (SProxy :: SProxy "a"))
+    { actual: NES.localeCompare (nes (Proxy :: Proxy "a")) (nes (Proxy :: Proxy "a"))
     , expected: EQ
     }
   assertEqual
-    { actual: NES.localeCompare (nes (SProxy :: SProxy "a")) (nes (SProxy :: SProxy "b"))
+    { actual: NES.localeCompare (nes (Proxy :: Proxy "a")) (nes (Proxy :: Proxy "b"))
     , expected: LT
     }
   assertEqual
-    { actual: NES.localeCompare (nes (SProxy :: SProxy "b")) (nes (SProxy :: SProxy "a"))
+    { actual: NES.localeCompare (nes (Proxy :: Proxy "b")) (nes (Proxy :: Proxy "a"))
     , expected: GT
     }
 
   log "replace"
   assertEqual
-    { actual: NES.replace (Pattern "b") (NES.NonEmptyReplacement (nes (SProxy :: SProxy "!"))) (nes (SProxy :: SProxy "abc"))
-    , expected: nes (SProxy :: SProxy "a!c")
+    { actual: NES.replace (Pattern "b") (NES.NonEmptyReplacement (nes (Proxy :: Proxy "!"))) (nes (Proxy :: Proxy "abc"))
+    , expected: nes (Proxy :: Proxy "a!c")
     }
   assertEqual
-    { actual: NES.replace (Pattern "b") (NES.NonEmptyReplacement (nes (SProxy :: SProxy "!"))) (nes (SProxy :: SProxy "abbc"))
-    , expected: nes (SProxy :: SProxy "a!bc")
+    { actual: NES.replace (Pattern "b") (NES.NonEmptyReplacement (nes (Proxy :: Proxy "!"))) (nes (Proxy :: Proxy "abbc"))
+    , expected: nes (Proxy :: Proxy "a!bc")
     }
   assertEqual
-    { actual: NES.replace (Pattern "d") (NES.NonEmptyReplacement (nes (SProxy :: SProxy "!"))) (nes (SProxy :: SProxy "abc"))
-    , expected: nes (SProxy :: SProxy "abc")
+    { actual: NES.replace (Pattern "d") (NES.NonEmptyReplacement (nes (Proxy :: Proxy "!"))) (nes (Proxy :: Proxy "abc"))
+    , expected: nes (Proxy :: Proxy "abc")
     }
 
   log "replaceAll"
   assertEqual
-    { actual: NES.replaceAll (Pattern "[b]") (NES.NonEmptyReplacement (nes (SProxy :: SProxy "!"))) (nes (SProxy :: SProxy "a[b]c"))
-    , expected: nes (SProxy :: SProxy "a!c")
+    { actual: NES.replaceAll (Pattern "[b]") (NES.NonEmptyReplacement (nes (Proxy :: Proxy "!"))) (nes (Proxy :: Proxy "a[b]c"))
+    , expected: nes (Proxy :: Proxy "a!c")
     }
   assertEqual
-    { actual: NES.replaceAll (Pattern "[b]") (NES.NonEmptyReplacement (nes (SProxy :: SProxy "!"))) (nes (SProxy :: SProxy "a[b]c[b]"))
-    , expected: nes (SProxy :: SProxy "a!c!")
+    { actual: NES.replaceAll (Pattern "[b]") (NES.NonEmptyReplacement (nes (Proxy :: Proxy "!"))) (nes (Proxy :: Proxy "a[b]c[b]"))
+    , expected: nes (Proxy :: Proxy "a!c!")
     }
   assertEqual
-    { actual: NES.replaceAll (Pattern "x") (NES.NonEmptyReplacement (nes (SProxy :: SProxy "!"))) (nes (SProxy :: SProxy "abc"))
-    , expected: nes (SProxy :: SProxy "abc")
+    { actual: NES.replaceAll (Pattern "x") (NES.NonEmptyReplacement (nes (Proxy :: Proxy "!"))) (nes (Proxy :: Proxy "abc"))
+    , expected: nes (Proxy :: Proxy "abc")
     }
 
   log "stripPrefix"
   assertEqual
-    { actual: NES.stripPrefix (Pattern "") (nes (SProxy :: SProxy "abc"))
-    , expected: Just (nes (SProxy :: SProxy "abc"))
+    { actual: NES.stripPrefix (Pattern "") (nes (Proxy :: Proxy "abc"))
+    , expected: Just (nes (Proxy :: Proxy "abc"))
     }
   assertEqual
-    { actual: NES.stripPrefix (Pattern "a") (nes (SProxy :: SProxy "abc"))
-    , expected: Just (nes (SProxy :: SProxy "bc"))
+    { actual: NES.stripPrefix (Pattern "a") (nes (Proxy :: Proxy "abc"))
+    , expected: Just (nes (Proxy :: Proxy "bc"))
     }
   assertEqual
-    { actual: NES.stripPrefix (Pattern "abc") (nes (SProxy :: SProxy "abc"))
+    { actual: NES.stripPrefix (Pattern "abc") (nes (Proxy :: Proxy "abc"))
     , expected: Nothing
     }
   assertEqual
-    { actual: NES.stripPrefix (Pattern "!") (nes (SProxy :: SProxy "abc"))
+    { actual: NES.stripPrefix (Pattern "!") (nes (Proxy :: Proxy "abc"))
     , expected: Nothing
     }
   assertEqual
-    { actual: NES.stripPrefix (Pattern "http:") (nes (SProxy :: SProxy "http://purescript.org"))
-    , expected: Just (nes (SProxy :: SProxy "//purescript.org"))
+    { actual: NES.stripPrefix (Pattern "http:") (nes (Proxy :: Proxy "http://purescript.org"))
+    , expected: Just (nes (Proxy :: Proxy "//purescript.org"))
     }
   assertEqual
-    { actual: NES.stripPrefix (Pattern "http:") (nes (SProxy :: SProxy "https://purescript.org"))
+    { actual: NES.stripPrefix (Pattern "http:") (nes (Proxy :: Proxy "https://purescript.org"))
     , expected: Nothing
     }
   assertEqual
-    { actual: NES.stripPrefix (Pattern "Hello!") (nes (SProxy :: SProxy "Hello!"))
+    { actual: NES.stripPrefix (Pattern "Hello!") (nes (Proxy :: Proxy "Hello!"))
     , expected: Nothing
     }
 
   log "stripSuffix"
   assertEqual
-    { actual: NES.stripSuffix (Pattern ".exe") (nes (SProxy :: SProxy "purs.exe"))
-    , expected: Just (nes (SProxy :: SProxy "purs"))
+    { actual: NES.stripSuffix (Pattern ".exe") (nes (Proxy :: Proxy "purs.exe"))
+    , expected: Just (nes (Proxy :: Proxy "purs"))
     }
   assertEqual
-    { actual: NES.stripSuffix (Pattern ".exe") (nes (SProxy :: SProxy "purs"))
+    { actual: NES.stripSuffix (Pattern ".exe") (nes (Proxy :: Proxy "purs"))
     , expected: Nothing
     }
   assertEqual
-    { actual: NES.stripSuffix (Pattern "Hello!") (nes (SProxy :: SProxy "Hello!"))
+    { actual: NES.stripSuffix (Pattern "Hello!") (nes (Proxy :: Proxy "Hello!"))
     , expected: Nothing
     }
 
   log "toLower"
   assertEqual
-    { actual: NES.toLower (nes (SProxy :: SProxy "bAtMaN"))
-    , expected: nes (SProxy :: SProxy "batman")
+    { actual: NES.toLower (nes (Proxy :: Proxy "bAtMaN"))
+    , expected: nes (Proxy :: Proxy "batman")
     }
 
   log "toUpper"
   assertEqual
-    { actual: NES.toUpper (nes (SProxy :: SProxy "bAtMaN"))
-    , expected: nes (SProxy :: SProxy "BATMAN")
+    { actual: NES.toUpper (nes (Proxy :: Proxy "bAtMaN"))
+    , expected: nes (Proxy :: Proxy "BATMAN")
     }
 
   log "trim"
   assertEqual
-    { actual: NES.trim (nes (SProxy :: SProxy "  abc  "))
-    , expected: Just (nes (SProxy :: SProxy "abc"))
+    { actual: NES.trim (nes (Proxy :: Proxy "  abc  "))
+    , expected: Just (nes (Proxy :: Proxy "abc"))
     }
   assertEqual
-    { actual: NES.trim (nes (SProxy :: SProxy "   \n"))
+    { actual: NES.trim (nes (Proxy :: Proxy "   \n"))
     , expected: Nothing
     }
 
@@ -172,48 +172,48 @@ testNonEmptyString = do
     , expected: ""
     }
   assertEqual
-    { actual: NES.joinWith "" [nes (SProxy :: SProxy "a"), nes (SProxy :: SProxy "b")]
+    { actual: NES.joinWith "" [nes (Proxy :: Proxy "a"), nes (Proxy :: Proxy "b")]
     , expected: "ab"
     }
   assertEqual
-    { actual: NES.joinWith "--" [nes (SProxy :: SProxy "a"), nes (SProxy :: SProxy "b"), nes (SProxy :: SProxy "c")]
+    { actual: NES.joinWith "--" [nes (Proxy :: Proxy "a"), nes (Proxy :: Proxy "b"), nes (Proxy :: Proxy "c")]
     , expected: "a--b--c"
     }
 
   log "join1With"
   assertEqual
-    { actual: NES.join1With "" (nea [nes (SProxy :: SProxy "a"), nes (SProxy :: SProxy "b")])
-    , expected: nes (SProxy :: SProxy "ab")
+    { actual: NES.join1With "" (nea [nes (Proxy :: Proxy "a"), nes (Proxy :: Proxy "b")])
+    , expected: nes (Proxy :: Proxy "ab")
     }
   assertEqual
-    { actual: NES.join1With "--" (nea [nes (SProxy :: SProxy "a"), nes (SProxy :: SProxy "b"), nes (SProxy :: SProxy "c")])
-    , expected: nes (SProxy :: SProxy "a--b--c")
+    { actual: NES.join1With "--" (nea [nes (Proxy :: Proxy "a"), nes (Proxy :: Proxy "b"), nes (Proxy :: Proxy "c")])
+    , expected: nes (Proxy :: Proxy "a--b--c")
     }
   assertEqual
-    { actual: NES.join1With ", " (nea [nes (SProxy :: SProxy "apple"), nes (SProxy :: SProxy "banana")])
-    , expected: nes (SProxy :: SProxy "apple, banana")
+    { actual: NES.join1With ", " (nea [nes (Proxy :: Proxy "apple"), nes (Proxy :: Proxy "banana")])
+    , expected: nes (Proxy :: Proxy "apple, banana")
     }
   assertEqual
-    { actual: NES.join1With "" (nea [nes (SProxy :: SProxy "apple"), nes (SProxy :: SProxy "banana")])
-    , expected: nes (SProxy :: SProxy "applebanana")
+    { actual: NES.join1With "" (nea [nes (Proxy :: Proxy "apple"), nes (Proxy :: Proxy "banana")])
+    , expected: nes (Proxy :: Proxy "applebanana")
     }
 
   log "joinWith1"
   assertEqual
-    { actual: NES.joinWith1 (nes (SProxy :: SProxy " ")) (nea ["a", "b"])
-    , expected: nes (SProxy :: SProxy "a b")
+    { actual: NES.joinWith1 (nes (Proxy :: Proxy " ")) (nea ["a", "b"])
+    , expected: nes (Proxy :: Proxy "a b")
     }
   assertEqual
-    { actual: NES.joinWith1 (nes (SProxy :: SProxy "--")) (nea ["a", "b", "c"])
-    , expected: nes (SProxy :: SProxy "a--b--c")
+    { actual: NES.joinWith1 (nes (Proxy :: Proxy "--")) (nea ["a", "b", "c"])
+    , expected: nes (Proxy :: Proxy "a--b--c")
     }
   assertEqual
-    { actual: NES.joinWith1 (nes (SProxy :: SProxy ", ")) (nea ["apple", "banana"])
-    , expected: nes (SProxy :: SProxy "apple, banana")
+    { actual: NES.joinWith1 (nes (Proxy :: Proxy ", ")) (nea ["apple", "banana"])
+    , expected: nes (Proxy :: Proxy "apple, banana")
     }
   assertEqual
-    { actual: NES.joinWith1 (nes (SProxy :: SProxy "/")) (nea ["a", "b", "", "c", ""])
-    , expected: nes (SProxy :: SProxy "a/b//c/")
+    { actual: NES.joinWith1 (nes (Proxy :: Proxy "/")) (nea ["a", "b", "", "c", ""])
+    , expected: nes (Proxy :: Proxy "a/b//c/")
     }
 
 nea :: Array ~> NEA.NonEmptyArray

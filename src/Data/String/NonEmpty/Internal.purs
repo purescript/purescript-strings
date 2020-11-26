@@ -20,7 +20,7 @@ import Unsafe.Coerce (unsafeCoerce)
 
 -- | A string that is known not to be empty.
 -- |
--- | You can use this constructor to create a NonEmptyString that isn't
+-- | You can use this constructor to create a `NonEmptyString` that isn't
 -- | non-empty, breaking the guarantee behind this newtype. It is
 -- | provided as an escape hatch mainly for the `Data.NonEmpty.CodeUnits`
 -- | and `Data.NonEmpty.CodePoints` modules. Use this at your own risk

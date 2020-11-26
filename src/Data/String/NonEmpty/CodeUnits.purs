@@ -39,12 +39,15 @@ import Data.String.Unsafe as U
 import Partial.Unsafe (unsafePartial)
 import Unsafe.Coerce (unsafeCoerce)
 
+-- For internal use only. Do not export.
 toNonEmptyString :: String -> NonEmptyString
 toNonEmptyString = NonEmptyString
 
+-- For internal use only. Do not export.
 fromNonEmptyString :: NonEmptyString -> String
 fromNonEmptyString (NonEmptyString s) = s
 
+-- For internal use only. Do not export.
 liftS :: forall r. (String -> r) -> NonEmptyString -> r
 liftS f (NonEmptyString s) = f s
 

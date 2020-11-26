@@ -23,9 +23,7 @@ newtype NonEmptyString =
   -- | You can use this constructor to create a NonEmptyString that isn't
   -- | non-empty, breaking the guarantee behind this newtype. It is
   -- | provided as an escape hatch mainly for the `Data.NonEmpty.CodeUnits`
-  -- | and `Data.NonEmpty.CodePoints` modules. Usage of this constructor
-  -- | in your own code provides the same safety guarantees of
-  -- | `unsafeCoerce`, that is, none at all. Use this at your own risk
+  -- | and `Data.NonEmpty.CodePoints` modules. Use this at your own risk
   -- | when you know what you are doing.
   NonEmptyString String
 

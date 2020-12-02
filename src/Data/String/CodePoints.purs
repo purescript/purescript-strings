@@ -220,7 +220,7 @@ length = Array.length <<< toCodePointArray
 -- | time linear to the length of the string.
 -- |
 -- | ```purescript
--- | >>> countPrefix (\c -> codePointToInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
+-- | >>> countPrefix (\c -> fromEnum c == 0x1D400) "𝐀𝐀 b c 𝐀"
 -- | 2
 -- | ```
 -- |
@@ -329,7 +329,7 @@ takeFallback n s = case uncons s of
 -- | in time linear to the length of the string.
 -- |
 -- | ```purescript
--- | >>> takeWhile (\c -> codePointToInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
+-- | >>> takeWhile (\c -> fromEnum c == 0x1D400) "𝐀𝐀 b c 𝐀"
 -- | "𝐀𝐀"
 -- | ```
 -- |
@@ -356,7 +356,7 @@ drop n s = CU.drop (CU.length (take n s)) s
 -- | to the length of the string.
 -- |
 -- | ```purescript
--- | >>> dropWhile (\c -> codePointToInt c == 0x1D400) "𝐀𝐀 b c 𝐀"
+-- | >>> dropWhile (\c -> fromEnum c == 0x1D400) "𝐀𝐀 b c 𝐀"
 -- | " b c 𝐀"
 -- | ```
 -- |

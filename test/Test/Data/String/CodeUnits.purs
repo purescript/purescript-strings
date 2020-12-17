@@ -270,7 +270,7 @@ testStringCodeUnits = do
     }
   assertEqual
     { actual: SCU.lastIndexOf' (Pattern "") (-1) "ab"
-    , expected: Nothing
+    , expected: Just 0
     }
   assertEqual
     { actual: SCU.lastIndexOf' (Pattern "") 0 "ab"
@@ -286,7 +286,7 @@ testStringCodeUnits = do
     }
   assertEqual
     { actual: SCU.lastIndexOf' (Pattern "") 3 "ab"
-    , expected: Nothing
+    , expected: Just 2
     }
   assertEqual
     { actual: SCU.lastIndexOf' (Pattern "bc") 0 "abcd"

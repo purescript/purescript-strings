@@ -277,7 +277,7 @@ testNonEmptyStringCodeUnits = do
   log "lastIndexOf'"
   assertEqual
     { actual: NESCU.lastIndexOf' (Pattern "") (-1) (nes (Proxy :: Proxy "ab"))
-    , expected: Nothing
+    , expected: Just 0
     }
   assertEqual
     { actual: NESCU.lastIndexOf' (Pattern "") 0 (nes (Proxy :: Proxy "ab"))
@@ -293,7 +293,7 @@ testNonEmptyStringCodeUnits = do
     }
   assertEqual
     { actual: NESCU.lastIndexOf' (Pattern "") 3 (nes (Proxy :: Proxy "ab"))
-    , expected: Nothing
+    , expected: Just 2
     }
   assertEqual
     { actual: NESCU.lastIndexOf' (Pattern "bc") 0 (nes (Proxy :: Proxy "abcd"))

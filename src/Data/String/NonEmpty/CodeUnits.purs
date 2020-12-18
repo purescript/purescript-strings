@@ -159,14 +159,21 @@ lastIndexOf :: Pattern -> NonEmptyString -> Maybe Int
 lastIndexOf = liftS <<< CU.lastIndexOf
 
 -- | Returns the index of the last occurrence of the pattern in the
--- | given string, starting at the specified index
--- | and searching backwards towards the beginning of the string.
+-- | given string, starting at the specified index and searching
+-- | backwards towards the beginning of the string.
+-- |
+-- | Starting at a negative index is equivalent to starting at 0 and
+-- | starting at an index greater than the string length is equivalent
+-- | to searching in the whole string.
+-- |
 -- | Returns `Nothing` if there is no match.
 -- |
 -- | ```purescript
+-- | lastIndexOf' (Pattern "a") (-1) (NonEmptyString "ababa") == Just 0
 -- | lastIndexOf' (Pattern "a") 1 (NonEmptyString "ababa") == Just 0
 -- | lastIndexOf' (Pattern "a") 3 (NonEmptyString "ababa") == Just 2
 -- | lastIndexOf' (Pattern "a") 4 (NonEmptyString "ababa") == Just 4
+-- | lastIndexOf' (Pattern "a") 5 (NonEmptyString "ababa") == Just 4
 -- | ```
 lastIndexOf' :: Pattern -> Int -> NonEmptyString -> Maybe Int
 lastIndexOf' pat = liftS <<< CU.lastIndexOf' pat

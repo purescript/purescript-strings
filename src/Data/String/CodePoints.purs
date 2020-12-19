@@ -286,11 +286,23 @@ lastIndexOf p s = (\i -> length (CU.take i s)) <$> CU.lastIndexOf p s
 
 -- | Returns the number of code points preceding the first match of the given
 -- | pattern in the string. Pattern matches following the given index will be
--- | ignored. Returns Nothing when no matches are found.
+-- | ignored.
+-- |
+-- | Giving a negative index is equivalent to giving 0 and giving an index
+-- | greater than the number of code points in the string is equivalent to
+-- | searching in the whole string.
+-- |
+-- | Returns Nothing when no matches are found.
 -- |
 -- | ```purescript
+-- | >>> lastIndexOf' (Pattern "𝐀") (-1) "b 𝐀𝐀 c 𝐀"
+-- | Nothing
+-- | >>> lastIndexOf' (Pattern "𝐀") 0 "b 𝐀𝐀 c 𝐀"
+-- | Nothing
 -- | >>> lastIndexOf' (Pattern "𝐀") 5 "b 𝐀𝐀 c 𝐀"
 -- | Just 3
+-- | >>> lastIndexOf' (Pattern "𝐀") 8 "b 𝐀𝐀 c 𝐀"
+-- | Just 7
 -- | >>> lastIndexOf' (Pattern "o") 5 "b 𝐀𝐀 c 𝐀"
 -- | Nothing
 -- | ```

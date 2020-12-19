@@ -83,7 +83,6 @@ exports._lastIndexOfStartingAt = function (just) {
     return function (x) {
       return function (startAt) {
         return function (s) {
-          if (startAt < 0 || startAt > s.length) return nothing;
           var i = s.lastIndexOf(x, startAt);
           return i === -1 ? nothing : just(i);
         };

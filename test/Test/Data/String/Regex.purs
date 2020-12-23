@@ -5,7 +5,7 @@ import Data.String.Regex
 import Data.Array.NonEmpty (NonEmptyArray, fromArray)
 import Data.Either (isLeft)
 import Data.Maybe (Maybe(..), fromJust)
-import Data.String.Regex.Flags (global, ignoreCase, noFlags)
+import Data.String.Regex.Flags (dotAll, global, ignoreCase, noFlags)
 import Data.String.Regex.Unsafe (unsafeRegex)
 import Effect (Effect)
 import Effect.Console (log)
@@ -24,6 +24,7 @@ testStringRegex = do
   assert $ "quxbarfoobaz" == replace (unsafeRegex "foo" noFlags) "qux" "foobarfoobaz"
   assert $ "quxbarquxbaz" == replace (unsafeRegex "foo" global) "qux" "foobarfoobaz"
   assert $ "quxbarquxbaz" == replace (unsafeRegex "foo" (global <> ignoreCase)) "qux" "foobarFOObaz"
+  assert $ "quxbarfoobaz" == replace (unsafeRegex ".foo" dotAll) "qux" "\nfoobarfoobaz"
 
   log "match"
   assert $ match (unsafeRegex "^abc$" noFlags) "abc" == Just (nea [Just "abc"])

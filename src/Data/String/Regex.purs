@@ -1,5 +1,5 @@
 -- | Wraps Javascript's `RegExp` object that enables matching strings with
--- | patternes defined by regular expressions.
+-- | patterns defined by regular expressions.
 -- | For details of the underlying implementation, see [RegExp Reference at MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
 module Data.String.Regex
   ( Regex(..)
@@ -95,18 +95,25 @@ foreign import _match
 match :: Regex -> String -> Maybe (NonEmptyArray (Maybe String))
 match = _match Just Nothing
 
--- | Replaces occurences of the `Regex` with the first string. The replacement
+-- | Replaces occurrences of the `Regex` with the first string. The replacement
 -- | string can include special replacement patterns escaped with `"$"`.
 -- | See [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace).
 foreign import replace :: Regex -> String -> String -> String
 
--- | Transforms occurences of the `Regex` using a function of the matched
--- | substring and a list of submatch strings.
--- | See the [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_function_as_a_parameter).
-replace' :: Regex -> (String -> Array String -> String) -> String -> String
-replace' = replaceBy
+foreign import _replaceBy
+  :: (forall r. r -> Maybe r)
+  -> (forall r. Maybe r)
+  -> Regex
+  -> (String -> Array (Maybe String) -> String)
+  -> String
+  -> String
 
-foreign import replaceBy :: Regex -> (String -> Array String -> String) -> String -> String
+-- | Transforms occurrences of the `Regex` using a function of the matched
+-- | substring and a list of captured substrings of type `Maybe String`,
+-- | where `Nothing` represents an unmatched optional capturing group.
+-- | See the [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_function_as_a_parameter).
+replace' :: Regex -> (String -> Array (Maybe String) -> String) -> String -> String
+replace' = _replaceBy Just Nothing
 
 foreign import _search
   :: (forall r. r -> Maybe r)
@@ -120,5 +127,5 @@ foreign import _search
 search :: Regex -> String -> Maybe Int
 search = _search Just Nothing
 
--- | Split the string into an array of substrings along occurences of the `Regex`.
+-- | Split the string into an array of substrings along occurrences of the `Regex`.
 foreign import split :: Regex -> String -> Array String

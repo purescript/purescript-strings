@@ -10,7 +10,7 @@ import Data.String.Regex.Unsafe (unsafeRegex)
 import Effect (Effect)
 import Effect.Console (log)
 import Partial.Unsafe (unsafePartial)
-import Prelude (type (~>), Unit, discard, not, ($), (<<<), (<>), (==))
+import Prelude (type (~>), Unit, discard, not, show, ($), (<<<), (<>), (==))
 import Test.Assert (assert)
 
 testStringRegex :: Effect Unit
@@ -35,6 +35,10 @@ testStringRegex = do
 
   log "replace'"
   assert $ replace' (unsafeRegex "-" noFlags) (\s xs -> "!") "a-b-c" == "a!b-c"
+  assert $ replace' (unsafeRegex "(foo)(bar)?" noFlags) (\s xs -> show xs) "<>" == "<>"
+  assert $ replace' (unsafeRegex "(foo)(bar)?" noFlags) (\s xs -> show xs) "<foo>" == "<[(Just \"foo\"),Nothing]>"
+  assert $ replace' (unsafeRegex "(foo)(bar)?" noFlags) (\s xs -> show xs) "<foobar>" == "<[(Just \"foo\"),(Just \"bar\")]>"
+  assert $ replace' (unsafeRegex "@(?<username>\\w+)" noFlags) (\s xs -> show xs) "@purescript" == "[(Just \"purescript\")]"
 
   log "search"
   assert $ search (unsafeRegex "b" noFlags) "abc" == Just 1

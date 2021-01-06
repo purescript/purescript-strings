@@ -104,15 +104,15 @@ foreign import _replaceBy
   :: (forall r. r -> Maybe r)
   -> (forall r. Maybe r)
   -> Regex
-  -> (String -> Array (Maybe String) -> String)
+  -> (Array (Maybe String) -> String)
   -> String
   -> String
 
--- | Transforms occurrences of the `Regex` using a function of the matched
--- | substring and a list of captured substrings of type `Maybe String`,
--- | where `Nothing` represents an unmatched optional capturing group.
+-- | Transforms occurrences of the `Regex` using a function of
+-- | a list of captured substrings of type `Maybe String`, where
+-- | `Nothing` represents an unmatched optional capturing group.
 -- | See the [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_function_as_a_parameter).
-replace' :: Regex -> (String -> Array (Maybe String) -> String) -> String -> String
+replace' :: Regex -> (Array (Maybe String) -> String) -> String -> String
 replace' = _replaceBy Just Nothing
 
 foreign import _search

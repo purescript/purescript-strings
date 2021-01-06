@@ -73,13 +73,13 @@ exports._replaceBy = function (just) {
     return function (r) {
       return function (f) {
         return function (s) {
-          return s.replace(r, function (match) {
+          return s.replace(r, function () {
             var groups = [];
             var group, i = 1;
             while (typeof (group = arguments[i++]) !== "number") {
               groups.push(group == null ? nothing : just(group));
             }
-            return f(match)(groups);
+            return f(groups);
           });
         };
       };

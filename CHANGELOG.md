@@ -5,12 +5,22 @@ Notable changes to this project are documented in this file. The format is based
 ## [Unreleased]
 
 Breaking changes:
+- Added support for PureScript 0.14 and dropped support for all previous versions (#129)
+- Updated `replace'` to reflect the existence of optional capturing groups (#126)
 
 New features:
+- Replaced `unsafeCoerce` with `coerce` where appropriate (#130)
+- Replaced monomorphic proxies with `Type.Proxy.Proxy` and polymorphic variables (#134)
+- Added a dotAll regexp flag (#133)
 
 Bugfixes:
+- Removed the bounds check from the foreign implementation of `lastIndexOf'` (#137)
 
 Other improvements:
+- Fix line endings to match overall project style (#132)
+- Removed references to `codePointToInt`, which no longer exists (#135)
+- Migrated CI to GitHub Actions and updated installation instructions to use Spago (#136)
+- Added a changelog and pull request template (#140, #141)
 
 ## [v4.0.2](https://github.com/purescript/purescript-strings/releases/tag/v4.0.2) - 2020-05-13
 
@@ -37,22 +47,22 @@ Other improvements:
 
 ## [v3.4.0](https://github.com/purescript/purescript-strings/releases/tag/v3.4.0) - 2017-12-28
 
-* Add `Show CodePoint` instance (@csicar)
-* Add `codePointFromChar` (@csicar)
-* Expanded docs for most functions in `Data.String` and `Data.String.CodePoints` (@csicar)
+- Add `Show CodePoint` instance (@csicar)
+- Add `codePointFromChar` (@csicar)
+- Expanded docs for most functions in `Data.String` and `Data.String.CodePoints` (@csicar)
 
 ## [v3.3.2](https://github.com/purescript/purescript-strings/releases/tag/v3.3.2) - 2017-11-19
 
-Performance improvement in `Data.String.Regex.match` (@fehrenbach)
+- Performance improvement in `Data.String.Regex.match` (@fehrenbach)
 
 ## [v3.3.1](https://github.com/purescript/purescript-strings/releases/tag/v3.3.1) - 2017-08-06
 
-Fix some `Show` instances (@Rufflewind)
+- Fix some `Show` instances (@Rufflewind)
 
 ## [v3.3.0](https://github.com/purescript/purescript-strings/releases/tag/v3.3.0) - 2017-07-10
 
-* Add a new module `Data.String.CodePoints`, which treats strings as sequences of Unicode code points rather than sequences of UTF-16 code units. In the future we may swap this module with `Data.String`. (@michaelficarra)
-* Fix a typo in the documentation (@ijks)
+- Add a new module `Data.String.CodePoints`, which treats strings as sequences of Unicode code points rather than sequences of UTF-16 code units. In the future we may swap this module with `Data.String`. (@michaelficarra)
+- Fix a typo in the documentation (@ijks)
 
 ## [v3.2.1](https://github.com/purescript/purescript-strings/releases/tag/v3.2.1) - 2017-06-06
 
@@ -73,7 +83,7 @@ Fix some `Show` instances (@Rufflewind)
 
 ## [v2.1.0](https://github.com/purescript/purescript-strings/releases/tag/v2.1.0) - 2016-12-25
 
-Add `unsafeRegex` (@rightfold)
+- Added `unsafeRegex` (@rightfold)
 
 ## [v2.0.2](https://github.com/purescript/purescript-strings/releases/tag/v2.0.2) - 2016-10-26
 
@@ -98,14 +108,6 @@ Add `unsafeRegex` (@rightfold)
 This release is intended for the PureScript 0.9.1 compiler and newer.
 
 **Note**: The v1.0.0 tag is not meant to indicate the library is “finished”, the core libraries are all being bumped to this for the 0.9 compiler release so as to use semver more correctly.
-
-## [v1.0.0-rc.2](https://github.com/purescript/purescript-strings/releases/tag/v1.0.0-rc.2) - 2016-05-20
-
-- Fix unused import warning
-
-## [v1.0.0-rc.1](https://github.com/purescript/purescript-strings/releases/tag/v1.0.0-rc.1) - 2016-03-24
-
-- Release candidate for the psc 0.8+ core libraries
 
 ## [v0.7.1](https://github.com/purescript/purescript-strings/releases/tag/v0.7.1) - 2015-11-20
 
@@ -147,17 +149,8 @@ Add `stripPrefix` (@hdgarrood)
 
 This release works with versions 0.7.\* of the PureScript compiler. It will not work with older versions. If you are using an older version, you should require an older, compatible version of this library.
 
-## [v0.5.0-rc.3](https://github.com/purescript/purescript-strings/releases/tag/v0.5.0-rc.3) - 2015-06-12
-
 - Fixed various FFI exports (@sharkdp)
-
-## [v0.5.0-rc.2](https://github.com/purescript/purescript-strings/releases/tag/v0.5.0-rc.2) - 2015-06-07
-
-Fix `localeCompare`
-
-## [v0.5.0-rc.1](https://github.com/purescript/purescript-strings/releases/tag/v0.5.0-rc.1) - 2015-06-07
-
-Initial release candidate of the library intended for the 0.7 compiler.
+- Fixed `localeCompare`
 
 ## [v0.4.5](https://github.com/purescript/purescript-strings/releases/tag/v0.4.5) - 2015-03-23
 
@@ -166,7 +159,7 @@ Initial release candidate of the library intended for the 0.7 compiler.
 
 ## [v0.4.4](https://github.com/purescript/purescript-strings/releases/tag/v0.4.4) - 2015-03-22
 
-Updated docs
+- Updated docs
 
 ## [v0.4.3](https://github.com/purescript/purescript-strings/releases/tag/v0.4.3) - 2015-02-18
 
@@ -174,11 +167,11 @@ Updated docs
 
 ## [v0.4.2](https://github.com/purescript/purescript-strings/releases/tag/v0.4.2) - 2014-11-28
 
-
+- Added `null`, `singleton`, `uncons`, `takeWhile`, and `dropWhile` to `Data.String` (@NightRa)
 
 ## [v0.4.1](https://github.com/purescript/purescript-strings/releases/tag/v0.4.1) - 2014-11-06
 
-
+- Use ternary operator in JavaScript output (@davidchambers)
 
 ## [v0.4.0](https://github.com/purescript/purescript-strings/releases/tag/v0.4.0) - 2014-10-27
 
@@ -190,11 +183,11 @@ Updated docs
 
 ## [v0.3.2](https://github.com/purescript/purescript-strings/releases/tag/v0.3.2) - 2014-10-16
 
-
+- Added essential instances for `Char` (@jdegoes)
 
 ## [v0.3.1](https://github.com/purescript/purescript-strings/releases/tag/v0.3.1) - 2014-10-15
 
-
+- Fixed typo in `fromCharArray` FFI implementation (@jdegoes)
 
 ## [v0.3.0](https://github.com/purescript/purescript-strings/releases/tag/v0.3.0) - 2014-10-14
 
@@ -212,17 +205,16 @@ Updated docs
 
 ## [v0.1.3](https://github.com/purescript/purescript-strings/releases/tag/v0.1.3) - 2014-05-04
 
-Renamed `Data.String.Regex.replaceR` to `replace`, added `replace'` which uses a function to construct replacements for matches.
+- Renamed `Data.String.Regex.replaceR` to `replace`, added `replace'` which uses a function to construct replacements for matches.
 
 ## [v0.1.2](https://github.com/purescript/purescript-strings/releases/tag/v0.1.2) - 2014-04-30
 
-Added `indexOf'` and `lastIndexOf'` (paf31)
+- Added `indexOf'` and `lastIndexOf'` (paf31)
 
 ## [v0.1.1](https://github.com/purescript/purescript-strings/releases/tag/v0.1.1) - 2014-04-27
 
-
+- Swapped `joinWith` arguments for better style
 
 ## [v0.1.0](https://github.com/purescript/purescript-strings/releases/tag/v0.1.0) - 2014-04-25
 
-
-
+- Initial release

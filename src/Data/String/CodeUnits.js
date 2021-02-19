@@ -103,7 +103,7 @@ exports.drop = function (n) {
   };
 };
 
-exports._slice = function (b) {
+exports.slice = function (b) {
   return function (e) {
     return function (s) {
       return s.slice(b,e);

@@ -17,25 +17,17 @@ testString = do
   assert $ not (S.null "a")
 
   log "stripPrefix"
+  -- this is a re-export from Data.String.CodeUnits, so the majority of tests are in there
   assertEqual
-    { actual: S.stripPrefix (Pattern "") ""
-    , expected: Just ""
+    { actual: S.stripPrefix (Pattern "𝕒𝕓𝕔") "𝕒𝕓𝕔𝕕𝕖"
+    , expected: Just "𝕕𝕖"
     }
+
+  log "stripSuffix"
+  -- this is a re-export from Data.String.CodeUnits, so the majority of tests are in there
   assertEqual
-    { actual: S.stripPrefix (Pattern "") "abc"
-    , expected: Just "abc"
-    }
-  assertEqual
-    { actual: S.stripPrefix (Pattern "a") "abc"
-    , expected: Just "bc"
-    }
-  assertEqual
-    { actual: S.stripPrefix (Pattern "!") "abc"
-    , expected: Nothing
-    }
-  assertEqual
-    { actual: S.stripPrefix (Pattern "!") ""
-    , expected: Nothing
+    { actual: S.stripSuffix (Pattern "𝕔𝕕𝕖") "𝕒𝕓𝕔𝕕𝕖"
+    , expected: Just "𝕒𝕓"
     }
 
   log "contains"

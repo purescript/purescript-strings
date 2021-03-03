@@ -5,12 +5,12 @@ import Data.String.Regex
 import Data.Array.NonEmpty (NonEmptyArray, fromArray)
 import Data.Either (isLeft)
 import Data.Maybe (Maybe(..), fromJust)
-import Data.String.Regex.Flags (global, ignoreCase, noFlags)
+import Data.String.Regex.Flags (dotAll, global, ignoreCase, noFlags)
 import Data.String.Regex.Unsafe (unsafeRegex)
 import Effect (Effect)
 import Effect.Console (log)
 import Partial.Unsafe (unsafePartial)
-import Prelude (type (~>), Unit, discard, not, ($), (<<<), (<>), (==))
+import Prelude (type (~>), Unit, discard, not, show, ($), (<<<), (<>), (==))
 import Test.Assert (assert)
 
 testStringRegex :: Effect Unit
@@ -24,6 +24,7 @@ testStringRegex = do
   assert $ "quxbarfoobaz" == replace (unsafeRegex "foo" noFlags) "qux" "foobarfoobaz"
   assert $ "quxbarquxbaz" == replace (unsafeRegex "foo" global) "qux" "foobarfoobaz"
   assert $ "quxbarquxbaz" == replace (unsafeRegex "foo" (global <> ignoreCase)) "qux" "foobarFOObaz"
+  assert $ "quxbarfoobaz" == replace (unsafeRegex ".foo" dotAll) "qux" "\nfoobarfoobaz"
 
   log "match"
   assert $ match (unsafeRegex "^abc$" noFlags) "abc" == Just (nea [Just "abc"])
@@ -34,6 +35,10 @@ testStringRegex = do
 
   -- log "replace'"
   -- assert $ replace' (unsafeRegex "-" noFlags) (\s xs -> "!") "a-b-c" == "a!b-c"
+  assert $ replace' (unsafeRegex "(foo)(bar)?" noFlags) (\s xs -> show xs) "<>" == "<>"
+  assert $ replace' (unsafeRegex "(foo)(bar)?" noFlags) (\s xs -> show xs) "<foo>" == "<[(Just \"foo\"),Nothing]>"
+  assert $ replace' (unsafeRegex "(foo)(bar)?" noFlags) (\s xs -> show xs) "<foobar>" == "<[(Just \"foo\"),(Just \"bar\")]>"
+  assert $ replace' (unsafeRegex "@(?<username>\\w+)" noFlags) (\s xs -> show xs) "@purescript" == "[(Just \"purescript\")]"
 
   log "search"
   assert $ search (unsafeRegex "b" noFlags) "abc" == Just 1

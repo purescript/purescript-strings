@@ -1,5 +1,5 @@
 -- | Wraps Javascript's `RegExp` object that enables matching strings with
--- | patternes defined by regular expressions.
+-- | patterns defined by regular expressions.
 -- | For details of the underlying implementation, see [RegExp Reference at MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
 module Data.String.Regex
   ( Regex(..)
@@ -28,12 +28,12 @@ import Data.String.Regex.Flags (RegexFlags(..), RegexFlagsRec)
 -- | Wraps Javascript `RegExp` objects.
 foreign import data Regex :: Type
 
-foreign import showRegex' :: Regex -> String
+foreign import showRegexImpl :: Regex -> String
 
 instance showRegex :: Show Regex where
-  show = showRegex'
+  show = showRegexImpl
 
-foreign import regex'
+foreign import regexImpl
   :: (String -> Either String Regex)
   -> (Regex -> Either String Regex)
   -> String
@@ -43,17 +43,17 @@ foreign import regex'
 -- | Constructs a `Regex` from a pattern string and flags. Fails with
 -- | `Left error` if the pattern contains a syntax error.
 regex :: String -> RegexFlags -> Either String Regex
-regex s f = regex' Left Right s $ renderFlags f
+regex s f = regexImpl Left Right s $ renderFlags f
 
 -- | Returns the pattern string used to construct the given `Regex`.
 foreign import source :: Regex -> String
 
 -- | Returns the `RegexFlags` used to construct the given `Regex`.
 flags :: Regex -> RegexFlags
-flags = RegexFlags <<< flags'
+flags = RegexFlags <<< flagsImpl
 
 -- | Returns the `RegexFlags` inner record used to construct the given `Regex`.
-foreign import flags' :: Regex -> RegexFlagsRec
+foreign import flagsImpl :: Regex -> RegexFlagsRec
 
 -- | Returns the string representation of the given `RegexFlags`.
 renderFlags :: RegexFlags -> String
@@ -61,6 +61,7 @@ renderFlags (RegexFlags f) =
   (if f.global then "g" else "") <>
   (if f.ignoreCase then "i" else "") <>
   (if f.multiline then "m" else "") <>
+  (if f.dotAll then "s" else "") <>
   (if f.sticky then "y" else "") <>
   (if f.unicode then "u" else "")
 
@@ -70,6 +71,7 @@ parseFlags s = RegexFlags
   { global: contains (Pattern "g") s
   , ignoreCase: contains (Pattern "i") s
   , multiline: contains (Pattern "m") s
+  , dotAll: contains (Pattern "s") s
   , sticky: contains (Pattern "y") s
   , unicode: contains (Pattern "u") s
   }
@@ -93,15 +95,25 @@ foreign import _match
 match :: Regex -> String -> Maybe (NonEmptyArray (Maybe String))
 match = _match Just Nothing
 
--- | Replaces occurences of the `Regex` with the first string. The replacement
+-- | Replaces occurrences of the `Regex` with the first string. The replacement
 -- | string can include special replacement patterns escaped with `"$"`.
 -- | See [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace).
 foreign import replace :: Regex -> String -> String -> String
 
--- | Transforms occurences of the `Regex` using a function of the matched
--- | substring and a list of submatch strings.
+foreign import _replaceBy
+  :: (forall r. r -> Maybe r)
+  -> (forall r. Maybe r)
+  -> Regex
+  -> (String -> Array (Maybe String) -> String)
+  -> String
+  -> String
+
+-- | Transforms occurrences of the `Regex` using a function of the matched
+-- | substring and a list of captured substrings of type `Maybe String`,
+-- | where `Nothing` represents an unmatched optional capturing group.
 -- | See the [reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_function_as_a_parameter).
-foreign import replace' :: Regex -> (String -> Array String -> String) -> String -> String
+replace' :: Regex -> (String -> Array (Maybe String) -> String) -> String -> String
+replace' = _replaceBy Just Nothing
 
 foreign import _search
   :: (forall r. r -> Maybe r)
@@ -115,5 +127,5 @@ foreign import _search
 search :: Regex -> String -> Maybe Int
 search = _search Just Nothing
 
--- | Split the string into an array of substrings along occurences of the `Regex`.
+-- | Split the string into an array of substrings along occurrences of the `Regex`.
 foreign import split :: Regex -> String -> Array String

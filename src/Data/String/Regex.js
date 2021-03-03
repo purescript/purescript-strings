@@ -1,10 +1,10 @@
 "use strict";
 
-exports["showRegex'"] = function (r) {
+exports.showRegexImpl = function (r) {
   return "" + r;
 };
 
-exports["regex'"] = function (left) {
+exports.regexImpl = function (left) {
   return function (right) {
     return function (s1) {
       return function (s2) {
@@ -22,11 +22,12 @@ exports.source = function (r) {
   return r.source;
 };
 
-exports["flags'"] = function (r) {
+exports.flagsImpl = function (r) {
   return {
     multiline: r.multiline,
     ignoreCase: r.ignoreCase,
     global: r.global,
+    dotAll: r.dotAll,
     sticky: !!r.sticky,
     unicode: !!r.unicode
   };
@@ -67,12 +68,21 @@ exports.replace = function (r) {
   };
 };
 
-exports["replace'"] = function (r) {
-  return function (f) {
-    return function (s2) {
-      return s2.replace(r, function (match) {
-        return f(match)(Array.prototype.splice.call(arguments, 1, arguments.length - 3));
-      });
+exports._replaceBy = function (just) {
+  return function (nothing) {
+    return function (r) {
+      return function (f) {
+        return function (s) {
+          return s.replace(r, function (match) {
+            var groups = [];
+            var group, i = 1;
+            while (typeof (group = arguments[i++]) !== "number") {
+              groups.push(group == null ? nothing : just(group));
+            }
+            return f(match)(groups);
+          });
+        };
+      };
     };
   };
 };

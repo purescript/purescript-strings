@@ -367,11 +367,19 @@ testStringCodePoints = do
     , expected: Just 0
     }
   assertEqual
+    { actual: SCP.lastIndexOf' (Pattern "a") (-1) str
+    , expected: Just 0
+    }
+  assertEqual
     { actual: SCP.lastIndexOf' (Pattern "a") 0 str
     , expected: Just 0
     }
   assertEqual
     { actual: SCP.lastIndexOf' (Pattern "a") 7 str
+    , expected: Just 0
+    }
+  assertEqual
+    { actual: SCP.lastIndexOf' (Pattern "a") (SCP.length str) str
     , expected: Just 0
     }
   assertEqual

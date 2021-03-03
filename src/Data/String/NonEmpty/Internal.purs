@@ -1,3 +1,9 @@
+-- | While most of the code in this module is safe, this module does
+-- | export a few partial functions and the `NonEmptyString` constructor.
+-- | While the partial functions are obvious from the `Partial` constraint in
+-- | their type signature, the `NonEmptyString` constructor can be overlooked
+-- | when searching for issues in one's code. See the constructor's
+-- | documentation for more information.
 module Data.String.NonEmpty.Internal where
 
 import Prelude
@@ -8,11 +14,17 @@ import Data.Maybe (Maybe(..), fromJust)
 import Data.Semigroup.Foldable (class Foldable1)
 import Data.String as String
 import Data.String.Pattern (Pattern)
-import Data.Symbol (class IsSymbol, SProxy, reflectSymbol)
+import Data.Symbol (class IsSymbol, reflectSymbol)
 import Prim.TypeError as TE
 import Unsafe.Coerce (unsafeCoerce)
 
 -- | A string that is known not to be empty.
+-- |
+-- | You can use this constructor to create a `NonEmptyString` that isn't
+-- | non-empty, breaking the guarantee behind this newtype. It is
+-- | provided as an escape hatch mainly for the `Data.NonEmpty.CodeUnits`
+-- | and `Data.NonEmpty.CodePoints` modules. Use this at your own risk
+-- | when you know what you are doing.
 newtype NonEmptyString = NonEmptyString String
 
 derive newtype instance eqNonEmptyString ∷ Eq NonEmptyString
@@ -26,10 +38,10 @@ instance showNonEmptyString :: Show NonEmptyString where
 -- |
 -- | ``` purescript
 -- | something :: NonEmptyString
--- | something = nes (SProxy :: SProxy "something")
+-- | something = nes (Proxy :: Proxy "something")
 -- | ```
 class MakeNonEmpty (s :: Symbol) where
-  nes :: SProxy s -> NonEmptyString
+  nes :: forall proxy. proxy s -> NonEmptyString
 
 instance makeNonEmptyBad :: TE.Fail (TE.Text "Cannot create an NonEmptyString from an empty Symbol") => MakeNonEmpty "" where
   nes _ = NonEmptyString ""

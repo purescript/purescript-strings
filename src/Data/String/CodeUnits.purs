@@ -44,10 +44,9 @@ import Data.String.Unsafe as U
 -- | stripPrefix (Pattern "http:") "https://purescript.org" == Nothing
 -- | ```
 stripPrefix :: Pattern -> String -> Maybe String
-stripPrefix prefix@(Pattern prefixS) str =
-  case indexOf prefix str of
-    Just 0 -> Just $ drop (length prefixS) str
-    _ -> Nothing
+stripPrefix (Pattern prefix) str =
+  let { before, after } = splitAt (length prefix) str in
+  if before == prefix then Just after else Nothing
 
 -- | If the string ends with the given suffix, return the portion of the
 -- | string left after removing it, as a `Just` value. Otherwise, return
@@ -58,10 +57,9 @@ stripPrefix prefix@(Pattern prefixS) str =
 -- | stripSuffix (Pattern ".exe") "psc" == Nothing
 -- | ```
 stripSuffix :: Pattern -> String -> Maybe String
-stripSuffix suffix@(Pattern suffixS) str =
-  case lastIndexOf suffix str of
-    Just x | x == length str - length suffixS -> Just $ take x str
-    _ -> Nothing
+stripSuffix (Pattern suffix) str =
+  let { before, after } = splitAt (length str - length suffix) str in
+  if after == suffix then Just before else Nothing
 
 -- | Checks whether the pattern appears in the given string.
 -- |
@@ -188,9 +186,9 @@ foreign import _indexOf
 -- | ```
 -- |
 indexOf' :: Pattern -> Int -> String -> Maybe Int
-indexOf' = _indexOf' Just Nothing
+indexOf' = _indexOfStartingAt Just Nothing
 
-foreign import _indexOf'
+foreign import _indexOfStartingAt
   :: (forall a. a -> Maybe a)
   -> (forall a. Maybe a)
   -> Pattern
@@ -217,20 +215,27 @@ foreign import _lastIndexOf
   -> Maybe Int
 
 -- | Returns the index of the last occurrence of the pattern in the
--- | given string, starting at the specified index
--- | and searching backwards towards the beginning of the string.
+-- | given string, starting at the specified index and searching
+-- | backwards towards the beginning of the string.
+-- |
+-- | Starting at a negative index is equivalent to starting at 0 and
+-- | starting at an index greater than the string length is equivalent
+-- | to searching in the whole string.
+-- |
 -- | Returns `Nothing` if there is no match.
 -- |
 -- | ```purescript
+-- | lastIndexOf' (Pattern "a") (-1) "ababa" == Just 0
 -- | lastIndexOf' (Pattern "a") 1 "ababa" == Just 0
 -- | lastIndexOf' (Pattern "a") 3 "ababa" == Just 2
 -- | lastIndexOf' (Pattern "a") 4 "ababa" == Just 4
+-- | lastIndexOf' (Pattern "a") 5 "ababa" == Just 4
 -- | ```
 -- |
 lastIndexOf' :: Pattern -> Int -> String -> Maybe Int
-lastIndexOf' = _lastIndexOf' Just Nothing
+lastIndexOf' = _lastIndexOfStartingAt Just Nothing
 
-foreign import _lastIndexOf'
+foreign import _lastIndexOfStartingAt
   :: (forall a. a -> Maybe a)
   -> (forall a. Maybe a)
   -> Pattern

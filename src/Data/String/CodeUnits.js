@@ -53,7 +53,7 @@ exports._indexOf = function (just) {
   };
 };
 
-exports["_indexOf'"] = function (just) {
+exports._indexOfStartingAt = function (just) {
   return function (nothing) {
     return function (x) {
       return function (startAt) {
@@ -78,12 +78,11 @@ exports._lastIndexOf = function (just) {
   };
 };
 
-exports["_lastIndexOf'"] = function (just) {
+exports._lastIndexOfStartingAt = function (just) {
   return function (nothing) {
     return function (x) {
       return function (startAt) {
         return function (s) {
-          if (startAt < 0 || startAt > s.length) return nothing;
           var i = s.lastIndexOf(x, startAt);
           return i === -1 ? nothing : just(i);
         };

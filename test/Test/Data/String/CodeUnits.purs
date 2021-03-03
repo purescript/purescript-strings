@@ -12,6 +12,58 @@ import Test.Assert (assert, assertEqual)
 
 testStringCodeUnits :: Effect Unit
 testStringCodeUnits = do
+  log "stripPrefix"
+  assertEqual
+    { actual: SCU.stripPrefix (Pattern "abc") "abcde"
+    , expected: Just "de"
+    }
+  assertEqual
+    { actual: SCU.stripPrefix (Pattern "xyz") "abcde"
+    , expected: Nothing
+    }
+  assertEqual
+    { actual: SCU.stripPrefix (Pattern "abcd") "ab"
+    , expected: Nothing
+    }
+  assertEqual
+    { actual: SCU.stripPrefix (Pattern "abc") "abc"
+    , expected: Just ""
+    }
+  assertEqual
+    { actual: SCU.stripPrefix (Pattern "") "abc"
+    , expected: Just "abc"
+    }
+  assertEqual
+    { actual: SCU.stripPrefix (Pattern "") ""
+    , expected: Just ""
+    }
+
+  log "stripSuffix"
+  assertEqual
+    { actual: SCU.stripSuffix (Pattern "cde") "abcde"
+    , expected: Just "ab"
+    }
+  assertEqual
+    { actual: SCU.stripSuffix (Pattern "xyz") "abcde"
+    , expected: Nothing
+    }
+  assertEqual
+    { actual: SCU.stripSuffix (Pattern "abcd") "cd"
+    , expected: Nothing
+    }
+  assertEqual
+    { actual: SCU.stripSuffix (Pattern "abc") "abc"
+    , expected: Just ""
+    }
+  assertEqual
+    { actual: SCU.stripSuffix (Pattern "") "abc"
+    , expected: Just "abc"
+    }
+  assertEqual
+    { actual: SCU.stripSuffix (Pattern "") ""
+    , expected: Just ""
+    }
+
   log "charAt"
   assertEqual
     { actual: SCU.charAt 0 ""
@@ -218,7 +270,7 @@ testStringCodeUnits = do
     }
   assertEqual
     { actual: SCU.lastIndexOf' (Pattern "") (-1) "ab"
-    , expected: Nothing
+    , expected: Just 0
     }
   assertEqual
     { actual: SCU.lastIndexOf' (Pattern "") 0 "ab"
@@ -234,7 +286,7 @@ testStringCodeUnits = do
     }
   assertEqual
     { actual: SCU.lastIndexOf' (Pattern "") 3 "ab"
-    , expected: Nothing
+    , expected: Just 2
     }
   assertEqual
     { actual: SCU.lastIndexOf' (Pattern "bc") 0 "abcd"

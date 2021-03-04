@@ -18,7 +18,7 @@ main = do
   log "\n--- Data.String ---\n"
   testString
   log "\n--- Data.String.CodePoints ---\n"
-  testStringCodePoints
+  -- testStringCodePoints
   log "\n--- Data.String.CodeUnits ---\n"
   testStringCodeUnits
   log "\n--- Data.String.Unsafe ---\n"

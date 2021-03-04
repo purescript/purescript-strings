@@ -91,10 +91,7 @@ snoc c s = toNonEmptyString (s <> CU.singleton c)
 -- | Creates a `NonEmptyString` from a `Foldable1` container carrying
 -- | characters.
 fromFoldable1 :: forall f. Foldable1 f => f Char -> NonEmptyString
-fromFoldable1 = F1.fold1 <<< coe
-  where
-    coe ∷ f Char -> f NonEmptyString
-    coe = unsafeCoerce
+fromFoldable1 = F1.foldMap1 (NonEmptyString <<< CU.singleton)   
 
 -- | Converts the `NonEmptyString` into an array of characters.
 -- |

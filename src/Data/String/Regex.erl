@@ -1,7 +1,7 @@
 -module(data_string_regex@foreign).
--export(['showRegex\''/1, 'regex\''/4, source/1, 'flags\''/1, test/2, '_match'/4, replace/3, 'replace\''/3, '_search'/4, split/2]).
+-export([showRegexImpl/1, regexImpl/4, source/1, flagsImpl/1, test/2, '_match'/4, replace/3, '_replaceBy'/5, '_search'/4, split/2]).
 
-'showRegex\''({_,{S,_}}) -> S.
+showRegexImpl({_,{S,_}}) -> S.
 
 flags_to_options([], Acc) -> {opts, Acc};
 flags_to_options([$g|Flags], Acc) -> flags_to_options(Flags, Acc);
@@ -16,7 +16,7 @@ is_global(S) -> case string:chr(unicode:characters_to_list(S), $g) of
   _ -> true
 end.
 
-'regex\''(Left,Right,S1,S2) ->
+regexImpl(Left,Right,S1,S2) ->
   FlagsStr = unicode:characters_to_list(S2),
   case flags_to_options(FlagsStr, []) of
     {opts, Opts} ->
@@ -29,7 +29,7 @@ end.
 
 source({_,{S,_}}) -> S.
 
-'flags\''(R) -> error("no flags").
+flagsImpl(R) -> error("no flags").
 
 % exports["flags'"] = function (r) {
 %   return {
@@ -55,7 +55,7 @@ replace({R,{_,F}},S1,S2) ->
   G = case is_global(F) of true -> [global]; false -> [] end,
   re:replace(S2,R,S1,G++[{return,binary}]).
 % TODO
-'replace\''({R,_},F,S2) -> error("replace' not supported").
+'_replaceBy'(_Just,_Nothing,{_R,_},_F,_S2) -> error("_replaceBy not supported").
 
 '_search'(Just,Nothing,{R,_},S) -> case re:run(S,R) of
   {match, [{I,_}]} -> Just(I);

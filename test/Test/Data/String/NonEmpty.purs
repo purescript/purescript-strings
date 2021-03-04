@@ -58,19 +58,19 @@ testNonEmptyString = do
   assert $ NES.contains (Pattern "needle") (nes (Proxy :: Proxy "haystack with needle"))
   assert $ not NES.contains (Pattern "needle") (nes (Proxy :: Proxy "haystack"))
 
-  log "localeCompare"
-  assertEqual
-    { actual: NES.localeCompare (nes (Proxy :: Proxy "a")) (nes (Proxy :: Proxy "a"))
-    , expected: EQ
-    }
-  assertEqual
-    { actual: NES.localeCompare (nes (Proxy :: Proxy "a")) (nes (Proxy :: Proxy "b"))
-    , expected: LT
-    }
-  assertEqual
-    { actual: NES.localeCompare (nes (Proxy :: Proxy "b")) (nes (Proxy :: Proxy "a"))
-    , expected: GT
-    }
+  -- log "localeCompare"
+  -- assertEqual
+  --   { actual: NES.localeCompare (nes (Proxy :: Proxy "a")) (nes (Proxy :: Proxy "a"))
+  --   , expected: EQ
+  --   }
+  -- assertEqual
+  --   { actual: NES.localeCompare (nes (Proxy :: Proxy "a")) (nes (Proxy :: Proxy "b"))
+  --   , expected: LT
+  --   }
+  -- assertEqual
+  --   { actual: NES.localeCompare (nes (Proxy :: Proxy "b")) (nes (Proxy :: Proxy "a"))
+  --   , expected: GT
+  --   }
 
   log "replace"
   assertEqual

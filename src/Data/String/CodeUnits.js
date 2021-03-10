@@ -120,11 +120,11 @@ exports.splitAt = function (i) {
 exports.startsWith = function (pattern) {
   return function (s) {
     return s.startsWith(pattern);
-  }
-}
+  };
+};
 
 exports.endsWith = function (pattern) {
   return function (s) {
     return s.endsWith(pattern);
-  }
-}
+  };
+};

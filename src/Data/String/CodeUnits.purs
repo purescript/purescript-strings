@@ -22,6 +22,8 @@ module Data.String.CodeUnits
   , dropWhile
   , slice
   , splitAt
+  , startsWith
+  , endsWith
   ) where
 
 import Prelude
@@ -343,3 +345,19 @@ foreign import _slice :: Int -> Int -> String -> String
 -- | splitAt i s == {before: take i s, after: drop i s}
 -- | ```
 foreign import splitAt :: Int -> String -> { before :: String, after :: String }
+
+-- | Checks whether the given string starts with the pattern.
+-- |
+-- | ```purescript
+-- | startsWith (Pattern "foo") "foobar" == true
+-- | startsWith (Pattern "bar") "foobar" == false
+-- | ```
+foreign import startsWith :: Pattern -> String -> Boolean
+
+-- | Checks whether the given string ends with the pattern.
+-- |
+-- | ```purescript
+-- | endsWith (Pattern "bar") "foobar" == true
+-- | endsWith (Pattern "foo") "foobar" == false
+-- | ```
+foreign import endsWith :: Pattern -> String -> Boolean

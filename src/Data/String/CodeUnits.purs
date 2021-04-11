@@ -352,7 +352,8 @@ foreign import splitAt :: Int -> String -> { before :: String, after :: String }
 -- | startsWith (Pattern "foo") "foobar" == true
 -- | startsWith (Pattern "bar") "foobar" == false
 -- | ```
-foreign import startsWith :: Pattern -> String -> Boolean
+startsWith :: Pattern -> String -> Boolean
+startsWith pat = isJust <<< stripPrefix pat
 
 -- | Checks whether the given string ends with the pattern.
 -- |
@@ -360,4 +361,5 @@ foreign import startsWith :: Pattern -> String -> Boolean
 -- | endsWith (Pattern "bar") "foobar" == true
 -- | endsWith (Pattern "foo") "foobar" == false
 -- | ```
-foreign import endsWith :: Pattern -> String -> Boolean
+endsWith :: Pattern -> String -> Boolean
+endsWith pat = isJust <<< stripSuffix pat

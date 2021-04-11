@@ -348,6 +348,9 @@ foreign import splitAt :: Int -> String -> { before :: String, after :: String }
 
 -- | Checks whether the given string starts with the pattern.
 -- |
+-- | **NOTE**: if you also want to get the string stripped of the pattern, see
+-- | `stripPrefix`.
+-- |
 -- | ```purescript
 -- | startsWith (Pattern "foo") "foobar" == true
 -- | startsWith (Pattern "bar") "foobar" == false
@@ -356,6 +359,9 @@ startsWith :: Pattern -> String -> Boolean
 startsWith pat = isJust <<< stripPrefix pat
 
 -- | Checks whether the given string ends with the pattern.
+-- |
+-- | **NOTE**: if you also want to get the string stripped of the pattern, see
+-- | `stripSuffix`.
 -- |
 -- | ```purescript
 -- | endsWith (Pattern "bar") "foobar" == true

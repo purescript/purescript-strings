@@ -42,7 +42,7 @@ import Data.String.Unsafe as Unsafe
 import Data.Tuple (Tuple(..))
 import Data.Unfoldable (unfoldr)
 
--- | CodePoint is an Int bounded between 0 and 0x10FFFF, corresponding to
+-- | CodePoint is an `Int` bounded between `0` and `0x10FFFF`, corresponding to
 -- | Unicode code points.
 newtype CodePoint = CodePoint Int
 
@@ -67,7 +67,7 @@ instance boundedEnumCodePoint :: BoundedEnum CodePoint where
     | n >= 0 && n <= 0x10FFFF = Just (CodePoint n)
     | otherwise = Nothing
 
--- | Creates a CodePoint from a given Char.
+-- | Creates a `CodePoint` from a given `Char`.
 -- |
 -- | ```purescript
 -- | >>> codePointFromChar 'B'
@@ -178,7 +178,7 @@ codePointAtFallback n s = case uncons s of
   _ -> Nothing
 
 -- | Returns a record with the first code point and the remaining code points
--- | of the string. Returns Nothing if the string is empty. Operates in
+-- | of the string. Returns `Nothing` if the string is empty. Operates in
 -- | constant space and time.
 -- |
 -- | ```purescript
@@ -243,7 +243,7 @@ countTail p s accum = case uncons s of
   _ -> accum
 
 -- | Returns the number of code points preceding the first match of the given
--- | pattern in the string. Returns Nothing when no matches are found.
+-- | pattern in the string. Returns `Nothing` when no matches are found.
 -- |
 -- | ```purescript
 -- | >>> indexOf (Pattern "𝐀") "b 𝐀𝐀 c 𝐀"
@@ -257,7 +257,7 @@ indexOf p s = (\i -> length (CU.take i s)) <$> CU.indexOf p s
 
 -- | Returns the number of code points preceding the first match of the given
 -- | pattern in the string. Pattern matches preceding the given index will be
--- | ignored. Returns Nothing when no matches are found.
+-- | ignored. Returns `Nothing` when no matches are found.
 -- |
 -- | ```purescript
 -- | >>> indexOf' (Pattern "𝐀") 4 "b 𝐀𝐀 c 𝐀"
@@ -272,7 +272,7 @@ indexOf' p i s =
   (\k -> i + length (CU.take k s')) <$> CU.indexOf p s'
 
 -- | Returns the number of code points preceding the last match of the given
--- | pattern in the string. Returns Nothing when no matches are found.
+-- | pattern in the string. Returns `Nothing` when no matches are found.
 -- |
 -- | ```purescript
 -- | >>> lastIndexOf (Pattern "𝐀") "b 𝐀𝐀 c 𝐀"
@@ -292,7 +292,7 @@ lastIndexOf p s = (\i -> length (CU.take i s)) <$> CU.lastIndexOf p s
 -- | greater than the number of code points in the string is equivalent to
 -- | searching in the whole string.
 -- |
--- | Returns Nothing when no matches are found.
+-- | Returns `Nothing` when no matches are found.
 -- |
 -- | ```purescript
 -- | >>> lastIndexOf' (Pattern "𝐀") (-1) "b 𝐀𝐀 c 𝐀"

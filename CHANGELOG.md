@@ -11,6 +11,7 @@ New features:
 Bugfixes:
 
 Other improvements:
+- Surround code with backticks in documentation (#148)
 
 ## [v5.0.0](https://github.com/purescript/purescript-strings/releases/tag/v5.0.0) - 2021-02-26
 

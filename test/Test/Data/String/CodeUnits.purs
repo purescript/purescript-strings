@@ -472,41 +472,45 @@ testStringCodeUnits = do
   log "slice"
   assertEqual
     { actual: SCU.slice 0 0   "purescript"
-    , expected: Just ""
+    , expected: ""
     }
   assertEqual
     { actual: SCU.slice 0 1   "purescript"
-    , expected: Just "p"
+    , expected: "p"
     }
   assertEqual
     { actual: SCU.slice 3 6   "purescript"
-    , expected: Just "esc"
+    , expected: "esc"
     }
   assertEqual
     { actual: SCU.slice 3 10  "purescript"
-    , expected: Just "escript"
+    , expected: "escript"
+    }
+  assertEqual
+    { actual: SCU.slice 10 10 "purescript"
+    , expected: ""
     }
   assertEqual
     { actual: SCU.slice (-4) (-1) "purescript"
-    , expected: Just "rip"
+    , expected: "rip"
     }
   assertEqual
     { actual: SCU.slice (-4) 3  "purescript"
-    , expected: Nothing -- b' > e'
+    , expected: ""
     }
   assertEqual
     { actual: SCU.slice 1000 3  "purescript"
-    , expected: Nothing -- b' > e' (subsumes b > l)
+    , expected: ""
     }
   assertEqual
     { actual: SCU.slice 2 (-15) "purescript"
-    , expected: Nothing -- e' < 0
+    , expected: ""
     }
   assertEqual
     { actual: SCU.slice (-15) 9 "purescript"
-    , expected: Nothing -- b' < 0
+    , expected: "purescrip"
     }
   assertEqual
     { actual: SCU.slice 3 1000 "purescript"
-    , expected: Nothing -- e > l
+    , expected: "escript"
     }

@@ -22,6 +22,8 @@ module Data.String.CodeUnits
   , dropWhile
   , slice
   , splitAt
+  , startsWith
+  , endsWith
   ) where
 
 import Prelude
@@ -31,9 +33,10 @@ import Data.String.Pattern (Pattern(..))
 import Data.String.Unsafe as U
 
 -------------------------------------------------------------------------------
--- `stripPrefix`, `stripSuffix`, and `contains` are CodeUnit/CodePoint agnostic
--- as they are based on patterns rather than lengths/indices, but they need to
--- be defined in here to avoid a circular module dependency
+-- `stripPrefix`, `stripSuffix`, `startsWith`, `endsWith`, and `contains` are
+-- CodeUnit/CodePoint agnostic as they are based on patterns rather than
+-- lengths/indices, but they need to be defined in here to avoid a circular
+-- module dependency
 -------------------------------------------------------------------------------
 
 -- | If the string starts with the given prefix, return the portion of the
@@ -60,6 +63,30 @@ stripSuffix :: Pattern -> String -> Maybe String
 stripSuffix (Pattern suffix) str =
   let { before, after } = splitAt (length str - length suffix) str in
   if after == suffix then Just before else Nothing
+
+-- | Checks whether the given string starts with the pattern.
+-- |
+-- | **NOTE**: if you also want to get the string stripped of the pattern, see
+-- | `stripPrefix`.
+-- |
+-- | ```purescript
+-- | startsWith (Pattern "foo") "foobar" == true
+-- | startsWith (Pattern "bar") "foobar" == false
+-- | ```
+startsWith :: Pattern -> String -> Boolean
+startsWith pat = isJust <<< stripPrefix pat
+
+-- | Checks whether the given string ends with the pattern.
+-- |
+-- | **NOTE**: if you also want to get the string stripped of the pattern, see
+-- | `stripSuffix`.
+-- |
+-- | ```purescript
+-- | endsWith (Pattern "bar") "foobar" == true
+-- | endsWith (Pattern "foo") "foobar" == false
+-- | ```
+endsWith :: Pattern -> String -> Boolean
+endsWith pat = isJust <<< stripSuffix pat
 
 -- | Checks whether the pattern appears in the given string.
 -- |

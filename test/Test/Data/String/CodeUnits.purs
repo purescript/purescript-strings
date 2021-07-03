@@ -64,6 +64,20 @@ testStringCodeUnits = do
     , expected: Just ""
     }
 
+  log "startsWith"
+  assert $ SCU.startsWith (Pattern "foo") "foobar"
+  assert $ SCU.startsWith (Pattern "foo") "foo"
+  assert $ SCU.startsWith (Pattern "") ""
+  assert $ SCU.startsWith (Pattern "") "foo"
+  assert $ not $ SCU.startsWith (Pattern "foo") ""
+
+  log "endsWith"
+  assert $ SCU.endsWith (Pattern "bar") "foobar"
+  assert $ SCU.endsWith (Pattern "bar") "bar"
+  assert $ SCU.endsWith (Pattern "") ""
+  assert $ SCU.endsWith (Pattern "") "bar"
+  assert $ not $ SCU.endsWith (Pattern "bar") ""
+
   log "charAt"
   assertEqual
     { actual: SCU.charAt 0 ""

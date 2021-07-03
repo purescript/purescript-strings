@@ -34,7 +34,7 @@ import Data.Array as Array
 import Data.Enum (class BoundedEnum, class Enum, Cardinality(..), defaultPred, defaultSucc, fromEnum, toEnum, toEnumWithDefaults)
 import Data.Int (hexadecimal, toStringAs)
 import Data.Maybe (Maybe(..))
-import Data.String.CodeUnits (contains, stripPrefix, stripSuffix) as Exports
+import Data.String.CodeUnits (contains, stripPrefix, stripSuffix, startsWith, endsWith) as Exports
 import Data.String.CodeUnits as CU
 import Data.String.Common (toUpper)
 import Data.String.Pattern (Pattern)

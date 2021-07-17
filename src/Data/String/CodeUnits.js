@@ -1,18 +1,18 @@
 "use strict";
 
-exports.fromCharArray = function (a) {
+export var fromCharArray = function (a) {
   return a.join("");
 };
 
-exports.toCharArray = function (s) {
+export var toCharArray = function (s) {
   return s.split("");
 };
 
-exports.singleton = function (c) {
+export var singleton = function (c) {
   return c;
 };
 
-exports._charAt = function (just) {
+export var _charAt = function (just) {
   return function (nothing) {
     return function (i) {
       return function (s) {
@@ -22,7 +22,7 @@ exports._charAt = function (just) {
   };
 };
 
-exports._toChar = function (just) {
+export var _toChar = function (just) {
   return function (nothing) {
     return function (s) {
       return s.length === 1 ? just(s) : nothing;
@@ -30,11 +30,11 @@ exports._toChar = function (just) {
   };
 };
 
-exports.length = function (s) {
+export var length = function (s) {
   return s.length;
 };
 
-exports.countPrefix = function (p) {
+export var countPrefix = function (p) {
   return function (s) {
     var i = 0;
     while (i < s.length && p(s.charAt(i))) i++;
@@ -42,7 +42,7 @@ exports.countPrefix = function (p) {
   };
 };
 
-exports._indexOf = function (just) {
+export var _indexOf = function (just) {
   return function (nothing) {
     return function (x) {
       return function (s) {
@@ -53,7 +53,7 @@ exports._indexOf = function (just) {
   };
 };
 
-exports._indexOfStartingAt = function (just) {
+export var _indexOfStartingAt = function (just) {
   return function (nothing) {
     return function (x) {
       return function (startAt) {
@@ -67,7 +67,7 @@ exports._indexOfStartingAt = function (just) {
   };
 };
 
-exports._lastIndexOf = function (just) {
+export var _lastIndexOf = function (just) {
   return function (nothing) {
     return function (x) {
       return function (s) {
@@ -78,7 +78,7 @@ exports._lastIndexOf = function (just) {
   };
 };
 
-exports._lastIndexOfStartingAt = function (just) {
+export var _lastIndexOfStartingAt = function (just) {
   return function (nothing) {
     return function (x) {
       return function (startAt) {
@@ -91,19 +91,19 @@ exports._lastIndexOfStartingAt = function (just) {
   };
 };
 
-exports.take = function (n) {
+export var take = function (n) {
   return function (s) {
     return s.substr(0, n);
   };
 };
 
-exports.drop = function (n) {
+export var drop = function (n) {
   return function (s) {
     return s.substring(n);
   };
 };
 
-exports._slice = function (b) {
+export var _slice = function (b) {
   return function (e) {
     return function (s) {
       return s.slice(b,e);
@@ -111,7 +111,7 @@ exports._slice = function (b) {
   };
 };
 
-exports.splitAt = function (i) {
+export var splitAt = function (i) {
   return function (s) {
     return { before: s.substring(0, i), after: s.substring(i) };
   };

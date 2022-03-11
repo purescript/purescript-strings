@@ -1,5 +1,3 @@
-"use strict";
-
 export const charAt = function (i) {
   return function (s) {
     if (i >= 0 && i < s.length) return s.charAt(i);

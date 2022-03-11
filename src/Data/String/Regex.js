@@ -1,5 +1,3 @@
-"use strict";
-
 export const showRegexImpl = function (r) {
   return "" + r;
 };

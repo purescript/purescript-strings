@@ -1,5 +1,3 @@
-"use strict";
-
 export const _localeCompare = function (lt) {
   return function (eq) {
     return function (gt) {

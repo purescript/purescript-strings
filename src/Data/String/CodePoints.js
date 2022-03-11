@@ -1,4 +1,3 @@
-"use strict";
 /* global Symbol */
 
 var hasArrayFrom = typeof Array.from === "function";

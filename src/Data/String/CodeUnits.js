@@ -1,5 +1,3 @@
-"use strict";
-
 export const fromCharArray = function (a) {
   return a.join("");
 };

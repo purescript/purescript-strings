@@ -10,13 +10,13 @@ var hasStringIterator =
 var hasFromCodePoint = typeof String.prototype.fromCodePoint === "function";
 var hasCodePointAt = typeof String.prototype.codePointAt === "function";
 
-export var _unsafeCodePointAt0 = function (fallback) {
+export const _unsafeCodePointAt0 = function (fallback) {
   return hasCodePointAt
     ? function (str) { return str.codePointAt(0); }
     : fallback;
 };
 
-export var _codePointAt = function (fallback) {
+export const _codePointAt = function (fallback) {
   return function (Just) {
     return function (Nothing) {
       return function (unsafeCodePointAt0) {
@@ -40,7 +40,7 @@ export var _codePointAt = function (fallback) {
   };
 };
 
-export var _countPrefix = function (fallback) {
+export const _countPrefix = function (fallback) {
   return function (unsafeCodePointAt0) {
     if (hasStringIterator) {
       return function (pred) {
@@ -59,7 +59,7 @@ export var _countPrefix = function (fallback) {
   };
 };
 
-export var _fromCodePointArray = function (singleton) {
+export const _fromCodePointArray = function (singleton) {
   return hasFromCodePoint
     ? function (cps) {
       // Function.prototype.apply will fail for very large second parameters,
@@ -74,11 +74,11 @@ export var _fromCodePointArray = function (singleton) {
     };
 };
 
-export var _singleton = function (fallback) {
+export const _singleton = function (fallback) {
   return hasFromCodePoint ? String.fromCodePoint : fallback;
 };
 
-export var _take = function (fallback) {
+export const _take = function (fallback) {
   return function (n) {
     if (hasStringIterator) {
       return function (str) {
@@ -96,7 +96,7 @@ export var _take = function (fallback) {
   };
 };
 
-export var _toCodePointArray = function (fallback) {
+export const _toCodePointArray = function (fallback) {
   return function (unsafeCodePointAt0) {
     if (hasArrayFrom) {
       return function (str) {

@@ -1,10 +1,10 @@
 "use strict";
 
-export var showRegexImpl = function (r) {
+export const showRegexImpl = function (r) {
   return "" + r;
 };
 
-export var regexImpl = function (left) {
+export const regexImpl = function (left) {
   return function (right) {
     return function (s1) {
       return function (s2) {
@@ -18,11 +18,11 @@ export var regexImpl = function (left) {
   };
 };
 
-export var source = function (r) {
+export const source = function (r) {
   return r.source;
 };
 
-export var flagsImpl = function (r) {
+export const flagsImpl = function (r) {
   return {
     multiline: r.multiline,
     ignoreCase: r.ignoreCase,
@@ -33,7 +33,7 @@ export var flagsImpl = function (r) {
   };
 };
 
-export var test = function (r) {
+export const test = function (r) {
   return function (s) {
     var lastIndex = r.lastIndex;
     var result = r.test(s);
@@ -42,7 +42,7 @@ export var test = function (r) {
   };
 };
 
-export var _match = function (just) {
+export const _match = function (just) {
   return function (nothing) {
     return function (r) {
       return function (s) {
@@ -60,7 +60,7 @@ export var _match = function (just) {
   };
 };
 
-export var replace = function (r) {
+export const replace = function (r) {
   return function (s1) {
     return function (s2) {
       return s2.replace(r, s1);
@@ -68,7 +68,7 @@ export var replace = function (r) {
   };
 };
 
-export var _replaceBy = function (just) {
+export const _replaceBy = function (just) {
   return function (nothing) {
     return function (r) {
       return function (f) {
@@ -87,7 +87,7 @@ export var _replaceBy = function (just) {
   };
 };
 
-export var _search = function (just) {
+export const _search = function (just) {
   return function (nothing) {
     return function (r) {
       return function (s) {
@@ -98,7 +98,7 @@ export var _search = function (just) {
   };
 };
 
-export var split = function (r) {
+export const split = function (r) {
   return function (s) {
     return s.split(r);
   };

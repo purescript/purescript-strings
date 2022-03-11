@@ -1,6 +1,6 @@
 "use strict";
 
-export var _localeCompare = function (lt) {
+export const _localeCompare = function (lt) {
   return function (eq) {
     return function (gt) {
       return function (s1) {
@@ -13,7 +13,7 @@ export var _localeCompare = function (lt) {
   };
 };
 
-export var replace = function (s1) {
+export const replace = function (s1) {
   return function (s2) {
     return function (s3) {
       return s3.replace(s1, s2);
@@ -21,7 +21,7 @@ export var replace = function (s1) {
   };
 };
 
-export var replaceAll = function (s1) {
+export const replaceAll = function (s1) {
   return function (s2) {
     return function (s3) {
       return s3.replace(new RegExp(s1.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"), "g"), s2); // eslint-disable-line no-useless-escape
@@ -29,25 +29,25 @@ export var replaceAll = function (s1) {
   };
 };
 
-export var split = function (sep) {
+export const split = function (sep) {
   return function (s) {
     return s.split(sep);
   };
 };
 
-export var toLower = function (s) {
+export const toLower = function (s) {
   return s.toLowerCase();
 };
 
-export var toUpper = function (s) {
+export const toUpper = function (s) {
   return s.toUpperCase();
 };
 
-export var trim = function (s) {
+export const trim = function (s) {
   return s.trim();
 };
 
-export var joinWith = function (s) {
+export const joinWith = function (s) {
   return function (xs) {
     return xs.join(s);
   };

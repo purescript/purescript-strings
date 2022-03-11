@@ -1,18 +1,18 @@
 "use strict";
 
-export var fromCharArray = function (a) {
+export const fromCharArray = function (a) {
   return a.join("");
 };
 
-export var toCharArray = function (s) {
+export const toCharArray = function (s) {
   return s.split("");
 };
 
-export var singleton = function (c) {
+export const singleton = function (c) {
   return c;
 };
 
-export var _charAt = function (just) {
+export const _charAt = function (just) {
   return function (nothing) {
     return function (i) {
       return function (s) {
@@ -22,7 +22,7 @@ export var _charAt = function (just) {
   };
 };
 
-export var _toChar = function (just) {
+export const _toChar = function (just) {
   return function (nothing) {
     return function (s) {
       return s.length === 1 ? just(s) : nothing;
@@ -30,11 +30,11 @@ export var _toChar = function (just) {
   };
 };
 
-export var length = function (s) {
+export const length = function (s) {
   return s.length;
 };
 
-export var countPrefix = function (p) {
+export const countPrefix = function (p) {
   return function (s) {
     var i = 0;
     while (i < s.length && p(s.charAt(i))) i++;
@@ -42,7 +42,7 @@ export var countPrefix = function (p) {
   };
 };
 
-export var _indexOf = function (just) {
+export const _indexOf = function (just) {
   return function (nothing) {
     return function (x) {
       return function (s) {
@@ -53,7 +53,7 @@ export var _indexOf = function (just) {
   };
 };
 
-export var _indexOfStartingAt = function (just) {
+export const _indexOfStartingAt = function (just) {
   return function (nothing) {
     return function (x) {
       return function (startAt) {
@@ -67,7 +67,7 @@ export var _indexOfStartingAt = function (just) {
   };
 };
 
-export var _lastIndexOf = function (just) {
+export const _lastIndexOf = function (just) {
   return function (nothing) {
     return function (x) {
       return function (s) {
@@ -78,7 +78,7 @@ export var _lastIndexOf = function (just) {
   };
 };
 
-export var _lastIndexOfStartingAt = function (just) {
+export const _lastIndexOfStartingAt = function (just) {
   return function (nothing) {
     return function (x) {
       return function (startAt) {
@@ -91,19 +91,19 @@ export var _lastIndexOfStartingAt = function (just) {
   };
 };
 
-export var take = function (n) {
+export const take = function (n) {
   return function (s) {
     return s.substr(0, n);
   };
 };
 
-export var drop = function (n) {
+export const drop = function (n) {
   return function (s) {
     return s.substring(n);
   };
 };
 
-export var _slice = function (b) {
+export const _slice = function (b) {
   return function (e) {
     return function (s) {
       return s.slice(b,e);
@@ -111,7 +111,7 @@ export var _slice = function (b) {
   };
 };
 
-export var splitAt = function (i) {
+export const splitAt = function (i) {
   return function (s) {
     return { before: s.substring(0, i), after: s.substring(i) };
   };

@@ -1,6 +1,4 @@
-"use strict";
-
-exports._localeCompare = function (lt) {
+export const _localeCompare = function (lt) {
   return function (eq) {
     return function (gt) {
       return function (s1) {
@@ -13,7 +11,7 @@ exports._localeCompare = function (lt) {
   };
 };
 
-exports.replace = function (s1) {
+export const replace = function (s1) {
   return function (s2) {
     return function (s3) {
       return s3.replace(s1, s2);
@@ -21,7 +19,7 @@ exports.replace = function (s1) {
   };
 };
 
-exports.replaceAll = function (s1) {
+export const replaceAll = function (s1) {
   return function (s2) {
     return function (s3) {
       return s3.replace(new RegExp(s1.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"), "g"), s2); // eslint-disable-line no-useless-escape
@@ -29,25 +27,25 @@ exports.replaceAll = function (s1) {
   };
 };
 
-exports.split = function (sep) {
+export const split = function (sep) {
   return function (s) {
     return s.split(sep);
   };
 };
 
-exports.toLower = function (s) {
+export const toLower = function (s) {
   return s.toLowerCase();
 };
 
-exports.toUpper = function (s) {
+export const toUpper = function (s) {
   return s.toUpperCase();
 };
 
-exports.trim = function (s) {
+export const trim = function (s) {
   return s.trim();
 };
 
-exports.joinWith = function (s) {
+export const joinWith = function (s) {
   return function (xs) {
     return xs.join(s);
   };

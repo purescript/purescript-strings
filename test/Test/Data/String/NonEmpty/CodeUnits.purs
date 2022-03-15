@@ -170,11 +170,11 @@ testNonEmptyStringCodeUnits = do
 
   log "takeWhile"
   assertEqual
-    { actual: NESCU.takeWhile (\c -> true) (nes (Proxy :: Proxy "abc"))
+    { actual: NESCU.takeWhile (\_ -> true) (nes (Proxy :: Proxy "abc"))
     , expected: Just (nes (Proxy :: Proxy "abc"))
     }
   assertEqual
-    { actual: NESCU.takeWhile (\c -> false) (nes (Proxy :: Proxy "abc"))
+    { actual: NESCU.takeWhile (\_ -> false) (nes (Proxy :: Proxy "abc"))
     , expected: Nothing
     }
   assertEqual
@@ -192,11 +192,11 @@ testNonEmptyStringCodeUnits = do
 
   log "dropWhile"
   assertEqual
-    { actual: NESCU.dropWhile (\c -> true) (nes (Proxy :: Proxy "abc"))
+    { actual: NESCU.dropWhile (\_ -> true) (nes (Proxy :: Proxy "abc"))
     , expected: Nothing
     }
   assertEqual
-    { actual: NESCU.dropWhile (\c -> false) (nes (Proxy :: Proxy "abc"))
+    { actual: NESCU.dropWhile (\_ -> false) (nes (Proxy :: Proxy "abc"))
     , expected: Just (nes (Proxy :: Proxy "abc"))
     }
   assertEqual

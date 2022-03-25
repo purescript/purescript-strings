@@ -298,30 +298,17 @@ dropWhile p s = drop (countPrefix p s) s
 
 -- | Returns the substring at indices `[begin, end)`.
 -- | If either index is negative, it is normalised to `length s - index`,
--- | where `s` is the input string. `Nothing` is returned if either
+-- | where `s` is the input string. `""` is returned if either
 -- | index is out of bounds or if `begin > end` after normalisation.
 -- |
 -- | ```purescript
--- | slice 0 0   "purescript" == Just ""
--- | slice 0 1   "purescript" == Just "p"
--- | slice 3 6   "purescript" == Just "esc"
--- | slice (-4) (-1) "purescript" == Just "rip"
--- | slice (-4) 3  "purescript" == Nothing
+-- | slice 0 0   "purescript" == ""
+-- | slice 0 1   "purescript" == "p"
+-- | slice 3 6   "purescript" == "esc"
+-- | slice (-4) (-1) "purescript" == "rip"
+-- | slice (-4) 3  "purescript" == ""
 -- | ```
-slice :: Int -> Int -> String -> Maybe String
-slice b e s = if b' < 0 || b' >= l ||
-                 e' < 0 || e' >  l ||
-                 b' > e'
-              then Nothing
-              else Just (_slice b e s)
-  where
-    l = length s
-    norm x | x < 0 = l + x
-           | otherwise = x
-    b' = norm b
-    e' = norm e
-
-foreign import _slice :: Int -> Int -> String -> String
+foreign import slice :: Int -> Int -> String -> String
 
 -- | Splits a string into two substrings, where `before` contains the
 -- | characters up to (but not including) the given index, and `after` contains

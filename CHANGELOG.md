@@ -7,6 +7,7 @@ Notable changes to this project are documented in this file. The format is based
 Breaking changes:
 - Migrate FFI to ES modules (#158 by @kl0tl and @JordanMartinez)
 - Replaced polymorphic proxies with monomorphic `Proxy` (#158 by @JordanMartinez)
+- In `slice`, drop bounds checking and `Maybe` return type (#145 by Quelklef)
 
 New features:
 

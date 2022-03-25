@@ -37,7 +37,7 @@ import Data.String.Unsafe as U
 -------------------------------------------------------------------------------
 
 -- | If the string starts with the given prefix, return the portion of the
--- | string left after removing it, as a Just value. Otherwise, return Nothing.
+-- | string left after removing it, as a `Just` value. Otherwise, return `Nothing`.
 -- |
 -- | ```purescript
 -- | stripPrefix (Pattern "http:") "http://purescript.org" == Just "//purescript.org"

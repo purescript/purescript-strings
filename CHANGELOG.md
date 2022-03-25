@@ -5,6 +5,19 @@ Notable changes to this project are documented in this file. The format is based
 ## [Unreleased]
 
 Breaking changes:
+- Migrate FFI to ES modules (#158 by @kl0tl and @JordanMartinez)
+- Replaced polymorphic proxies with monomorphic `Proxy` (#158 by @JordanMartinez)
+
+New features:
+
+Bugfixes:
+
+Other improvements:
+- Surround code with backticks in documentation (#148)
+
+## [v5.0.0](https://github.com/purescript/purescript-strings/releases/tag/v5.0.0) - 2021-02-26
+
+Breaking changes:
 - Added support for PureScript 0.14 and dropped support for all previous versions (#129)
 - Updated `replace'` to reflect the existence of optional capturing groups (#126)
 

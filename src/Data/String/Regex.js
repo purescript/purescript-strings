@@ -1,10 +1,8 @@
-"use strict";
-
-exports.showRegexImpl = function (r) {
+export const showRegexImpl = function (r) {
   return "" + r;
 };
 
-exports.regexImpl = function (left) {
+export const regexImpl = function (left) {
   return function (right) {
     return function (s1) {
       return function (s2) {
@@ -18,11 +16,11 @@ exports.regexImpl = function (left) {
   };
 };
 
-exports.source = function (r) {
+export const source = function (r) {
   return r.source;
 };
 
-exports.flagsImpl = function (r) {
+export const flagsImpl = function (r) {
   return {
     multiline: r.multiline,
     ignoreCase: r.ignoreCase,
@@ -33,7 +31,7 @@ exports.flagsImpl = function (r) {
   };
 };
 
-exports.test = function (r) {
+export const test = function (r) {
   return function (s) {
     var lastIndex = r.lastIndex;
     var result = r.test(s);
@@ -42,7 +40,7 @@ exports.test = function (r) {
   };
 };
 
-exports._match = function (just) {
+export const _match = function (just) {
   return function (nothing) {
     return function (r) {
       return function (s) {
@@ -60,7 +58,7 @@ exports._match = function (just) {
   };
 };
 
-exports.replace = function (r) {
+export const replace = function (r) {
   return function (s1) {
     return function (s2) {
       return s2.replace(r, s1);
@@ -68,7 +66,7 @@ exports.replace = function (r) {
   };
 };
 
-exports._replaceBy = function (just) {
+export const _replaceBy = function (just) {
   return function (nothing) {
     return function (r) {
       return function (f) {
@@ -87,7 +85,7 @@ exports._replaceBy = function (just) {
   };
 };
 
-exports._search = function (just) {
+export const _search = function (just) {
   return function (nothing) {
     return function (r) {
       return function (s) {
@@ -98,7 +96,7 @@ exports._search = function (just) {
   };
 };
 
-exports.split = function (r) {
+export const split = function (r) {
   return function (s) {
     return s.split(r);
   };

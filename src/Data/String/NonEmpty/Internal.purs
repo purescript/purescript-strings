@@ -16,6 +16,7 @@ import Data.String as String
 import Data.String.Pattern (Pattern)
 import Data.Symbol (class IsSymbol, reflectSymbol)
 import Prim.TypeError as TE
+import Type.Proxy (Proxy)
 import Unsafe.Coerce (unsafeCoerce)
 
 -- | A string that is known not to be empty.
@@ -41,7 +42,7 @@ instance showNonEmptyString :: Show NonEmptyString where
 -- | something = nes (Proxy :: Proxy "something")
 -- | ```
 class MakeNonEmpty (s :: Symbol) where
-  nes :: forall proxy. proxy s -> NonEmptyString
+  nes :: Proxy s -> NonEmptyString
 
 instance makeNonEmptyBad :: TE.Fail (TE.Text "Cannot create an NonEmptyString from an empty Symbol") => MakeNonEmpty "" where
   nes _ = NonEmptyString ""

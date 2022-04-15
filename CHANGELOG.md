@@ -15,6 +15,7 @@ Bugfixes:
 
 Other improvements:
 - Surround code with backticks in documentation (#148)
+- Make `RegexFlags` a `newtype` and a `Newtype` instance for it(#159 by @mhmdanas)
 
 ## [v5.0.0](https://github.com/purescript/purescript-strings/releases/tag/v5.0.0) - 2021-02-26
 

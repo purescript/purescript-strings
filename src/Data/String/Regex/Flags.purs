@@ -23,7 +23,7 @@ noFlags = RegexFlags
   { global: false
   , ignoreCase: false
   , multiline: false
-  , dotAll : false
+  , dotAll: false
   , sticky: false
   , unicode: false
   }
@@ -34,7 +34,7 @@ global = RegexFlags
   { global: true
   , ignoreCase: false
   , multiline: false
-  , dotAll : false
+  , dotAll: false
   , sticky: false
   , unicode: false
   }
@@ -45,7 +45,7 @@ ignoreCase = RegexFlags
   { global: false
   , ignoreCase: true
   , multiline: false
-  , dotAll : false
+  , dotAll: false
   , sticky: false
   , unicode: false
   }
@@ -56,7 +56,7 @@ multiline = RegexFlags
   { global: false
   , ignoreCase: false
   , multiline: true
-  , dotAll : false
+  , dotAll: false
   , sticky: false
   , unicode: false
   }
@@ -67,7 +67,7 @@ sticky = RegexFlags
   { global: false
   , ignoreCase: false
   , multiline: false
-  , dotAll : false
+  , dotAll: false
   , sticky: true
   , unicode: false
   }
@@ -78,7 +78,7 @@ unicode = RegexFlags
   { global: false
   , ignoreCase: false
   , multiline: false
-  , dotAll : false
+  , dotAll: false
   , sticky: false
   , unicode: true
   }
@@ -89,7 +89,7 @@ dotAll = RegexFlags
   { global: false
   , ignoreCase: false
   , multiline: false
-  , dotAll : true
+  , dotAll: true
   , sticky: false
   , unicode: false
   }

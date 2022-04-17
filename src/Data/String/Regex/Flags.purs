@@ -3,6 +3,7 @@ module Data.String.Regex.Flags where
 import Prelude
 
 import Control.MonadPlus (guard)
+import Data.Newtype (class Newtype)
 import Data.String (joinWith)
 
 type RegexFlagsRec =
@@ -15,7 +16,9 @@ type RegexFlagsRec =
   }
 
 -- | Flags that control matching.
-data RegexFlags = RegexFlags RegexFlagsRec
+newtype RegexFlags = RegexFlags RegexFlagsRec
+
+derive instance newtypeRegexFlags :: Newtype RegexFlags _
 
 -- | All flags set to false.
 noFlags :: RegexFlags
@@ -107,14 +110,7 @@ instance semigroupRegexFlags :: Semigroup RegexFlags where
 instance monoidRegexFlags :: Monoid RegexFlags where
   mempty = noFlags
 
-instance eqRegexFlags :: Eq RegexFlags where
-  eq (RegexFlags x) (RegexFlags y)
-    = x.global == y.global
-    && x.ignoreCase == y.ignoreCase
-    && x.multiline == y.multiline
-    && x.dotAll == y.dotAll
-    && x.sticky == y.sticky
-    && x.unicode == y.unicode
+derive newtype instance eqRegexFlags :: Eq RegexFlags
 
 instance showRegexFlags :: Show RegexFlags where
   show (RegexFlags flags) =

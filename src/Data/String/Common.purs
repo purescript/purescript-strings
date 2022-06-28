@@ -1,27 +1,39 @@
 module Data.String.Common
-  ( null
+  ( isEmpty
+  , joinWith
   , localeCompare
+  , null
   , replace
   , replaceAll
   , split
   , toLower
   , toUpper
   , trim
-  , joinWith
-  ) where
+  )
+  where
 
 import Prelude
 
 import Data.String.Pattern (Pattern, Replacement)
+import Prim.TypeError (class Warn, Text)
 
--- | Returns `true` if the given string is empty.
+-- | Returns `true` if the given string is empty. Alias for isEmpty.
 -- |
 -- | ```purescript
 -- | null "" == true
 -- | null "Hi" == false
 -- | ```
-null :: String -> Boolean
+null :: Warn (Text "'null' is deprecated, use 'isEmpty'") => String -> Boolean
 null s = s == ""
+
+-- | Returns `true` if the given string is empty.
+-- |
+-- | ```purescript
+-- | isEmpty "" == true
+-- | isEmpty "Hi" == false
+-- | ```
+isEmpty :: String -> Boolean
+isEmpty s = s == ""
 
 -- | Compare two strings in a locale-aware fashion. This is in contrast to
 -- | the `Ord` instance on `String` which treats strings as arrays of code

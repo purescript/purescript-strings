@@ -24,7 +24,7 @@ import Prim.TypeError (class Warn, Text)
 -- | null "Hi" == false
 -- | ```
 null :: Warn (Text "'null' is deprecated, use 'isEmpty'") => String -> Boolean
-null s = s == ""
+null = isEmpty
 
 -- | Returns `true` if the given string is empty.
 -- |

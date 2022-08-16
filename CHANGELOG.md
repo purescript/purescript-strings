@@ -9,9 +9,13 @@ Breaking changes:
 New features:
 
 Bugfixes:
-- Fix `Char`'s `toEnum` implementation (#163 by @JordanMartinez)
 
 Other improvements:
+
+## [v6.0.1](https://github.com/purescript/purescript-strings/releases/tag/v6.0.1) - 2022-08-16
+
+Bugfixes:
+- Fix `Char`'s `toEnum` implementation (#163 by @JordanMartinez)
 
 ## [v6.0.0](https://github.com/purescript/purescript-strings/releases/tag/v6.0.0) - 2022-04-27
 

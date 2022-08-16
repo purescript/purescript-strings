@@ -19,7 +19,7 @@
     "purescript-arrays": "^7.0.0",
     "purescript-control": "^6.0.0",
     "purescript-either": "^6.0.0",
-    "purescript-enums": "^6.0.0",
+    "purescript-enums": "^6.0.1",
     "purescript-foldable-traversable": "^6.0.0",
     "purescript-gen": "^4.0.0",
     "purescript-integers": "^6.0.0",

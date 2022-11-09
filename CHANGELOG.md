@@ -11,6 +11,9 @@ New features:
 Bugfixes:
 
 Other improvements:
+- `split` (#165)
+  - Add more examples.
+  - Fix typo in documentation.
 
 ## [v6.0.1](https://github.com/purescript/purescript-strings/releases/tag/v6.0.1) - 2022-08-16
 

@@ -225,14 +225,7 @@ length = Array.length <<< toCodePointArray
 -- | ```
 -- |
 countPrefix :: (CodePoint -> Boolean) -> String -> Int
-countPrefix = _countPrefix countFallback unsafeCodePointAt0
-
-foreign import _countPrefix
-  :: ((CodePoint -> Boolean) -> String -> Int)
-  -> (String -> CodePoint)
-  -> (CodePoint -> Boolean)
-  -> String
-  -> Int
+countPrefix = countFallback
 
 countFallback :: (CodePoint -> Boolean) -> String -> Int
 countFallback p s = countTail p s 0

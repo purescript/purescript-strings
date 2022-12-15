@@ -1,7 +1,6 @@
 -module(data_string_codePoints@foreign).
 -export(['_unsafeCodePointAt0'/1
        , '_codePointAt'/6
-       , '_countPrefix'/0
        , '_fromCodePointArray'/2
        , '_singleton'/1
        , '_take'/1
@@ -22,7 +21,6 @@ end.
     end
 .
 
-'_countPrefix'() -> error("unimplemented").
 '_fromCodePointArray'(_Fallback, Array) ->
   List = array:to_list(Array),
   unicode:characters_to_binary(List, utf8).

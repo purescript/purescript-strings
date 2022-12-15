@@ -99,7 +99,7 @@ in  upstream
 -------------------------------
 -}
 let upstream =
-      https://github.com/purerl/package-sets/releases/download/erl-0.15.3-20220629/packages.dhall
-        sha256:48ee9f3558c00e234eae6b8f23b4b8b66eb9715c7f2154864e1e425042a0723b
+      https://github.com/purerl/package-sets/releases/download/erl-0.14.5-20220204-2/packages.dhall
+        sha256:bf284d597ad053b43591b964a52aa0f41ed12a576c3efde85ba999ad65072fc9
 
 in  upstream

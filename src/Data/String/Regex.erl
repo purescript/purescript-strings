@@ -29,7 +29,7 @@ end.
 
 source({_,{S,_}}) -> S.
 
-flagsImpl(R) -> error("no flags").
+flagsImpl(_R) -> error("no flags").
 
 % exports["flags'"] = function (r) {
 %   return {

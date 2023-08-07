@@ -11,6 +11,7 @@ New features:
 Bugfixes:
 
 Other improvements:
+- Derive `newtype` instances where possible (#166 by @mhmdanas)
 
 ## [v6.0.1](https://github.com/purescript/purescript-strings/releases/tag/v6.0.1) - 2022-08-16
 

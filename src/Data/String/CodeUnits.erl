@@ -23,23 +23,25 @@ length(S) -> byte_size(S).
 
 '_indexOf'(Just,_,<<>>,_) -> Just(0);
 '_indexOf'(Just,Nothing,X,S) ->
-  case string:str(unicode:characters_to_list(S), unicode:characters_to_list(X)) of
-    0 -> Nothing;
-    N -> Just(N-1)
+  case binary:match(S, X) of
+    nomatch -> Nothing;
+    { Start, _Length } -> Just(Start)
   end.
 '_indexOfStartingAt'(_Just,Nothing,_X,StartAt,S) when StartAt < 0; StartAt > byte_size(S) -> Nothing;
+'_indexOfStartingAt'(Just,_Nothing,<<>>,StartAt,_S) -> Just(StartAt);
 '_indexOfStartingAt'(Just,Nothing,X,StartAt,S) ->
-  case '_indexOf'(Just,Nothing,X,drop(StartAt,S)) of
-    {just,N} -> Just(N+StartAt);
-    _ -> Nothing
+  case binary:match(S, X, [{scope, {StartAt, byte_size(S)-StartAt}}]) of
+    nomatch -> Nothing;
+    { Start, _Length } -> Just(Start)
   end.
 
 '_lastIndexOf'(Just,_,<<>>,S) -> Just(byte_size(S));
 '_lastIndexOf'(Just,Nothing,X,S) ->
-    case string:rstr(unicode:characters_to_list(S), unicode:characters_to_list(X)) of
-      0 -> Nothing;
-      N -> Just(N-1)
-    end.
+  % there is no binary reverse match, and matches returns only nonoverlapping so would not always include the last match
+  case string:find(S, X, trailing) of
+    nomatch -> Nothing;
+    Substr -> Just(byte_size(S) - byte_size(Substr))
+  end.
 '_lastIndexOfStartingAt'(Just,Nothing,X,StartAt,S) ->
   L = byte_size(S),
   S0 = min(L, max(0, StartAt)),

@@ -203,6 +203,11 @@ testStringCodeUnits = do
     , expected: Nothing
     }
 
+  assertEqual
+    { actual: SCU.indexOf (Pattern " ") "360° sehen können"
+    , expected: Just 5 -- not 4
+    }
+
   log "indexOf'"
   assertEqual
     { actual: SCU.indexOf' (Pattern "") 0 ""
@@ -244,6 +249,10 @@ testStringCodeUnits = do
     { actual: SCU.indexOf' (Pattern "cb") 0 "abcd"
     , expected: Nothing
     }
+  assertEqual
+    { actual: SCU.indexOf' (Pattern " ") 8 "360° sehen können"
+    , expected: Just 11
+    }
 
   log "lastIndexOf"
   assertEqual
@@ -262,6 +271,11 @@ testStringCodeUnits = do
     { actual: SCU.lastIndexOf (Pattern "cb") "abcd"
     , expected: Nothing
     }
+  assertEqual
+    { actual: SCU.lastIndexOf (Pattern " ") "360° sehen können"
+    , expected: Just 11
+    }
+
 
   log "lastIndexOf'"
   assertEqual

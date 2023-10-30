@@ -37,7 +37,6 @@ import Data.String.NonEmpty.Internal (NonEmptyString(..), fromString)
 import Data.String.Pattern (Pattern)
 import Data.String.Unsafe as U
 import Partial.Unsafe (unsafePartial)
-import Unsafe.Coerce (unsafeCoerce)
 
 -- For internal use only. Do not export.
 toNonEmptyString :: String -> NonEmptyString
@@ -91,7 +90,7 @@ snoc c s = toNonEmptyString (s <> CU.singleton c)
 -- | Creates a `NonEmptyString` from a `Foldable1` container carrying
 -- | characters.
 fromFoldable1 :: forall f. Foldable1 f => f Char -> NonEmptyString
-fromFoldable1 = unsafeCoerce <<< F1.foldMap1 CU.singleton
+fromFoldable1 = F1.foldMap1 singleton
 
 -- | Converts the `NonEmptyString` into an array of characters.
 -- |

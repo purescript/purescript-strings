@@ -11,10 +11,6 @@ New features:
 Bugfixes:
 
 Other improvements:
-
-## [v6.0.2]
-
-Other improvements:
 - Redefine `Data.String.NonEmpty.CodeUnits.fromFoldable1` in terms of `singleton` (#168 by @postsolar)
 
 ## [v6.0.1](https://github.com/purescript/purescript-strings/releases/tag/v6.0.1) - 2022-08-16

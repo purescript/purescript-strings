@@ -12,9 +12,9 @@ import Test.Assert (assert, assertEqual)
 testString :: Effect Unit
 testString = do
 
-  log "null"
-  assert $ S.null ""
-  assert $ not (S.null "a")
+  log "isEmpty"
+  assert $ S.isEmpty ""
+  assert $ not (S.isEmpty "a")
 
   log "stripPrefix"
   -- this is a re-export from Data.String.CodeUnits, so the majority of tests are in there

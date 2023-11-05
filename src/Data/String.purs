@@ -6,5 +6,5 @@ module Data.String
 
 import Data.String.CodePoints
 
-import Data.String.Common (joinWith, localeCompare, null, replace, replaceAll, split, toLower, toUpper, trim)
+import Data.String.Common (joinWith, localeCompare, null, isEmpty, replace, replaceAll, split, toLower, toUpper, trim)
 import Data.String.Pattern (Pattern(..), Replacement(..))

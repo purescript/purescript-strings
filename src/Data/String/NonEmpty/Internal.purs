@@ -124,6 +124,31 @@ stripPrefix pat = fromString <=< liftS (String.stripPrefix pat)
 stripSuffix :: Pattern -> NonEmptyString -> Maybe NonEmptyString
 stripSuffix pat = fromString <=< liftS (String.stripSuffix pat)
 
+
+-- | Checks whether the given string starts with the pattern.
+-- |
+-- | **NOTE**: if you also want to get the string stripped of the pattern, see
+-- | `stripPrefix`.
+-- |
+-- | ```purescript
+-- | startsWith (Pattern "foo") (NonEmptyString "foobar") == true
+-- | startsWith (Pattern "bar") (NonEmptyString "foobar") == false
+-- | ```
+startsWith :: Pattern -> NonEmptyString -> Boolean
+startsWith = liftS <<< String.startsWith
+
+-- | Checks whether the given string ends with the pattern.
+-- |
+-- | **NOTE**: if you also want to get the string stripped of the pattern, see
+-- | `stripSuffix`.
+-- |
+-- | ```purescript
+-- | endsWith (Pattern "bar") (NonEmptyString "foobar") == true
+-- | endsWith (Pattern "foo") (NonEmptyString "foobar") == false
+-- | ```
+endsWith :: Pattern -> NonEmptyString -> Boolean
+endsWith = liftS <<< String.endsWith
+
 -- | Checks whether the pattern appears in the given string.
 -- |
 -- | ```purescript

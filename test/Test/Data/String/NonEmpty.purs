@@ -144,6 +144,19 @@ testNonEmptyString = do
     , expected: Nothing
     }
 
+  log "startsWith"
+  assert $ NES.startsWith (Pattern "foo") (nes (Proxy :: Proxy "foobar"))
+  assert $ NES.startsWith (Pattern "foo") (nes (Proxy :: Proxy "foo"))
+  assert $ NES.startsWith (Pattern "") (nes (Proxy :: Proxy "foo"))
+  assert $ not $ NES.startsWith (Pattern "foo") (nes (Proxy :: Proxy "f"))
+
+  log "endsWith"
+  assert $ NES.endsWith (Pattern "bar") (nes (Proxy :: Proxy "foobar"))
+  assert $ NES.endsWith (Pattern "bar") (nes (Proxy :: Proxy "bar"))
+  assert $ NES.endsWith (Pattern "") (nes (Proxy :: Proxy "f"))
+  assert $ NES.endsWith (Pattern "") (nes (Proxy :: Proxy "bar"))
+  assert $ not $ NES.endsWith (Pattern "bar") (nes (Proxy :: Proxy "b"))
+
   log "toLower"
   assertEqual
     { actual: NES.toLower (nes (Proxy :: Proxy "bAtMaN"))

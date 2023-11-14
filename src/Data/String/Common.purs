@@ -56,11 +56,18 @@ foreign import replace :: Pattern -> Replacement -> String -> String
 -- | ```
 foreign import replaceAll :: Pattern -> Replacement -> String -> String
 
--- | Returns the substrings of the second string separated along occurences
+-- | Returns the substrings of the second string separated along occurrences
 -- | of the first string.
 -- |
 -- | ```purescript
+-- | -- single match
 -- | split (Pattern " ") "hello world" == ["hello", "world"]
+-- | -- multiple matches
+-- | split (Pattern " | ") "foo | bar | baz" == ["foo", "bar", "baz"]
+-- | -- no match
+-- | split (Pattern "baz") "foo bar" == ["foo bar"]
+-- | -- empty string
+-- | split (Pattern "") "foo bar" == ["f","o","o"," ","b","a","r"]
 -- | ```
 foreign import split :: Pattern -> String -> Array String
 

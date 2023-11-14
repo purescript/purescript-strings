@@ -12,6 +12,7 @@ Bugfixes:
 
 Other improvements:
 - Derive `newtype` instances where possible (#166 by @mhmdanas)
+- Redefine `Data.String.NonEmpty.CodeUnits.fromFoldable1` in terms of `singleton` (#168 by @postsolar)
 
 ## [v6.0.1](https://github.com/purescript/purescript-strings/releases/tag/v6.0.1) - 2022-08-16
 

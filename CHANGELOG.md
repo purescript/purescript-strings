@@ -11,9 +11,8 @@ New features:
 Bugfixes:
 
 Other improvements:
-- `split` (#165)
-  - Add more examples.
-  - Fix typo in documentation.
+- Add more examples to `Data.String.split` and fix a typo in documentation (#165 by @gasi)
+- Redefine `Data.String.NonEmpty.CodeUnits.fromFoldable1` in terms of `singleton` (#168 by @postsolar)
 
 ## [v6.0.1](https://github.com/purescript/purescript-strings/releases/tag/v6.0.1) - 2022-08-16
 

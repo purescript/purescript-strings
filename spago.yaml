@@ -1,0 +1,32 @@
+
+package:
+  name: strings
+  dependencies:
+    - arrays
+    - control
+    - either
+    - enums
+    - foldable-traversable
+    - gen
+    - integers
+    - maybe
+    - newtype
+    - nonempty
+    - partial
+    - prelude
+    - tailrec
+    - tuples
+    - unfoldable
+    - unsafe-coerce
+  test:
+    main: Test.Main
+    dependencies:
+      - assert
+      - debug
+workspace:
+  package_set:
+    url: https://raw.githubusercontent.com/purerl/package-sets/erl-0.15.3-20220629/packages.json
+    hash: sha256-kLmZv2u5dWVUUaQEwK0b3T1Ghce5a/hG0zlizaYfcXs=
+  extra_packages: {}
+  backend:
+    cmd: purerl

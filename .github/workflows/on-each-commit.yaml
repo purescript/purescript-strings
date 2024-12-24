@@ -1,13 +1,12 @@
-on: [push]
+name: build
 
+on:
+  pull_request:
+  push:
 jobs:
-  run_tests:
+  tests:
     runs-on: ubuntu-latest
-    container:
-      image: fredthedino/purerl:0.0.16
     steps:
-      - uses: actions/checkout@v2
-      - name: 'Compile'
-        run: spago build
-      - name: 'Test'
-        run: spago test
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v12
+    - run: nix-shell --run 'spago test'

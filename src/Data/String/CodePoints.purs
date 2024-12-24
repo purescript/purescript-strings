@@ -314,7 +314,7 @@ lastIndexOf' p i s =
 
 -- | Returns a string containing the given number of code points from the
 -- | beginning of the given string. If the string does not have that many code
--- | points, returns the empty string. Operates in constant space and in time
+-- | points, returns the entire string. Operates in constant space and in time
 -- | linear to the given number.
 -- |
 -- | ```purescript

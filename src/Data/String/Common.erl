@@ -18,12 +18,11 @@ split(Sep,S) ->
   end,
   array:from_list(Res).
 
-% TODO ugh
-toLower(S) -> unicode:characters_to_binary(string:to_lower(unicode:characters_to_list(S))).
+toLower(S) -> string:lowercase(S).
 
-toUpper(S) -> unicode:characters_to_binary(string:to_upper(unicode:characters_to_list(S))).
+toUpper(S) -> string:uppercase(S).
 
-trim(S) -> re:replace(S, "^\\s*(.*?)\\s*$","\\1", [{return, binary}]).
+trim(S) -> re:replace(S, "^\\s*(.*?)\\s*$","\\1", [{return, binary}, dotall]).
 
 joinWith(S, XS) ->
   XS1 = lists:map(fun unicode:characters_to_list/1, array:to_list(XS)),

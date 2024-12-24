@@ -7,7 +7,8 @@ flags_to_options([], Acc) -> {opts, Acc};
 flags_to_options([$g|Flags], Acc) -> flags_to_options(Flags, Acc);
 flags_to_options([$i|Flags], Acc) -> flags_to_options(Flags, [caseless|Acc]);
 flags_to_options([$m|Flags], Acc) -> flags_to_options(Flags, [multiline|Acc]);
-flags_to_options([$y|Flags], Acc) -> flags_to_options(Flags, Acc);
+flags_to_options([$s|Flags], Acc) -> flags_to_options(Flags, [dotall|Acc]);
+flags_to_options([$y|Flags], Acc) -> flags_to_options(Flags, [anchored|Acc]); %% this is basically sticky given there is no way to advance the index
 flags_to_options([$u|Flags], Acc) -> flags_to_options(Flags, [ucp|[unicode|Acc]]);
 flags_to_options(_,_) -> err.
 

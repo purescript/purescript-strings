@@ -118,6 +118,12 @@ testString = do
     , expected: "abc"
     }
 
+  log "trim multiline"
+  assertEqual
+    { actual: S.trim "  abc\n def \n"
+    , expected: "abc\n def"
+    }
+
   log "joinWith"
   assertEqual
     { actual: S.joinWith "" []

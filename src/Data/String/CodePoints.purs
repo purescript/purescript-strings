@@ -207,6 +207,9 @@ uncons s = case CU.length s of
 -- | ```purescript
 -- | >>> length "b 𝐀𝐀 c 𝐀"
 -- | 8
+-- | -- compare to Data.String.CodeUnits:
+-- | >>> length "b 𝐀𝐀 c 𝐀"
+-- | 11
 -- | ```
 -- |
 length :: String -> Int

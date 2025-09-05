@@ -145,6 +145,10 @@ uncons s  = Just { head: U.charAt zero s, tail: drop one s }
 -- |
 -- | ```purescript
 -- | length "Hello World" == 11
+-- |
+-- | length "𝐀A" == 3
+-- | -- compare to Data.String.CodePoints:
+-- | length "𝐀A" == 2
 -- | ```
 -- |
 foreign import length :: String -> Int

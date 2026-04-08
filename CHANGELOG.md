@@ -12,7 +12,27 @@ New features:
 Bugfixes:
 
 Other improvements:
+- Redefine `Data.String.NonEmpty.CodeUnits.fromFoldable1` in terms of `singleton` (#168 by @postsolar)
+
+## [v6.0.1](https://github.com/purescript/purescript-strings/releases/tag/v6.0.1) - 2022-08-16
+
+Bugfixes:
+- Fix `Char`'s `toEnum` implementation (#163 by @JordanMartinez)
+
+## [v6.0.0](https://github.com/purescript/purescript-strings/releases/tag/v6.0.0) - 2022-04-27
+
+Breaking changes:
+- Migrate FFI to ES modules (#158 by @kl0tl and @JordanMartinez)
+- Replaced polymorphic proxies with monomorphic `Proxy` (#158 by @JordanMartinez)
+- In `slice`, drop bounds checking and `Maybe` return type (#145 by Quelklef)
+
+New features:
+
+Bugfixes:
+
+Other improvements:
 - Surround code with backticks in documentation (#148)
+- Make `RegexFlags` a `newtype` and a `Newtype` instance for it(#159 by @mhmdanas)
 
 ## [v5.0.0](https://github.com/purescript/purescript-strings/releases/tag/v5.0.0) - 2021-02-26
 

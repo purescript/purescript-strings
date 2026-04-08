@@ -3,6 +3,7 @@ module Data.String.Regex.Flags where
 import Prelude
 
 import Control.MonadPlus (guard)
+import Data.Newtype (class Newtype)
 import Data.String (joinWith)
 
 type RegexFlagsRec =
@@ -15,7 +16,9 @@ type RegexFlagsRec =
   }
 
 -- | Flags that control matching.
-data RegexFlags = RegexFlags RegexFlagsRec
+newtype RegexFlags = RegexFlags RegexFlagsRec
+
+derive instance newtypeRegexFlags :: Newtype RegexFlags _
 
 -- | All flags set to false.
 noFlags :: RegexFlags
@@ -23,7 +26,7 @@ noFlags = RegexFlags
   { global: false
   , ignoreCase: false
   , multiline: false
-  , dotAll : false
+  , dotAll: false
   , sticky: false
   , unicode: false
   }
@@ -34,7 +37,7 @@ global = RegexFlags
   { global: true
   , ignoreCase: false
   , multiline: false
-  , dotAll : false
+  , dotAll: false
   , sticky: false
   , unicode: false
   }
@@ -45,7 +48,7 @@ ignoreCase = RegexFlags
   { global: false
   , ignoreCase: true
   , multiline: false
-  , dotAll : false
+  , dotAll: false
   , sticky: false
   , unicode: false
   }
@@ -56,7 +59,7 @@ multiline = RegexFlags
   { global: false
   , ignoreCase: false
   , multiline: true
-  , dotAll : false
+  , dotAll: false
   , sticky: false
   , unicode: false
   }
@@ -67,7 +70,7 @@ sticky = RegexFlags
   { global: false
   , ignoreCase: false
   , multiline: false
-  , dotAll : false
+  , dotAll: false
   , sticky: true
   , unicode: false
   }
@@ -78,7 +81,7 @@ unicode = RegexFlags
   { global: false
   , ignoreCase: false
   , multiline: false
-  , dotAll : false
+  , dotAll: false
   , sticky: false
   , unicode: true
   }
@@ -89,7 +92,7 @@ dotAll = RegexFlags
   { global: false
   , ignoreCase: false
   , multiline: false
-  , dotAll : true
+  , dotAll: true
   , sticky: false
   , unicode: false
   }
@@ -107,14 +110,7 @@ instance semigroupRegexFlags :: Semigroup RegexFlags where
 instance monoidRegexFlags :: Monoid RegexFlags where
   mempty = noFlags
 
-instance eqRegexFlags :: Eq RegexFlags where
-  eq (RegexFlags x) (RegexFlags y)
-    = x.global == y.global
-    && x.ignoreCase == y.ignoreCase
-    && x.multiline == y.multiline
-    && x.dotAll == y.dotAll
-    && x.sticky == y.sticky
-    && x.unicode == y.unicode
+derive newtype instance eqRegexFlags :: Eq RegexFlags
 
 instance showRegexFlags :: Show RegexFlags where
   show (RegexFlags flags) =

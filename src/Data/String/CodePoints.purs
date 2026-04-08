@@ -207,7 +207,7 @@ uncons s = case CU.length s of
 -- | ```purescript
 -- | >>> length "b 𝐀𝐀 c 𝐀"
 -- | 8
--- | -- compare to Data.String:
+-- | -- compare to Data.String.CodeUnits:
 -- | >>> length "b 𝐀𝐀 c 𝐀"
 -- | 11
 -- | ```
@@ -314,7 +314,7 @@ lastIndexOf' p i s =
 
 -- | Returns a string containing the given number of code points from the
 -- | beginning of the given string. If the string does not have that many code
--- | points, returns the empty string. Operates in constant space and in time
+-- | points, returns the entire string. Operates in constant space and in time
 -- | linear to the given number.
 -- |
 -- | ```purescript

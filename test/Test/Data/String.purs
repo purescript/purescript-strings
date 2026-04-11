@@ -99,6 +99,10 @@ testString = do
     { actual: S.split (Pattern "d") "abc"
     , expected: ["abc"]
     }
+  assertEqual
+    { actual: S.split (Pattern "--") "a--b--c"
+    , expected: ["a", "b", "c"]
+    }
 
   log "toLower"
   assertEqual

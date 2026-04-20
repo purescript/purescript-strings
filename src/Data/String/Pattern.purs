@@ -15,8 +15,8 @@ import Data.Newtype (class Newtype)
 -- |
 newtype Pattern = Pattern String
 
-derive instance eqPattern :: Eq Pattern
-derive instance ordPattern :: Ord Pattern
+derive newtype instance eqPattern :: Eq Pattern
+derive newtype instance ordPattern :: Ord Pattern
 derive instance newtypePattern :: Newtype Pattern _
 
 instance showPattern :: Show Pattern where
@@ -25,8 +25,8 @@ instance showPattern :: Show Pattern where
 -- | A newtype used in cases to specify a replacement for a pattern.
 newtype Replacement = Replacement String
 
-derive instance eqReplacement :: Eq Replacement
-derive instance ordReplacement :: Ord Replacement
+derive newtype instance eqReplacement :: Eq Replacement
+derive newtype instance ordReplacement :: Ord Replacement
 derive instance newtypeReplacement :: Newtype Replacement _
 
 instance showReplacement :: Show Replacement where

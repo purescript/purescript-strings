@@ -46,8 +46,8 @@ import Data.Unfoldable (unfoldr)
 -- | Unicode code points.
 newtype CodePoint = CodePoint Int
 
-derive instance eqCodePoint :: Eq CodePoint
-derive instance ordCodePoint :: Ord CodePoint
+derive newtype instance eqCodePoint :: Eq CodePoint
+derive newtype instance ordCodePoint :: Ord CodePoint
 
 instance showCodePoint :: Show CodePoint where
   show (CodePoint i) = "(CodePoint 0x" <> toUpper (toStringAs hexadecimal i) <> ")"

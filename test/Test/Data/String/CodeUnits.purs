@@ -163,11 +163,11 @@ testStringCodeUnits = do
 
   log "takeWhile"
   assertEqual
-    { actual: SCU.takeWhile (\c -> true) "abc"
+    { actual: SCU.takeWhile (\_ -> true) "abc"
     , expected: "abc"
     }
   assertEqual
-    { actual: SCU.takeWhile (\c -> false) "abc"
+    { actual: SCU.takeWhile (\_ -> false) "abc"
     , expected: ""
     }
   assertEqual
@@ -177,11 +177,11 @@ testStringCodeUnits = do
 
   log "dropWhile"
   assertEqual
-    { actual: SCU.dropWhile (\c -> true) "abc"
+    { actual: SCU.dropWhile (\_ -> true) "abc"
     , expected: ""
     }
   assertEqual
-    { actual: SCU.dropWhile (\c -> false) "abc"
+    { actual: SCU.dropWhile (\_ -> false) "abc"
     , expected: "abc"
     }
   assertEqual

@@ -34,11 +34,11 @@ testStringRegex = do
   assert $ replace (unsafeRegex "-" noFlags) "!" "a-b-c" == "a!b-c"
 
   log "replace'"
-  assert $ replace' (unsafeRegex "-" noFlags) (\s xs -> "!") "a-b-c" == "a!b-c"
-  assert $ replace' (unsafeRegex "(foo)(bar)?" noFlags) (\s xs -> show xs) "<>" == "<>"
-  assert $ replace' (unsafeRegex "(foo)(bar)?" noFlags) (\s xs -> show xs) "<foo>" == "<[(Just \"foo\"),Nothing]>"
-  assert $ replace' (unsafeRegex "(foo)(bar)?" noFlags) (\s xs -> show xs) "<foobar>" == "<[(Just \"foo\"),(Just \"bar\")]>"
-  assert $ replace' (unsafeRegex "@(?<username>\\w+)" noFlags) (\s xs -> show xs) "@purescript" == "[(Just \"purescript\")]"
+  assert $ replace' (unsafeRegex "-" noFlags) (\_ _ -> "!") "a-b-c" == "a!b-c"
+  assert $ replace' (unsafeRegex "(foo)(bar)?" noFlags) (\_ xs -> show xs) "<>" == "<>"
+  assert $ replace' (unsafeRegex "(foo)(bar)?" noFlags) (\_ xs -> show xs) "<foo>" == "<[(Just \"foo\"),Nothing]>"
+  assert $ replace' (unsafeRegex "(foo)(bar)?" noFlags) (\_ xs -> show xs) "<foobar>" == "<[(Just \"foo\"),(Just \"bar\")]>"
+  assert $ replace' (unsafeRegex "@(?<username>\\w+)" noFlags) (\_ xs -> show xs) "@purescript" == "[(Just \"purescript\")]"
 
   log "search"
   assert $ search (unsafeRegex "b" noFlags) "abc" == Just 1

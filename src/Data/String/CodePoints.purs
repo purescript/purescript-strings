@@ -197,9 +197,10 @@ uncons s = case CU.length s of
       cu0 = fromEnum (Unsafe.charAt 0 s)
       cu1 = fromEnum (Unsafe.charAt 1 s)
     in
-      if isLead cu0 && isTrail cu1
-        then Just { head: unsurrogate cu0 cu1, tail: CU.drop 2 s }
-        else Just { head: CodePoint cu0, tail: CU.drop 1 s }
+      if isLead cu0 && isTrail cu1 then
+        Just { head: unsurrogate cu0 cu1, tail: CU.drop 2 s }
+      else
+        Just { head: CodePoint cu0, tail: CU.drop 1 s }
 
 -- | Returns the number of code points in the string. Operates in constant
 -- | space and in time linear to the length of the string.

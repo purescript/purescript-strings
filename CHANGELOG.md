@@ -2,16 +2,13 @@
 
 Notable changes to this project are documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
-Breaking changes:
+## [v6.1.0](https://github.com/purescript/purescript-strings/releases/tag/v6.1.0)
 
 New features:
 - Added `startsWith` and `endsWith` (#147)
 
-Bugfixes:
-
 Other improvements:
+- Migrate from Bower/Pulp to Spago and update CI
 - Redefine `Data.String.NonEmpty.CodeUnits.fromFoldable1` in terms of `singleton` (#168 by @postsolar)
 
 ## [v6.0.1](https://github.com/purescript/purescript-strings/releases/tag/v6.0.1) - 2022-08-16

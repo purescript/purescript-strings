@@ -117,13 +117,12 @@ instance showRegexFlags :: Show RegexFlags where
     let
       usedFlags =
         []
-        <> (guard flags.global $> "global")
-        <> (guard flags.ignoreCase $> "ignoreCase")
-        <> (guard flags.multiline $> "multiline")
-        <> (guard flags.dotAll $> "dotAll")
-        <> (guard flags.sticky $> "sticky")
-        <> (guard flags.unicode $> "unicode")
+          <> (guard flags.global $> "global")
+          <> (guard flags.ignoreCase $> "ignoreCase")
+          <> (guard flags.multiline $> "multiline")
+          <> (guard flags.dotAll $> "dotAll")
+          <> (guard flags.sticky $> "sticky")
+          <> (guard flags.unicode $> "unicode")
     in
-      if usedFlags == []
-      then "noFlags"
+      if usedFlags == [] then "noFlags"
       else "(" <> joinWith " <> " usedFlags <> ")"

@@ -2,7 +2,7 @@ module Data.String.Gen where
 
 import Prelude
 
-import Control.Monad.Gen (class MonadGen, chooseInt, unfoldable, sized, resize)
+import Control.Monad.Gen (class MonadGen, chooseInt, resize, sized, unfoldable)
 import Control.Monad.Rec.Class (class MonadRec)
 import Data.Char.Gen as CG
 import Data.String.CodeUnits as SCU

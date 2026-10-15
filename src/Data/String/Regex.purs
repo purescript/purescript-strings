@@ -58,12 +58,13 @@ foreign import flagsImpl :: Regex -> RegexFlagsRec
 -- | Returns the string representation of the given `RegexFlags`.
 renderFlags :: RegexFlags -> String
 renderFlags (RegexFlags f) =
-  (if f.global then "g" else "") <>
-  (if f.ignoreCase then "i" else "") <>
-  (if f.multiline then "m" else "") <>
-  (if f.dotAll then "s" else "") <>
-  (if f.sticky then "y" else "") <>
-  (if f.unicode then "u" else "")
+  (if f.global then "g" else "")
+    <> (if f.ignoreCase then "i" else "")
+    <> (if f.multiline then "m" else "")
+    <> (if f.dotAll then "s" else "")
+    <> (if f.sticky then "y" else "")
+    <>
+      (if f.unicode then "u" else "")
 
 -- | Parses the string representation of `RegexFlags`.
 parseFlags :: String -> RegexFlags

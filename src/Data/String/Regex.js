@@ -27,7 +27,7 @@ export const flagsImpl = function (r) {
     global: r.global,
     dotAll: r.dotAll,
     sticky: !!r.sticky,
-    unicode: !!r.unicode
+    unicode: !!r.unicode,
   };
 };
 
@@ -73,7 +73,8 @@ export const _replaceBy = function (just) {
         return function (s) {
           return s.replace(r, function (match) {
             var groups = [];
-            var group, i = 1;
+            var group,
+              i = 1;
             while (typeof (group = arguments[i++]) !== "number") {
               groups.push(group == null ? nothing : just(group));
             }

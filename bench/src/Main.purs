@@ -2,12 +2,12 @@ module Bench.Main where
 
 import Prelude
 
-import Effect (Effect)
-import Effect.Console (log)
 import Data.Array.NonEmpty (fromArray)
 import Data.Maybe (fromJust)
 import Data.String.CodeUnits (toCharArray)
 import Data.String.NonEmpty.CodeUnits (fromFoldable1, fromNonEmptyCharArray)
+import Effect (Effect)
+import Effect.Console (log)
 import Partial.Unsafe (unsafePartial)
 import Performance.Minibench (benchWith)
 

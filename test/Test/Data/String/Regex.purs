@@ -27,7 +27,7 @@ testStringRegex = do
   assert $ "quxbarfoobaz" == replace (unsafeRegex ".foo" dotAll) "qux" "\nfoobarfoobaz"
 
   log "match"
-  assert $ match (unsafeRegex "^abc$" noFlags) "abc" == Just (nea [Just "abc"])
+  assert $ match (unsafeRegex "^abc$" noFlags) "abc" == Just (nea [ Just "abc" ])
   assert $ match (unsafeRegex "^abc$" noFlags) "xyz" == Nothing
 
   log "replace"
@@ -46,9 +46,9 @@ testStringRegex = do
 
   log "split"
   assert $ split (unsafeRegex "" noFlags) "" == []
-  assert $ split (unsafeRegex "" noFlags) "abc" == ["a", "b", "c"]
-  assert $ split (unsafeRegex "b" noFlags) "" == [""]
-  assert $ split (unsafeRegex "b" noFlags) "abc" == ["a", "c"]
+  assert $ split (unsafeRegex "" noFlags) "abc" == [ "a", "b", "c" ]
+  assert $ split (unsafeRegex "b" noFlags) "" == [ "" ]
+  assert $ split (unsafeRegex "b" noFlags) "abc" == [ "a", "c" ]
 
   log "test"
   -- Ensure that we have referential transparency for calls to 'test'. No

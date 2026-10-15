@@ -85,19 +85,19 @@ testString = do
     }
   assertEqual
     { actual: S.split (Pattern "") "a"
-    , expected: ["a"]
+    , expected: [ "a" ]
     }
   assertEqual
     { actual: S.split (Pattern "") "ab"
-    , expected: ["a", "b"]
+    , expected: [ "a", "b" ]
     }
   assertEqual
     { actual: S.split (Pattern "b") "aabcc"
-    , expected: ["aa", "cc"]
+    , expected: [ "aa", "cc" ]
     }
   assertEqual
     { actual: S.split (Pattern "d") "abc"
-    , expected: ["abc"]
+    , expected: [ "abc" ]
     }
 
   log "toLower"
@@ -124,10 +124,10 @@ testString = do
     , expected: ""
     }
   assertEqual
-    { actual: S.joinWith "" ["a", "b"]
+    { actual: S.joinWith "" [ "a", "b" ]
     , expected: "ab"
     }
   assertEqual
-    { actual: S.joinWith "--" ["a", "b", "c"]
+    { actual: S.joinWith "--" [ "a", "b", "c" ]
     , expected: "a--b--c"
     }

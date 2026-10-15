@@ -209,9 +209,8 @@ take i nes =
   let
     s = fromNonEmptyString nes
   in
-    if i < 1
-      then Nothing
-      else Just (toNonEmptyString (CU.take i s))
+    if i < 1 then Nothing
+    else Just (toNonEmptyString (CU.take i s))
 
 -- | Returns the last `n` characters of the string. Returns `Nothing` if `n` is
 -- | less than 1.
@@ -225,9 +224,8 @@ takeRight i nes =
   let
     s = fromNonEmptyString nes
   in
-    if i < 1
-      then Nothing
-      else Just (toNonEmptyString (CU.takeRight i s))
+    if i < 1 then Nothing
+    else Just (toNonEmptyString (CU.takeRight i s))
 
 -- | Returns the longest prefix of characters that satisfy the predicate.
 -- | `Nothing` is returned if there is no matching prefix.
@@ -251,9 +249,8 @@ drop i nes =
   let
     s = fromNonEmptyString nes
   in
-    if i >= CU.length s
-      then Nothing
-      else Just (toNonEmptyString (CU.drop i s))
+    if i >= CU.length s then Nothing
+    else Just (toNonEmptyString (CU.drop i s))
 
 -- | Returns the string without the last `n` characters. Returns `Nothing` if
 -- | more characters are dropped than the string is long.
@@ -267,9 +264,8 @@ dropRight i nes =
   let
     s = fromNonEmptyString nes
   in
-    if i >= CU.length s
-      then Nothing
-      else Just (toNonEmptyString (CU.dropRight i s))
+    if i >= CU.length s then Nothing
+    else Just (toNonEmptyString (CU.dropRight i s))
 
 -- | Returns the suffix remaining after `takeWhile`.
 -- |

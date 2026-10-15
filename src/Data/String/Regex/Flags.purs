@@ -124,5 +124,7 @@ instance showRegexFlags :: Show RegexFlags where
           <> (guard flags.sticky $> "sticky")
           <> (guard flags.unicode $> "unicode")
     in
-      if usedFlags == [] then "noFlags"
-      else "(" <> joinWith " <> " usedFlags <> ")"
+      if usedFlags == [] then
+        "noFlags"
+      else
+        "(" <> joinWith " <> " usedFlags <> ")"

@@ -107,8 +107,10 @@ take i nes =
   let
     s = fromNonEmptyString nes
   in
-    if i < 1 then Nothing
-    else Just (toNonEmptyString (CP.take i s))
+    if i < 1 then
+      Nothing
+    else
+      Just (toNonEmptyString (CP.take i s))
 
 takeWhile :: (CodePoint -> Boolean) -> NonEmptyString -> Maybe NonEmptyString
 takeWhile f = fromString <<< liftS (CP.takeWhile f)
@@ -118,8 +120,10 @@ drop i nes =
   let
     s = fromNonEmptyString nes
   in
-    if i >= CP.length s then Nothing
-    else Just (toNonEmptyString (CP.drop i s))
+    if i >= CP.length s then
+      Nothing
+    else
+      Just (toNonEmptyString (CP.drop i s))
 
 dropWhile :: (CodePoint -> Boolean) -> NonEmptyString -> Maybe NonEmptyString
 dropWhile f = fromString <<< liftS (CP.dropWhile f)

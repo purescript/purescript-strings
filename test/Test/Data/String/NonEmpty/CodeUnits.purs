@@ -22,7 +22,7 @@ testNonEmptyStringCodeUnits = do
     , expected: Nothing
     }
   assertEqual
-    { actual: NESCU.fromCharArray ['a', 'b']
+    { actual: NESCU.fromCharArray [ 'a', 'b' ]
     , expected: Just (nes (Proxy :: Proxy "ab"))
     }
 
@@ -60,11 +60,11 @@ testNonEmptyStringCodeUnits = do
 
   log "fromFoldable1"
   assertEqual
-    { actual: NESCU.fromFoldable1 (nea ['a'])
+    { actual: NESCU.fromFoldable1 (nea [ 'a' ])
     , expected: nes (Proxy :: Proxy "a")
     }
   assertEqual
-    { actual: NESCU.fromFoldable1 (nea ['a', 'b', 'c'])
+    { actual: NESCU.fromFoldable1 (nea [ 'a', 'b', 'c' ])
     , expected: nes (Proxy :: Proxy "abc")
     }
 
@@ -141,21 +141,21 @@ testNonEmptyStringCodeUnits = do
   log "toCharArray"
   assertEqual
     { actual: NESCU.toCharArray (nes (Proxy :: Proxy "a"))
-    , expected: ['a']
+    , expected: [ 'a' ]
     }
   assertEqual
     { actual: NESCU.toCharArray (nes (Proxy :: Proxy "ab"))
-    , expected: ['a', 'b']
+    , expected: [ 'a', 'b' ]
     }
   assertEqual
     { actual: NESCU.toCharArray (nes (Proxy :: Proxy "Hello☺\n"))
-    , expected: ['H','e','l','l','o','☺','\n']
+    , expected: [ 'H', 'e', 'l', 'l', 'o', '☺', '\n' ]
     }
 
   log "toNonEmptyCharArray"
   assertEqual
     { actual: NESCU.toNonEmptyCharArray (nes (Proxy :: Proxy "ab"))
-    , expected: nea ['a', 'b']
+    , expected: nea [ 'a', 'b' ]
     }
 
   log "uncons"

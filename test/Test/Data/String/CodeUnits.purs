@@ -163,11 +163,11 @@ testStringCodeUnits = do
 
   log "takeWhile"
   assertEqual
-    { actual: SCU.takeWhile (\c -> true) "abc"
+    { actual: SCU.takeWhile (\_ -> true) "abc"
     , expected: "abc"
     }
   assertEqual
-    { actual: SCU.takeWhile (\c -> false) "abc"
+    { actual: SCU.takeWhile (\_ -> false) "abc"
     , expected: ""
     }
   assertEqual
@@ -177,11 +177,11 @@ testStringCodeUnits = do
 
   log "dropWhile"
   assertEqual
-    { actual: SCU.dropWhile (\c -> true) "abc"
+    { actual: SCU.dropWhile (\_ -> true) "abc"
     , expected: ""
     }
   assertEqual
-    { actual: SCU.dropWhile (\c -> false) "abc"
+    { actual: SCU.dropWhile (\_ -> false) "abc"
     , expected: "abc"
     }
   assertEqual
@@ -192,10 +192,10 @@ testStringCodeUnits = do
   log "fromCharArray"
   assertEqual
     { actual: SCU.fromCharArray []
-      , expected: ""
-      }
+    , expected: ""
+    }
   assertEqual
-    { actual: SCU.fromCharArray ['a', 'b']
+    { actual: SCU.fromCharArray [ 'a', 'b' ]
     , expected: "ab"
     }
 
@@ -442,31 +442,31 @@ testStringCodeUnits = do
   log "splitAt"
   assertEqual
     { actual: SCU.splitAt 1 ""
-    , expected: {before: "", after: ""}
+    , expected: { before: "", after: "" }
     }
   assertEqual
     { actual: SCU.splitAt 0 "a"
-    , expected: {before: "", after: "a"}
+    , expected: { before: "", after: "a" }
     }
   assertEqual
     { actual: SCU.splitAt 1 "a"
-    , expected: {before: "a", after: ""}
+    , expected: { before: "a", after: "" }
     }
   assertEqual
     { actual: SCU.splitAt 1 "ab"
-    , expected: {before: "a", after: "b"}
+    , expected: { before: "a", after: "b" }
     }
   assertEqual
     { actual: SCU.splitAt 3 "aabcc"
-    , expected: {before: "aab", after: "cc"}
+    , expected: { before: "aab", after: "cc" }
     }
   assertEqual
     { actual: SCU.splitAt (-1) "abc"
-    , expected: {before: "", after: "abc"}
+    , expected: { before: "", after: "abc" }
     }
   assertEqual
     { actual: SCU.splitAt 10 "Hi"
-    , expected: {before: "Hi", after: ""}
+    , expected: { before: "Hi", after: "" }
     }
 
   log "toCharArray"
@@ -476,28 +476,28 @@ testStringCodeUnits = do
     }
   assertEqual
     { actual: SCU.toCharArray "a"
-    , expected: ['a']
+    , expected: [ 'a' ]
     }
   assertEqual
     { actual: SCU.toCharArray "ab"
-    , expected: ['a', 'b']
+    , expected: [ 'a', 'b' ]
     }
 
   log "slice"
   assertEqual
-    { actual: SCU.slice 0 0   "purescript"
+    { actual: SCU.slice 0 0 "purescript"
     , expected: ""
     }
   assertEqual
-    { actual: SCU.slice 0 1   "purescript"
+    { actual: SCU.slice 0 1 "purescript"
     , expected: "p"
     }
   assertEqual
-    { actual: SCU.slice 3 6   "purescript"
+    { actual: SCU.slice 3 6 "purescript"
     , expected: "esc"
     }
   assertEqual
-    { actual: SCU.slice 3 10  "purescript"
+    { actual: SCU.slice 3 10 "purescript"
     , expected: "escript"
     }
   assertEqual
@@ -509,11 +509,11 @@ testStringCodeUnits = do
     , expected: "rip"
     }
   assertEqual
-    { actual: SCU.slice (-4) 3  "purescript"
+    { actual: SCU.slice (-4) 3 "purescript"
     , expected: ""
     }
   assertEqual
-    { actual: SCU.slice 1000 3  "purescript"
+    { actual: SCU.slice 1000 3 "purescript"
     , expected: ""
     }
   assertEqual

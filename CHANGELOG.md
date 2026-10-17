@@ -2,26 +2,37 @@
 
 Notable changes to this project are documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Unreleased](https://github.com/purescript/purescript-strings/compare/v6.1.0...HEAD)
 
 Breaking changes:
 
 New features:
-- Added `startsWith` and `endsWith` (#147)
 
 Bugfixes:
 
 Other improvements:
+
+## [v6.1.0](https://github.com/purescript/purescript-strings/releases/tag/v6.1.0) - 2026-10-17
+
+New features:
+
+- Added `startsWith` and `endsWith` (#147)
+
+Other improvements:
+
+- Migrate from Bower/Pulp to Spago and update CI (#178 by @thomashoneyman)
 - Redefine `Data.String.NonEmpty.CodeUnits.fromFoldable1` in terms of `singleton` (#168 by @postsolar)
 
 ## [v6.0.1](https://github.com/purescript/purescript-strings/releases/tag/v6.0.1) - 2022-08-16
 
 Bugfixes:
+
 - Fix `Char`'s `toEnum` implementation (#163 by @JordanMartinez)
 
 ## [v6.0.0](https://github.com/purescript/purescript-strings/releases/tag/v6.0.0) - 2022-04-27
 
 Breaking changes:
+
 - Migrate FFI to ES modules (#158 by @kl0tl and @JordanMartinez)
 - Replaced polymorphic proxies with monomorphic `Proxy` (#158 by @JordanMartinez)
 - In `slice`, drop bounds checking and `Maybe` return type (#145 by Quelklef)
@@ -31,24 +42,29 @@ New features:
 Bugfixes:
 
 Other improvements:
+
 - Surround code with backticks in documentation (#148)
 - Make `RegexFlags` a `newtype` and a `Newtype` instance for it(#159 by @mhmdanas)
 
 ## [v5.0.0](https://github.com/purescript/purescript-strings/releases/tag/v5.0.0) - 2021-02-26
 
 Breaking changes:
+
 - Added support for PureScript 0.14 and dropped support for all previous versions (#129)
 - Updated `replace'` to reflect the existence of optional capturing groups (#126)
 
 New features:
+
 - Replaced `unsafeCoerce` with `coerce` where appropriate (#130)
 - Replaced monomorphic proxies with `Type.Proxy.Proxy` and polymorphic variables (#134)
 - Added a dotAll regexp flag (#133)
 
 Bugfixes:
+
 - Removed the bounds check from the foreign implementation of `lastIndexOf'` (#137)
 
 Other improvements:
+
 - Fix line endings to match overall project style (#132)
 - Removed references to `codePointToInt`, which no longer exists (#135)
 - Migrated CI to GitHub Actions and updated installation instructions to use Spago (#136)
@@ -129,7 +145,7 @@ Other improvements:
 
 - Updated dependencies
 - `Pattern` and `Replacement` newtypes are now used to distinguish between arguments when a function accepts multiple strings
-- `RegexFlags` have been reworked as a monoid  (@Risto-Stevcev)
+- `RegexFlags` have been reworked as a monoid (@Risto-Stevcev)
 
 ## [v1.1.0](https://github.com/purescript/purescript-strings/releases/tag/v1.1.0) - 2016-07-20
 

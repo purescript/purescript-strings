@@ -37,15 +37,13 @@ import Data.String.NonEmpty.Internal (NonEmptyString(..), fromString)
 import Data.String.Pattern (Pattern)
 import Partial.Unsafe (unsafePartial)
 
--- For internal use only. Do not export.
+-- For internal use only. Do not export these helpers.
 toNonEmptyString :: String -> NonEmptyString
 toNonEmptyString = NonEmptyString
 
--- For internal use only. Do not export.
 fromNonEmptyString :: NonEmptyString -> String
 fromNonEmptyString (NonEmptyString s) = s
 
--- For internal use only. Do not export.
 liftS :: forall r. (String -> r) -> NonEmptyString -> r
 liftS f (NonEmptyString s) = f s
 
@@ -91,37 +89,33 @@ lastIndexOf' :: Pattern -> Int -> NonEmptyString -> Maybe Int
 lastIndexOf' pat = liftS <<< CP.lastIndexOf' pat
 
 uncons :: NonEmptyString -> { head :: CodePoint, tail :: Maybe NonEmptyString }
-uncons nes =
-  let
-    s = fromNonEmptyString nes
-  in
-    { head: unsafePartial fromJust (CP.codePointAt 0 s)
-    , tail: fromString (CP.drop 1 s)
-    }
+uncons nes = do
+  let s = fromNonEmptyString nes
+  { head: unsafePartial fromJust (CP.codePointAt 0 s)
+  , tail: fromString (CP.drop 1 s)
+  }
 
 length :: NonEmptyString -> Int
 length = CP.length <<< fromNonEmptyString
 
 take :: Int -> NonEmptyString -> Maybe NonEmptyString
-take i nes =
-  let
-    s = fromNonEmptyString nes
-  in
-    if i < 1
-      then Nothing
-      else Just (toNonEmptyString (CP.take i s))
+take i nes = do
+  let s = fromNonEmptyString nes
+  if i < 1 then
+    Nothing
+  else
+    Just (toNonEmptyString (CP.take i s))
 
 takeWhile :: (CodePoint -> Boolean) -> NonEmptyString -> Maybe NonEmptyString
 takeWhile f = fromString <<< liftS (CP.takeWhile f)
 
 drop :: Int -> NonEmptyString -> Maybe NonEmptyString
-drop i nes =
-  let
-    s = fromNonEmptyString nes
-  in
-    if i >= CP.length s
-      then Nothing
-      else Just (toNonEmptyString (CP.drop i s))
+drop i nes = do
+  let s = fromNonEmptyString nes
+  if i >= CP.length s then
+    Nothing
+  else
+    Just (toNonEmptyString (CP.drop i s))
 
 dropWhile :: (CodePoint -> Boolean) -> NonEmptyString -> Maybe NonEmptyString
 dropWhile f = fromString <<< liftS (CP.dropWhile f)

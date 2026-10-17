@@ -22,7 +22,7 @@ export const replace = function (s1) {
 export const replaceAll = function (s1) {
   return function (s2) {
     return function (s3) {
-      return s3.replace(new RegExp(s1.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"), "g"), s2); // eslint-disable-line no-useless-escape
+      return s3.replace(new RegExp(s1.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&"), "g"), s2);
     };
   };
 };

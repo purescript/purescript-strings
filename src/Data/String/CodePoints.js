@@ -11,7 +11,9 @@ var hasCodePointAt = typeof String.prototype.codePointAt === "function";
 
 export const _unsafeCodePointAt0 = function (fallback) {
   return hasCodePointAt
-    ? function (str) { return str.codePointAt(0); }
+    ? function (str) {
+        return str.codePointAt(0);
+      }
     : fallback;
 };
 
@@ -25,7 +27,7 @@ export const _codePointAt = function (fallback) {
             if (index < 0 || index >= length) return Nothing;
             if (hasStringIterator) {
               var iter = str[Symbol.iterator]();
-              for (var i = index;; --i) {
+              for (var i = index; ; --i) {
                 var o = iter.next();
                 if (o.done) return Nothing;
                 if (i === 0) return Just(unsafeCodePointAt0(o.value));
@@ -61,16 +63,16 @@ export const _countPrefix = function (fallback) {
 export const _fromCodePointArray = function (singleton) {
   return hasFromCodePoint
     ? function (cps) {
-      // Function.prototype.apply will fail for very large second parameters,
-      // so we don't use it for arrays with 10,000 or more entries.
-      if (cps.length < 10e3) {
-        return String.fromCodePoint.apply(String, cps);
+        // Function.prototype.apply will fail for very large second parameters,
+        // so we don't use it for arrays with 10,000 or more entries.
+        if (cps.length < 10e3) {
+          return String.fromCodePoint.apply(String, cps);
+        }
+        return cps.map(singleton).join("");
       }
-      return cps.map(singleton).join("");
-    }
     : function (cps) {
-      return cps.map(singleton).join("");
-    };
+        return cps.map(singleton).join("");
+      };
 };
 
 export const _singleton = function (fallback) {

@@ -28,9 +28,9 @@ import Unsafe.Coerce (unsafeCoerce)
 -- | when you know what you are doing.
 newtype NonEmptyString = NonEmptyString String
 
-derive newtype instance eqNonEmptyString ∷ Eq NonEmptyString
-derive newtype instance ordNonEmptyString ∷ Ord NonEmptyString
-derive newtype instance semigroupNonEmptyString ∷ Semigroup NonEmptyString
+derive newtype instance eqNonEmptyString :: Eq NonEmptyString
+derive newtype instance ordNonEmptyString :: Ord NonEmptyString
+derive newtype instance semigroupNonEmptyString :: Semigroup NonEmptyString
 
 instance showNonEmptyString :: Show NonEmptyString where
   show (NonEmptyString s) = "(NonEmptyString.unsafeFromString " <> show s <> ")"
@@ -55,7 +55,7 @@ newtype NonEmptyReplacement = NonEmptyReplacement NonEmptyString
 
 derive newtype instance eqNonEmptyReplacement :: Eq NonEmptyReplacement
 derive newtype instance ordNonEmptyReplacement :: Ord NonEmptyReplacement
-derive newtype instance semigroupNonEmptyReplacement ∷ Semigroup NonEmptyReplacement
+derive newtype instance semigroupNonEmptyReplacement :: Semigroup NonEmptyReplacement
 
 instance showNonEmptyReplacement :: Show NonEmptyReplacement where
   show (NonEmptyReplacement s) = "(NonEmptyReplacement " <> show s <> ")"
@@ -123,7 +123,6 @@ stripPrefix pat = fromString <=< liftS (String.stripPrefix pat)
 -- | ```
 stripSuffix :: Pattern -> NonEmptyString -> Maybe NonEmptyString
 stripSuffix pat = fromString <=< liftS (String.stripSuffix pat)
-
 
 -- | Checks whether the given string starts with the pattern.
 -- |
@@ -226,8 +225,8 @@ trim (NonEmptyString s) = fromString (String.trim s)
 joinWith :: forall f. Foldable f => String -> f NonEmptyString -> String
 joinWith splice = F.intercalate splice <<< coe
   where
-    coe :: f NonEmptyString -> f String
-    coe = unsafeCoerce
+  coe :: f NonEmptyString -> f String
+  coe = unsafeCoerce
 
 -- | Joins non-empty strings in a non-empty container together as a new
 -- | non-empty string, inserting a possibly empty string as separator between

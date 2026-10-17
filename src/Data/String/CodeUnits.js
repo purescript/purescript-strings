@@ -104,7 +104,7 @@ export const drop = function (n) {
 export const slice = function (b) {
   return function (e) {
     return function (s) {
-      return s.slice(b,e);
+      return s.slice(b, e);
     };
   };
 };

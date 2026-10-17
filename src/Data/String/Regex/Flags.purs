@@ -113,17 +113,17 @@ instance monoidRegexFlags :: Monoid RegexFlags where
 derive newtype instance eqRegexFlags :: Eq RegexFlags
 
 instance showRegexFlags :: Show RegexFlags where
-  show (RegexFlags flags) =
+  show (RegexFlags flags) = do
     let
       usedFlags =
         []
-        <> (guard flags.global $> "global")
-        <> (guard flags.ignoreCase $> "ignoreCase")
-        <> (guard flags.multiline $> "multiline")
-        <> (guard flags.dotAll $> "dotAll")
-        <> (guard flags.sticky $> "sticky")
-        <> (guard flags.unicode $> "unicode")
-    in
-      if usedFlags == []
-      then "noFlags"
-      else "(" <> joinWith " <> " usedFlags <> ")"
+          <> (guard flags.global $> "global")
+          <> (guard flags.ignoreCase $> "ignoreCase")
+          <> (guard flags.multiline $> "multiline")
+          <> (guard flags.dotAll $> "dotAll")
+          <> (guard flags.sticky $> "sticky")
+          <> (guard flags.unicode $> "unicode")
+    if usedFlags == [] then
+      "noFlags"
+    else
+      "(" <> joinWith " <> " usedFlags <> ")"

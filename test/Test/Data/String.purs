@@ -16,15 +16,15 @@ testString = do
   assert $ S.null ""
   assert $ not (S.null "a")
 
+  -- stripPrefix and stripSuffix are re-exports from Data.String.CodeUnits;
+  -- the majority of their tests are there.
   log "stripPrefix"
-  -- this is a re-export from Data.String.CodeUnits, so the majority of tests are in there
   assertEqual
     { actual: S.stripPrefix (Pattern "𝕒𝕓𝕔") "𝕒𝕓𝕔𝕕𝕖"
     , expected: Just "𝕕𝕖"
     }
 
   log "stripSuffix"
-  -- this is a re-export from Data.String.CodeUnits, so the majority of tests are in there
   assertEqual
     { actual: S.stripSuffix (Pattern "𝕔𝕕𝕖") "𝕒𝕓𝕔𝕕𝕖"
     , expected: Just "𝕒𝕓"
@@ -85,19 +85,19 @@ testString = do
     }
   assertEqual
     { actual: S.split (Pattern "") "a"
-    , expected: ["a"]
+    , expected: [ "a" ]
     }
   assertEqual
     { actual: S.split (Pattern "") "ab"
-    , expected: ["a", "b"]
+    , expected: [ "a", "b" ]
     }
   assertEqual
     { actual: S.split (Pattern "b") "aabcc"
-    , expected: ["aa", "cc"]
+    , expected: [ "aa", "cc" ]
     }
   assertEqual
     { actual: S.split (Pattern "d") "abc"
-    , expected: ["abc"]
+    , expected: [ "abc" ]
     }
 
   log "toLower"
@@ -124,10 +124,10 @@ testString = do
     , expected: ""
     }
   assertEqual
-    { actual: S.joinWith "" ["a", "b"]
+    { actual: S.joinWith "" [ "a", "b" ]
     , expected: "ab"
     }
   assertEqual
-    { actual: S.joinWith "--" ["a", "b", "c"]
+    { actual: S.joinWith "--" [ "a", "b", "c" ]
     , expected: "a--b--c"
     }

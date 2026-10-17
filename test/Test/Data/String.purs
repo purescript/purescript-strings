@@ -16,15 +16,15 @@ testString = do
   assert $ S.null ""
   assert $ not (S.null "a")
 
+  -- stripPrefix and stripSuffix are re-exports from Data.String.CodeUnits;
+  -- the majority of their tests are there.
   log "stripPrefix"
-  -- this is a re-export from Data.String.CodeUnits, so the majority of tests are in there
   assertEqual
     { actual: S.stripPrefix (Pattern "𝕒𝕓𝕔") "𝕒𝕓𝕔𝕕𝕖"
     , expected: Just "𝕕𝕖"
     }
 
   log "stripSuffix"
-  -- this is a re-export from Data.String.CodeUnits, so the majority of tests are in there
   assertEqual
     { actual: S.stripSuffix (Pattern "𝕔𝕕𝕖") "𝕒𝕓𝕔𝕕𝕖"
     , expected: Just "𝕒𝕓"

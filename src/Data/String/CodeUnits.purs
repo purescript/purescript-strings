@@ -47,11 +47,9 @@ import Data.String.Unsafe as U
 -- | stripPrefix (Pattern "http:") "https://purescript.org" == Nothing
 -- | ```
 stripPrefix :: Pattern -> String -> Maybe String
-stripPrefix (Pattern prefix) str =
-  let
-    { before, after } = splitAt (length prefix) str
-  in
-    if before == prefix then Just after else Nothing
+stripPrefix (Pattern prefix) str = do
+  let { before, after } = splitAt (length prefix) str
+  if before == prefix then Just after else Nothing
 
 -- | If the string ends with the given suffix, return the portion of the
 -- | string left after removing it, as a `Just` value. Otherwise, return
@@ -62,11 +60,9 @@ stripPrefix (Pattern prefix) str =
 -- | stripSuffix (Pattern ".exe") "psc" == Nothing
 -- | ```
 stripSuffix :: Pattern -> String -> Maybe String
-stripSuffix (Pattern suffix) str =
-  let
-    { before, after } = splitAt (length str - length suffix) str
-  in
-    if after == suffix then Just before else Nothing
+stripSuffix (Pattern suffix) str = do
+  let { before, after } = splitAt (length str - length suffix) str
+  if after == suffix then Just before else Nothing
 
 -- | Checks whether the given string starts with the pattern.
 -- |

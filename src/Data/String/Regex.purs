@@ -63,8 +63,7 @@ renderFlags (RegexFlags f) =
     <> (if f.multiline then "m" else "")
     <> (if f.dotAll then "s" else "")
     <> (if f.sticky then "y" else "")
-    <>
-      (if f.unicode then "u" else "")
+    <> (if f.unicode then "u" else "")
 
 -- | Parses the string representation of `RegexFlags`.
 parseFlags :: String -> RegexFlags

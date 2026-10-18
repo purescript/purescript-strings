@@ -38,15 +38,13 @@ import Data.String.Pattern (Pattern)
 import Data.String.Unsafe as U
 import Partial.Unsafe (unsafePartial)
 
--- For internal use only. Do not export.
+-- For internal use only. Do not export these helpers.
 toNonEmptyString :: String -> NonEmptyString
 toNonEmptyString = NonEmptyString
 
--- For internal use only. Do not export.
 fromNonEmptyString :: NonEmptyString -> String
 fromNonEmptyString (NonEmptyString s) = s
 
--- For internal use only. Do not export.
 liftS :: forall r. (String -> r) -> NonEmptyString -> r
 liftS f (NonEmptyString s) = f s
 
@@ -181,13 +179,11 @@ lastIndexOf' pat = liftS <<< CU.lastIndexOf' pat
 -- | uncons "Hello World" == { head: 'H', tail: Just (NonEmptyString "ello World") }
 -- | ```
 uncons :: NonEmptyString -> { head :: Char, tail :: Maybe NonEmptyString }
-uncons nes =
-  let
-    s = fromNonEmptyString nes
-  in
-    { head: U.charAt 0 s
-    , tail: fromString (CU.drop 1 s)
-    }
+uncons nes = do
+  let s = fromNonEmptyString nes
+  { head: U.charAt 0 s
+  , tail: fromString (CU.drop 1 s)
+  }
 
 -- | Returns the number of characters the string is composed of.
 -- |
@@ -205,13 +201,12 @@ length = CU.length <<< fromNonEmptyString
 -- | take 0 (NonEmptyString "Hello World") == Nothing
 -- | ```
 take :: Int -> NonEmptyString -> Maybe NonEmptyString
-take i nes =
-  let
-    s = fromNonEmptyString nes
-  in
-    if i < 1
-      then Nothing
-      else Just (toNonEmptyString (CU.take i s))
+take i nes = do
+  let s = fromNonEmptyString nes
+  if i < 1 then
+    Nothing
+  else
+    Just (toNonEmptyString (CU.take i s))
 
 -- | Returns the last `n` characters of the string. Returns `Nothing` if `n` is
 -- | less than 1.
@@ -221,13 +216,12 @@ take i nes =
 -- | take 0 (NonEmptyString "Hello World") == Nothing
 -- | ```
 takeRight :: Int -> NonEmptyString -> Maybe NonEmptyString
-takeRight i nes =
-  let
-    s = fromNonEmptyString nes
-  in
-    if i < 1
-      then Nothing
-      else Just (toNonEmptyString (CU.takeRight i s))
+takeRight i nes = do
+  let s = fromNonEmptyString nes
+  if i < 1 then
+    Nothing
+  else
+    Just (toNonEmptyString (CU.takeRight i s))
 
 -- | Returns the longest prefix of characters that satisfy the predicate.
 -- | `Nothing` is returned if there is no matching prefix.
@@ -247,13 +241,12 @@ takeWhile f = fromString <<< liftS (CU.takeWhile f)
 -- | drop 20 (NonEmptyString "Hello World") == Nothing
 -- | ```
 drop :: Int -> NonEmptyString -> Maybe NonEmptyString
-drop i nes =
-  let
-    s = fromNonEmptyString nes
-  in
-    if i >= CU.length s
-      then Nothing
-      else Just (toNonEmptyString (CU.drop i s))
+drop i nes = do
+  let s = fromNonEmptyString nes
+  if i >= CU.length s then
+    Nothing
+  else
+    Just (toNonEmptyString (CU.drop i s))
 
 -- | Returns the string without the last `n` characters. Returns `Nothing` if
 -- | more characters are dropped than the string is long.
@@ -263,13 +256,12 @@ drop i nes =
 -- | dropRight 20 (NonEmptyString "Hello World") == Nothing
 -- | ```
 dropRight :: Int -> NonEmptyString -> Maybe NonEmptyString
-dropRight i nes =
-  let
-    s = fromNonEmptyString nes
-  in
-    if i >= CU.length s
-      then Nothing
-      else Just (toNonEmptyString (CU.dropRight i s))
+dropRight i nes = do
+  let s = fromNonEmptyString nes
+  if i >= CU.length s then
+    Nothing
+  else
+    Just (toNonEmptyString (CU.dropRight i s))
 
 -- | Returns the suffix remaining after `takeWhile`.
 -- |

@@ -2,23 +2,23 @@ module Bench.Main where
 
 import Prelude
 
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE, log)
 import Data.Array.NonEmpty (fromArray)
 import Data.Maybe (fromJust)
-import Data.String (toCharArray)
-import Data.String.NonEmpty (fromFoldable1, fromNonEmptyCharArray)
+import Data.String.CodeUnits (toCharArray)
+import Data.String.NonEmpty.CodeUnits (fromFoldable1, fromNonEmptyCharArray)
+import Effect (Effect)
+import Effect.Console (log)
 import Partial.Unsafe (unsafePartial)
 import Performance.Minibench (benchWith)
 
-main :: Eff (console :: CONSOLE) Unit
+main :: Effect Unit
 main = do
   log "NonEmpty conversions"
   log "======"
   log ""
   benchNonEmptyConversions
 
-benchNonEmptyConversions :: Eff (console :: CONSOLE) Unit
+benchNonEmptyConversions :: Effect Unit
 benchNonEmptyConversions = do
   log "fromNonEmptyCharArray: short"
   log "---"

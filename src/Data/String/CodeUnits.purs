@@ -47,8 +47,8 @@ import Data.String.Unsafe as U
 -- | stripPrefix (Pattern "http:") "https://purescript.org" == Nothing
 -- | ```
 stripPrefix :: Pattern -> String -> Maybe String
-stripPrefix (Pattern prefix) str =
-  let { before, after } = splitAt (length prefix) str in
+stripPrefix (Pattern prefix) str = do
+  let { before, after } = splitAt (length prefix) str
   if before == prefix then Just after else Nothing
 
 -- | If the string ends with the given suffix, return the portion of the
@@ -60,8 +60,8 @@ stripPrefix (Pattern prefix) str =
 -- | stripSuffix (Pattern ".exe") "psc" == Nothing
 -- | ```
 stripSuffix :: Pattern -> String -> Maybe String
-stripSuffix (Pattern suffix) str =
-  let { before, after } = splitAt (length str - length suffix) str in
+stripSuffix (Pattern suffix) str = do
+  let { before, after } = splitAt (length str - length suffix) str
   if after == suffix then Just before else Nothing
 
 -- | Checks whether the given string starts with the pattern.
@@ -166,7 +166,7 @@ foreign import _toChar
 -- |
 uncons :: String -> Maybe { head :: Char, tail :: String }
 uncons "" = Nothing
-uncons s  = Just { head: U.charAt zero s, tail: drop one s }
+uncons s = Just { head: U.charAt zero s, tail: drop one s }
 
 -- | Returns the number of characters the string is composed of.
 -- |

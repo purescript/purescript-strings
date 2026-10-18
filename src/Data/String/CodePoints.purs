@@ -34,7 +34,7 @@ import Data.Array as Array
 import Data.Enum (class BoundedEnum, class Enum, Cardinality(..), defaultPred, defaultSucc, fromEnum, toEnum, toEnumWithDefaults)
 import Data.Int (hexadecimal, toStringAs)
 import Data.Maybe (Maybe(..))
-import Data.String.CodeUnits (contains, stripPrefix, stripSuffix, startsWith, endsWith) as Exports
+import Data.String.CodeUnits (contains, endsWith, startsWith, stripPrefix, stripSuffix) as Exports
 import Data.String.CodeUnits as CU
 import Data.String.Common (toUpper)
 import Data.String.Pattern (Pattern)
@@ -95,9 +95,9 @@ foreign import _singleton
 
 singletonFallback :: CodePoint -> String
 singletonFallback (CodePoint cp) | cp <= 0xFFFF = fromCharCode cp
-singletonFallback (CodePoint cp) =
-  let lead = ((cp - 0x10000) / 0x400) + 0xD800 in
-  let trail = (cp - 0x10000) `mod` 0x400 + 0xDC00 in
+singletonFallback (CodePoint cp) = do
+  let lead = ((cp - 0x10000) / 0x400) + 0xD800
+  let trail = (cp - 0x10000) `mod` 0x400 + 0xDC00
   fromCharCode lead <> fromCharCode trail
 
 -- | Creates a string from an array of code points. Operates in space and time
@@ -192,14 +192,14 @@ uncons :: String -> Maybe { head :: CodePoint, tail :: String }
 uncons s = case CU.length s of
   0 -> Nothing
   1 -> Just { head: CodePoint (fromEnum (Unsafe.charAt 0 s)), tail: "" }
-  _ ->
+  _ -> do
     let
       cu0 = fromEnum (Unsafe.charAt 0 s)
       cu1 = fromEnum (Unsafe.charAt 1 s)
-    in
-      if isLead cu0 && isTrail cu1
-        then Just { head: unsurrogate cu0 cu1, tail: CU.drop 2 s }
-        else Just { head: CodePoint cu0, tail: CU.drop 1 s }
+    if isLead cu0 && isTrail cu1 then
+      Just { head: unsurrogate cu0 cu1, tail: CU.drop 2 s }
+    else
+      Just { head: CodePoint cu0, tail: CU.drop 1 s }
 
 -- | Returns the number of code points in the string. Operates in constant
 -- | space and in time linear to the length of the string.
@@ -267,8 +267,8 @@ indexOf p s = (\i -> length (CU.take i s)) <$> CU.indexOf p s
 -- | ```
 -- |
 indexOf' :: Pattern -> Int -> String -> Maybe Int
-indexOf' p i s =
-  let s' = drop i s in
+indexOf' p i s = do
+  let s' = drop i s
   (\k -> i + length (CU.take k s')) <$> CU.indexOf p s'
 
 -- | Returns the number of code points preceding the last match of the given
@@ -308,8 +308,8 @@ lastIndexOf p s = (\i -> length (CU.take i s)) <$> CU.lastIndexOf p s
 -- | ```
 -- |
 lastIndexOf' :: Pattern -> Int -> String -> Maybe Int
-lastIndexOf' p i s =
-  let i' = CU.length (take i s) in
+lastIndexOf' p i s = do
+  let i' = CU.length (take i s)
   (\k -> length (CU.take k s)) <$> CU.lastIndexOf' p i' s
 
 -- | Returns a string containing the given number of code points from the
@@ -395,8 +395,8 @@ dropWhile p s = drop (countPrefix p s) s
 -- | splitAt i s == {before: take i s, after: drop i s}
 -- | ```
 splitAt :: Int -> String -> { before :: String, after :: String }
-splitAt i s =
-  let before = take i s in
+splitAt i s = do
+  let before = take i s
   { before
   -- inline drop i s to reuse the result of take i s
   , after: CU.drop (CU.length before) s
@@ -424,13 +424,10 @@ foreign import _unsafeCodePointAt0
   -> CodePoint
 
 unsafeCodePointAt0Fallback :: String -> CodePoint
-unsafeCodePointAt0Fallback s =
-  let
-    cu0 = fromEnum (Unsafe.charAt 0 s)
-  in
-    if isLead cu0 && CU.length s > 1
-       then
-         let cu1 = fromEnum (Unsafe.charAt 1 s) in
-         if isTrail cu1 then unsurrogate cu0 cu1 else CodePoint cu0
-       else
-         CodePoint cu0
+unsafeCodePointAt0Fallback s = do
+  let cu0 = fromEnum (Unsafe.charAt 0 s)
+  if isLead cu0 && CU.length s > 1 then do
+    let cu1 = fromEnum (Unsafe.charAt 1 s)
+    if isTrail cu1 then unsurrogate cu0 cu1 else CodePoint cu0
+  else
+    CodePoint cu0

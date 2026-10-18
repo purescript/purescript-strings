@@ -185,47 +185,47 @@ testNonEmptyString = do
     , expected: ""
     }
   assertEqual
-    { actual: NES.joinWith "" [nes (Proxy :: Proxy "a"), nes (Proxy :: Proxy "b")]
+    { actual: NES.joinWith "" [ nes (Proxy :: Proxy "a"), nes (Proxy :: Proxy "b") ]
     , expected: "ab"
     }
   assertEqual
-    { actual: NES.joinWith "--" [nes (Proxy :: Proxy "a"), nes (Proxy :: Proxy "b"), nes (Proxy :: Proxy "c")]
+    { actual: NES.joinWith "--" [ nes (Proxy :: Proxy "a"), nes (Proxy :: Proxy "b"), nes (Proxy :: Proxy "c") ]
     , expected: "a--b--c"
     }
 
   log "join1With"
   assertEqual
-    { actual: NES.join1With "" (nea [nes (Proxy :: Proxy "a"), nes (Proxy :: Proxy "b")])
+    { actual: NES.join1With "" (nea [ nes (Proxy :: Proxy "a"), nes (Proxy :: Proxy "b") ])
     , expected: nes (Proxy :: Proxy "ab")
     }
   assertEqual
-    { actual: NES.join1With "--" (nea [nes (Proxy :: Proxy "a"), nes (Proxy :: Proxy "b"), nes (Proxy :: Proxy "c")])
+    { actual: NES.join1With "--" (nea [ nes (Proxy :: Proxy "a"), nes (Proxy :: Proxy "b"), nes (Proxy :: Proxy "c") ])
     , expected: nes (Proxy :: Proxy "a--b--c")
     }
   assertEqual
-    { actual: NES.join1With ", " (nea [nes (Proxy :: Proxy "apple"), nes (Proxy :: Proxy "banana")])
+    { actual: NES.join1With ", " (nea [ nes (Proxy :: Proxy "apple"), nes (Proxy :: Proxy "banana") ])
     , expected: nes (Proxy :: Proxy "apple, banana")
     }
   assertEqual
-    { actual: NES.join1With "" (nea [nes (Proxy :: Proxy "apple"), nes (Proxy :: Proxy "banana")])
+    { actual: NES.join1With "" (nea [ nes (Proxy :: Proxy "apple"), nes (Proxy :: Proxy "banana") ])
     , expected: nes (Proxy :: Proxy "applebanana")
     }
 
   log "joinWith1"
   assertEqual
-    { actual: NES.joinWith1 (nes (Proxy :: Proxy " ")) (nea ["a", "b"])
+    { actual: NES.joinWith1 (nes (Proxy :: Proxy " ")) (nea [ "a", "b" ])
     , expected: nes (Proxy :: Proxy "a b")
     }
   assertEqual
-    { actual: NES.joinWith1 (nes (Proxy :: Proxy "--")) (nea ["a", "b", "c"])
+    { actual: NES.joinWith1 (nes (Proxy :: Proxy "--")) (nea [ "a", "b", "c" ])
     , expected: nes (Proxy :: Proxy "a--b--c")
     }
   assertEqual
-    { actual: NES.joinWith1 (nes (Proxy :: Proxy ", ")) (nea ["apple", "banana"])
+    { actual: NES.joinWith1 (nes (Proxy :: Proxy ", ")) (nea [ "apple", "banana" ])
     , expected: nes (Proxy :: Proxy "apple, banana")
     }
   assertEqual
-    { actual: NES.joinWith1 (nes (Proxy :: Proxy "/")) (nea ["a", "b", "", "c", ""])
+    { actual: NES.joinWith1 (nes (Proxy :: Proxy "/")) (nea [ "a", "b", "", "c", "" ])
     , expected: nes (Proxy :: Proxy "a/b//c/")
     }
 

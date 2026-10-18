@@ -24,7 +24,7 @@ genDigitChar = toEnumWithDefaults bottom top <$> chooseInt 48 57
 
 -- | Generates a character from the basic latin alphabet.
 genAlpha :: forall m. MonadGen m => m Char
-genAlpha = oneOf (genAlphaLowercase :| [genAlphaUppercase])
+genAlpha = oneOf (genAlphaLowercase :| [ genAlphaUppercase ])
 
 -- | Generates a lowercase character from the basic latin alphabet.
 genAlphaLowercase :: forall m. MonadGen m => m Char
